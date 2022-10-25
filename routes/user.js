@@ -3,8 +3,7 @@ const router = require("express").Router();
 const catchAsync = require("../utils/catchAsync");
 const middleware = require("../middlewares/auth");
 
-// router.post("/register", catchAsync(userController.register));
-// router.get("/allUser", catchAsync(user.allUser));
+router.post("/register", catchAsync(userController.createUser));
 router.post("/login", catchAsync(userController.userLogin));
 router.post("/logout", middleware.verifyToken, catchAsync(userController.userLogout));
 router.post("/refreshToken", catchAsync(userController.refreshRToken));

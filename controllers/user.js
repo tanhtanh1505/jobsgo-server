@@ -42,13 +42,28 @@ class UserController {
     res.send(userWithoutPassword);
   };
 
-  getCurrentUser = async (req, res, next) => {
+  getCurrentUser = async (req, res) => {
     const { password, ...userWithoutPassword } = req.user;
 
     res.send(userWithoutPassword);
   };
 
-  createUser = async (req, res, next) => {
+  createUser = async (req, res) => {
+    var user = await UserModel.findOne({ username: req.body.username });
+    if (user) {
+      throw new HttpException(500, "Username is existed!");
+    }
+
+    user = await UserModel.findOne({ email: req.body.email });
+    if (user) {
+      throw new HttpException(500, "Email is registed!");
+    }
+
+    user = await UserModel.findOne({ phone: req.body.phone });
+    if (user) {
+      throw new HttpException(500, "Phone is existed!");
+    }
+
     await this.hashPassword(req);
 
     const result = await UserModel.create(req.body);
@@ -60,7 +75,7 @@ class UserController {
     res.status(201).send("User was created!");
   };
 
-  updateUser = async (req, res, next) => {
+  updateUser = async (req, res) => {
     this.checkValidation(req);
 
     await this.hashPassword(req);
@@ -82,7 +97,7 @@ class UserController {
     res.send({ message, info });
   };
 
-  deleteUser = async (req, res, next) => {
+  deleteUser = async (req, res) => {
     const result = await UserModel.delete(req.params.id);
     if (!result) {
       throw new HttpException(404, "User not found");
@@ -90,13 +105,13 @@ class UserController {
     res.send("User has been deleted");
   };
 
-  userLogin = async (req, res, next) => {
+  userLogin = async (req, res) => {
     const { username, password: pass } = req.body;
 
     const user = await UserModel.findOne({ username });
 
     if (!user) {
-      throw new HttpException(401, "Unable to login!");
+      throw new HttpException(401, "User not exist!");
     }
 
     const isMatch = await bcrypt.compare(pass, user.password);

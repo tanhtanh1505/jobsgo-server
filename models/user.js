@@ -1,7 +1,7 @@
 const query = require("../db/dbConnection");
 const { multipleColumnSet } = require("../utils/common");
 const Role = require("../constants/user");
-
+const { v4: uuidv4 } = require("uuid");
 class UserModel {
   find = async (params = {}) => {
     let sql = `SELECT * FROM user`;
@@ -27,10 +27,10 @@ class UserModel {
     return result[0];
   };
 
-  create = async ({ username, password, name, email, role = Role.JobSeeker, avatar = "" }) => {
-    const sql = `INSERT INTO user (username, password, name, email, role, avatar) VALUES (?,?,?,?,?,?,?)`;
-
-    const result = await query(sql, [username, password, name, email, role, avatar]);
+  create = async ({ username, password, name, email, phone, role = Role.JobSeeker, avatar = "" }) => {
+    const sql = `INSERT INTO user (id, username, password, name, email, phone, role, avatar) VALUES (?,?,?,?,?,?,?,?)`;
+    const id = uuidv4();
+    const result = await query(sql, [id, username, password, name, email, phone, role, avatar]);
     const affectedRows = result ? result.affectedRows : 0;
 
     return affectedRows;
