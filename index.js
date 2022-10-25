@@ -3,8 +3,8 @@ const http = require("http");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const HttpException = require("./utils/HttpException");
-const redis = require("redis");
 const cookieParser = require("cookie-parser");
+const socket = require("./socket/index");
 const userRoutes = require("./routes/user");
 
 const setup = require("./setup/index");
@@ -19,34 +19,7 @@ app.use(cors());
 app.use(cookieParser());
 app.use(express.json());
 
-// const socketIo = require("socket.io")(server, {
-//   cors: {
-//     origin: "*",
-//   },
-// });
-
-// socketIo.on("connection", (socket) => {
-//   let onlineUser = "";
-
-//   socket.on("join", (username) => {
-//     console.log("Connected", socket.id);
-//     onlineUser = username;
-//     client.set(username, socket.id);
-//   });
-//   socket.on("sendNewMessage", (message) => {
-//     client
-//       .get(message.recieverId)
-//       .then((data) => {
-//         socketIo.to(`${data}`).emit("getMessage", JSON.stringify(message));
-//       })
-//       .catch((err) => console.log(err));
-//   });
-
-//   socket.on("disconnect", () => {
-//     client.del(onlineUser);
-//     console.log("Client disconnected");
-//   });
-// });
+socket.listen(server);
 
 app.use("/", userRoutes);
 app.get("/", (req, res) => {

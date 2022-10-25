@@ -1,7 +1,7 @@
 const userController = require("../controllers/user");
 const router = require("express").Router();
 const catchAsync = require("../utils/catchAsync");
-const middleware = require("../middleware/auth");
+const middleware = require("../middlewares/auth");
 
 // router.post("/register", catchAsync(userController.register));
 // router.get("/allUser", catchAsync(user.allUser));
