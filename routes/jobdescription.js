@@ -3,14 +3,16 @@ const router = require("express").Router();
 const catchAsync = require("../utils/catchAsync");
 const middleware = require("../middlewares/auth");
 
-//crete
-router.post("/create", middleware.verifyToken, catchAsync(jobDescriptionController.create));
+router.post("/create", middleware.verifyToken, middleware.isEmployer, catchAsync(jobDescriptionController.create));
+
+router.get("/all", catchAsync(jobDescriptionController.getAll));
+router.get("/all-mine", middleware.verifyToken, middleware.isEmployer, catchAsync(jobDescriptionController.getMyJobDescription));
 
 //get, edit, delete
 router
   .route("/:id")
-  .get(catchAsync(jobDescriptionController.find))
-  .put(middleware.verifyToken, catchAsync(jobDescriptionController.edit))
-  .delete(middleware.verifyToken, catchAsync(jobDescriptionController.delete));
+  .get(catchAsync(jobDescriptionController.getById))
+  .put(middleware.verifyToken, middleware.isJobsCreator, catchAsync(jobDescriptionController.update))
+  .delete(middleware.verifyToken, middleware.isJobsCreator, catchAsync(jobDescriptionController.delete));
 
 module.exports = router;

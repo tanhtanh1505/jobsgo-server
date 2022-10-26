@@ -28,7 +28,6 @@ class JobDescriptionModel {
   create = async ({ title, description, requirement, start_time = null, end_time = null, tag }, author) => {
     const sql = `INSERT INTO jobs_description (id, title, description, requirement, author, start_time, end_time, tag) VALUES (?,?,?,?,?,?,?,?)`;
     const id = uuidv4();
-    console.log({ title, description, requirement, start_time, end_time, tag });
     const result = await query(sql, [id, title, description, requirement, author, start_time, end_time, tag]);
     const affectedRows = result ? result.affectedRows : 0;
 

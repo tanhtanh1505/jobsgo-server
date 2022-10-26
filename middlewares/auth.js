@@ -1,6 +1,8 @@
 const jwt = require("jsonwebtoken");
 const UserModel = require("../models/user");
+const JobDescriptionModel = require("../models/jobdescription");
 const HttpException = require("../utils/HttpException");
+const Role = require("../constants/user");
 
 module.exports.verifyToken = async (req, res, next) => {
   try {
@@ -23,6 +25,46 @@ module.exports.verifyToken = async (req, res, next) => {
     }
 
     req.user = user;
+    next();
+  } catch (e) {
+    e.status = 401;
+    next(e);
+  }
+};
+
+module.exports.isJobsCreator = async (req, res, next) => {
+  try {
+    const cur_job = await JobDescriptionModel.findOne({ id: req.params.id });
+    if (cur_job.author != req.user.id) {
+      throw new HttpException(404, "You are not author");
+    }
+
+    next();
+  } catch (e) {
+    e.status = 401;
+    next(e);
+  }
+};
+
+module.exports.isEmployer = async (req, res, next) => {
+  try {
+    if (req.user.role != Role.Employer) {
+      throw new HttpException(404, "You are not employer");
+    }
+
+    next();
+  } catch (e) {
+    e.status = 401;
+    next(e);
+  }
+};
+
+module.exports.isJobSeeker = async (req, res, next) => {
+  try {
+    if ((req.user.role = Role.JobSeeker)) {
+      throw new HttpException(404, "You are not jobseeker");
+    }
+
     next();
   } catch (e) {
     e.status = 401;
