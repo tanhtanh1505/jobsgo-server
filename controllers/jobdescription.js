@@ -1,84 +1,41 @@
 const UserModel = require("../models/user");
+const JobDescriptionModel = require("../models/jobdescription");
 const HttpException = require("../utils/HttpException");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 dotenv.config();
 
-class UserController {
-  getAllUsers = async (req, res, next) => {
-    let userList = await UserModel.find();
-    if (!userList.length) {
-      throw new HttpException(404, "Users not found");
-    }
-
-    userList = userList.map((user) => {
-      const { password, ...userWithoutPassword } = user;
-      return userWithoutPassword;
-    });
-
-    res.send(userList);
+class JobDescriptionController {
+  getAll = async (req, res) => {
+    let list = await JobDescriptionModel.find();
+    res.send(list);
   };
 
-  getUserById = async (req, res, next) => {
-    const user = await UserModel.findOne({ id: req.params.id });
-    if (!user) {
-      throw new HttpException(404, "User not found");
+  getById = async (req, res) => {
+    const jobdescription = await JobDescriptionModel.findOne({ id: req.params.id });
+    if (!jobdescription) {
+      throw new HttpException(404, "JobDescription not found");
     }
-
-    const { password, ...userWithoutPassword } = user;
-
-    res.send(userWithoutPassword);
+    res.send(jobdescription);
   };
 
-  getUserByUserName = async (req, res, next) => {
-    const user = await UserModel.findOne({ username: req.params.username });
-    if (!user) {
-      throw new HttpException(404, "User not found");
-    }
+  getMyJobDescription = async (req, res) => {
+    let listJobs = await JobDescriptionModel.find({ author: req.user.id });
 
-    const { password, ...userWithoutPassword } = user;
-
-    res.send(userWithoutPassword);
+    res.send(listJobs);
   };
 
-  getCurrentUser = async (req, res) => {
-    const { password, ...userWithoutPassword } = req.user;
+  create = async (req, res) => {
+    const { title, description, requirement, tag } = req.body;
 
-    res.send(userWithoutPassword);
-  };
+    if (!title || !description || !requirement || !tag) throw new HttpException(500, "Fill all required feild: title, description, requirement, tag");
 
-  createUser = async (req, res) => {
-    const { username, name, password, email, phone } = req.body;
-
-    if (!username || !name || !password || !email || !phone)
-      throw new HttpException(500, "Fill all required feild: username, name, password, email, phone");
-
-    var user = await UserModel.findOne({ username: req.body.username });
-
-    if (user) {
-      throw new HttpException(500, "Username is existed!");
-    }
-
-    user = await UserModel.findOne({ email: req.body.email });
-    if (user) {
-      throw new HttpException(500, "Email is registed!");
-    }
-
-    user = await UserModel.findOne({ phone: req.body.phone });
-    if (user) {
-      throw new HttpException(500, "Phone is existed!");
-    }
-
-    await this.hashPassword(req);
-
-    const result = await UserModel.create(req.body);
+    const result = await JobDescriptionModel.create(req.body, req.user.id);
 
     if (!result) {
       throw new HttpException(500, "Something went wrong");
     }
 
-    res.status(201).send("User was created!");
+    res.status(201).send("Jobs was created!");
   };
 
   updateUser = async (req, res) => {
@@ -228,4 +185,4 @@ class UserController {
   };
 }
 
-module.exports = new UserController();
+module.exports = new JobDescriptionController();

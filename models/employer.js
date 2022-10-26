@@ -2,9 +2,14 @@ const query = require("../db/dbConnection");
 const { multipleColumnSet } = require("../utils/common");
 const Role = require("../constants/user");
 const { v4: uuidv4 } = require("uuid");
-class UserModel {
+const UserModel = require("./user");
+
+class EmployerModel extends UserModel {
+  updateAbout = async () => {
+    console.log("update about");
+  };
   find = async (params = {}) => {
-    let sql = `SELECT * FROM user`;
+    let sql = `SELECT * FROM employer`;
 
     if (!Object.keys(params).length) {
       return await query(sql);
@@ -19,7 +24,7 @@ class UserModel {
   findOne = async (params) => {
     const { columnSet, values } = multipleColumnSet(params);
 
-    const sql = `SELECT * FROM user WHERE ${columnSet}`;
+    const sql = `SELECT * FROM employer WHERE ${columnSet}`;
 
     const result = await query(sql, [...values]);
 
@@ -27,20 +32,10 @@ class UserModel {
     return result[0];
   };
 
-  create = async ({ username, password, name, email, phone, role = Role.JobSeeker, avatar = "", about = "about", interested = "interested" }) => {
-    const sql_create_user = `INSERT INTO user (id, username, password, name, email, phone, role, avatar) VALUES (?,?,?,?,?,?,?,?)`;
-
+  create = async ({ username, password, name, email, phone, role = Role.JobSeeker, avatar = "" }) => {
+    const sql = `INSERT INTO user (id, username, password, name, email, phone, role, avatar) VALUES (?,?,?,?,?,?,?,?)`;
     const id = uuidv4();
-    const result = await query(sql_create_user, [id, username, password, name, email, phone, role, avatar]);
-
-    if (role == Role.Employer) {
-      const sql_create_employer = `INSERT INTO employer (id, about) VALUES (?,?)`;
-      await query(sql_create_employer, [id, about]);
-    } else {
-      const sql_create_jobseeker = `INSERT INTO jobseeker (id, interested) VALUES (?,?)`;
-      await query(sql_create_jobseeker, [id, interested]);
-    }
-
+    const result = await query(sql, [id, username, password, name, email, phone, role, avatar]);
     const affectedRows = result ? result.affectedRows : 0;
 
     return affectedRows;
@@ -65,4 +60,4 @@ class UserModel {
   };
 }
 
-module.exports = new UserModel();
+module.exports = new EmployerModel();

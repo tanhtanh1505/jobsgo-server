@@ -6,6 +6,7 @@ const HttpException = require("./utils/HttpException");
 const cookieParser = require("cookie-parser");
 const socket = require("./socket/index");
 const userRoutes = require("./routes/user");
+const jobsRoutes = require("./routes/jobdescription");
 
 const setup = require("./setup/index");
 
@@ -22,6 +23,7 @@ app.use(express.json());
 socket.listen(server);
 
 app.use("/", userRoutes);
+app.use("/jobs", jobsRoutes);
 app.get("/", (req, res) => {
   res.status(200).end("hi");
 });
