@@ -53,7 +53,26 @@ router.post("/:id/create", middleware.verifyToken, middleware.isJobSeeker, catch
  *              200:
  *                  description: success
  */
-router.post("/:id/create", middleware.verifyToken, middleware.isJobSeeker, catchAsync(applicationController.createApplication));
+router.post("/:id/mark", middleware.verifyToken, middleware.isJobSeeker, catchAsync(applicationController.markApplication));
+
+/**
+ * @openapi
+ * /applications/{id}/unmark:
+ *  post:
+ *      summary: unmark an application
+ *      description: for jobseeker to unmark an application of jobId
+ *      tags:
+ *      - Application
+ *      parameters:
+ *       - in: path
+ *         name: jobId
+ *         type: string
+ *         required: true
+ *      responses:
+ *              200:
+ *                  description: success
+ */
+router.post("/:id/unmark", middleware.verifyToken, middleware.isJobSeeker, catchAsync(applicationController.unmarkApplication));
 
 /**
  * @openapi

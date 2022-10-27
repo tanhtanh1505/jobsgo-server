@@ -1,4 +1,5 @@
 const CommentModel = require("../models/comment");
+const HttpException = require("../utils/HttpException");
 
 class CommentController {
   // crud

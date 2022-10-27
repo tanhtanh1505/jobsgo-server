@@ -33,8 +33,6 @@ class ApplicationModel {
 
     sql = sql.replace(",", " AND");
 
-    console.log(sql);
-
     const result = await query(sql, [...values]);
 
     return result;
@@ -75,7 +73,16 @@ class ApplicationModel {
 
   //mark an application in bookbark
   mark = async (jobseeker_id, job_id) => {
-    const sql = `UPDATE application SET status = 'marked' WHERE jobseeker_id = ? AND job_id = ?`;
+    const sql = `UPDATE application SET marked = 1 WHERE jobseeker_id = ? AND job_id = ?`;
+    const result = await query(sql, [jobseeker_id, job_id]);
+
+    const affectedRows = result ? result.affectedRows : 0;
+
+    return affectedRows;
+  };
+
+  unmark = async (jobseeker_id, job_id) => {
+    const sql = `UPDATE application SET marked = 0 WHERE jobseeker_id = ? AND job_id = ?`;
     const result = await query(sql, [jobseeker_id, job_id]);
 
     const affectedRows = result ? result.affectedRows : 0;

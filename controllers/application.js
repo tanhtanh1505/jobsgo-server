@@ -1,6 +1,7 @@
 const ApplicationModel = require("../models/application");
 const JobModel = require("../models/job");
 const Role = require("../constants/user");
+const HttpException = require("../utils/HttpException");
 
 class ApplicationController {
   getApplicationOfJob = async (req, res) => {
@@ -27,7 +28,7 @@ class ApplicationController {
   createApplication = async (req, res) => {
     //id of job
     const application = await ApplicationModel.findBy({ job_id: req.params.id, jobseeker_id: req.user.id });
-    if (application) {
+    if (application && application.length > 0) {
       return res.send("Already applied");
     }
 
@@ -38,6 +39,37 @@ class ApplicationController {
     }
 
     res.send("Application was created!");
+  };
+
+  //mark application
+  markApplication = async (req, res) => {
+    const application = await ApplicationModel.findBy({ job_id: req.params.id, jobseeker_id: req.user.id });
+    if (!(application && application.length > 0)) {
+      await this.createApplication(req, res);
+    }
+
+    const result = await ApplicationModel.mark(req.user.id, req.params.id);
+
+    if (!result) {
+      throw new HttpException(500, "Something went wrong");
+    }
+
+    res.send("Application was marked!");
+  };
+
+  unmarkApplication = async (req, res) => {
+    const application = await ApplicationModel.findBy({ job_id: req.params.id, jobseeker_id: req.user.id });
+    if (!(application && application.length > 0)) {
+      throw new HttpException(500, "Application not exist");
+    }
+
+    const result = await ApplicationModel.unmark(req.user.id, req.params.id);
+
+    if (!result) {
+      throw new HttpException(500, "Something went wrong");
+    }
+
+    res.send("Application was unmarked!");
   };
 
   //accept an application
