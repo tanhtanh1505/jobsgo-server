@@ -1,45 +1,46 @@
 const UserModel = require("../models/user");
-const JobDescriptionModel = require("../models/jobdescription");
+const JobModel = require("../models/job");
 const HttpException = require("../utils/HttpException");
 const dotenv = require("dotenv");
 dotenv.config();
 
-class JobDescriptionController {
+class JobController {
   getAll = async (req, res) => {
-    let list = await JobDescriptionModel.find();
+    let list = await JobModel.find();
     res.send(list);
   };
 
   getById = async (req, res) => {
-    const jobdescription = await JobDescriptionModel.findOne({ id: req.params.id });
-    if (!jobdescription) {
-      throw new HttpException(404, "JobDescription not found");
+    const job = await JobModel.findOne({ id: req.params.id });
+    if (!job) {
+      throw new HttpException(404, "Job not found");
     }
-    res.send(jobdescription);
+    res.send(job);
   };
 
-  getMyJobDescription = async (req, res) => {
-    let listJobs = await JobDescriptionModel.find({ author: req.user.id });
+  getMyJob = async (req, res) => {
+    let listJobs = await JobModel.find({ author: req.user.id });
 
     res.send(listJobs);
   };
 
   create = async (req, res) => {
-    const { title, description, requirement, tag } = req.body;
+    const { title, description, requirement, tags } = req.body;
 
-    if (!title || !description || !requirement || !tag) throw new HttpException(500, "Fill all required feild: title, description, requirement, tag");
+    if (!title || !description || !requirement || !tags)
+      throw new HttpException(500, "Fill all required feild: title, description, requirement, tags");
 
-    const result = await JobDescriptionModel.create(req.body, req.user.id);
+    const result = await JobModel.create(req.body, req.user.id);
 
     if (!result) {
       throw new HttpException(500, "Something went wrong");
     }
 
-    res.status(201).send("Jobs was created!");
+    res.send("Jobs was created!");
   };
 
   update = async (req, res) => {
-    const result = await JobDescriptionModel.update(req.body, req.params.id);
+    const result = await JobModel.update(req.body, req.params.id);
 
     if (!result) {
       throw new HttpException(404, "Something went wrong");
@@ -53,7 +54,7 @@ class JobDescriptionController {
   };
 
   delete = async (req, res) => {
-    const result = await UserModel.delete(req.params.id);
+    const result = await JobModel.delete(req.params.id);
     if (!result) {
       throw new HttpException(404, "Job not found");
     }
@@ -61,4 +62,4 @@ class JobDescriptionController {
   };
 }
 
-module.exports = new JobDescriptionController();
+module.exports = new JobController();

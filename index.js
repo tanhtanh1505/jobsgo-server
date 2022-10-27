@@ -7,6 +7,7 @@ const cookieParser = require("cookie-parser");
 const socket = require("./socket/index");
 const userRoutes = require("./routes/user");
 const jobsRoutes = require("./routes/jobdescription");
+const commentRoutes = require("./routes/comment");
 const employerRouter = require("./routes/employer");
 const swagger = require("./utils/swagger");
 
@@ -28,6 +29,7 @@ socket.listen(server);
 
 app.use("/", userRoutes);
 app.use("/jobs", jobsRoutes);
+app.use("/jobs/:id/comments", commentRoutes);
 app.use("/employer", employerRouter);
 
 app.get("/", (req, res) => {

@@ -64,7 +64,27 @@ router.post("/register", catchAsync(userController.createUser));
  *                  description: success
  */
 router.post("/login", catchAsync(userController.userLogin));
+/**
+ * @openapi
+ * /logout:
+ *  post:
+ *      tags:
+ *      - User
+ *      responses:
+ *              200:
+ *                  description: success
+ */
 router.post("/logout", middleware.verifyToken, catchAsync(userController.userLogout));
+/**
+ * @openapi
+ * /refreshToken:
+ *  post:
+ *      tags:
+ *      - User
+ *      responses:
+ *              200:
+ *                  description: success
+ */
 router.post("/refreshToken", catchAsync(userController.refreshRToken));
 /**
  * @openapi
@@ -77,6 +97,22 @@ router.post("/refreshToken", catchAsync(userController.refreshRToken));
  *                  description: success
  */
 router.get("/profile", middleware.verifyToken, catchAsync(userController.getCurrentUser));
+/**
+ * @openapi
+ * /info/{username}:
+ *  get:
+ *      tags:
+ *      - User
+ *      parameters:
+ *       - in: path
+ *         name: username
+ *         type: string
+ *         required: true
+ *         description: username
+ *      responses:
+ *              200:
+ *                  description: success
+ */
 router.get("/info/:username", catchAsync(userController.getUserByUserName));
 // router.post("/uploadAvatar", catchAsync(user.uploadAvatar));
 
