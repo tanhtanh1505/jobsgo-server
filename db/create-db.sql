@@ -104,6 +104,8 @@ COLLATE = utf8mb4_0900_ai_ci;
 CREATE TABLE IF NOT EXISTS `jobsgo`.`application` (
   `jobseeker_id` VARCHAR(45) NOT NULL,
   `job_id` VARCHAR(45) NOT NULL,
+  `marked` TINYINT NULL DEFAULT 0,
+  `accepted` VARCHAR(45) NULL DEFAULT 0,
   `create_time` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
   `update_time` TIMESTAMP NULL DEFAULT NULL,
   INDEX `fk_application_1_idx` (`job_id` ASC) VISIBLE,

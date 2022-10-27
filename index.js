@@ -6,9 +6,10 @@ const HttpException = require("./utils/HttpException");
 const cookieParser = require("cookie-parser");
 const socket = require("./socket/index");
 const userRoutes = require("./routes/user");
-const jobsRoutes = require("./routes/jobdescription");
+const jobsRoutes = require("./routes/job");
 const commentRoutes = require("./routes/comment");
 const employerRouter = require("./routes/employer");
+const applicationRouter = require("./routes/application");
 const swagger = require("./utils/swagger");
 
 const setup = require("./setup/index");
@@ -30,6 +31,7 @@ socket.listen(server);
 app.use("/", userRoutes);
 app.use("/jobs", jobsRoutes);
 app.use("/jobs/:id/comments", commentRoutes);
+app.use("/applications", applicationRouter);
 app.use("/employer", employerRouter);
 
 app.get("/", (req, res) => {

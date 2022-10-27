@@ -7,6 +7,8 @@ const middleware = require("../middlewares/auth");
  * @openapi
  * /register:
  *  post:
+ *      summary: register a new user
+ *      description: register a new user, set role to Employer or JobSeeker
  *      tags:
  *      - User
  *      requestBody:
@@ -45,6 +47,7 @@ router.post("/register", catchAsync(userController.createUser));
  * @openapi
  * /login:
  *  post:
+ *      summary: login
  *      tags:
  *      - User
  *      requestBody:
@@ -68,6 +71,7 @@ router.post("/login", catchAsync(userController.userLogin));
  * @openapi
  * /logout:
  *  post:
+ *      summary: logout
  *      tags:
  *      - User
  *      responses:
@@ -79,6 +83,7 @@ router.post("/logout", middleware.verifyToken, catchAsync(userController.userLog
  * @openapi
  * /refreshToken:
  *  post:
+ *      summary: refresh token
  *      tags:
  *      - User
  *      responses:
@@ -90,6 +95,7 @@ router.post("/refreshToken", catchAsync(userController.refreshRToken));
  * @openapi
  * /profile:
  *  get:
+ *      summary: get profile of user
  *      tags:
  *      - User
  *      responses:
@@ -101,6 +107,7 @@ router.get("/profile", middleware.verifyToken, catchAsync(userController.getCurr
  * @openapi
  * /info/{username}:
  *  get:
+ *      summary: get info of other user
  *      tags:
  *      - User
  *      parameters:

@@ -76,7 +76,7 @@ module.exports.isEmployer = async (req, res, next) => {
 
 module.exports.isJobSeeker = async (req, res, next) => {
   try {
-    if ((req.user.role = Role.JobSeeker)) {
+    if (req.user.role != Role.JobSeeker) {
       throw new HttpException(404, "You are not jobseeker");
     }
 

@@ -23,7 +23,7 @@ const options = {
       },
     ],
   },
-  apis: ["./routes/user.js", "./routes/jobdescription.js", "./routes/comment.js", "./routes/employer.js"],
+  apis: ["./routes/user.js", "./routes/job.js", "./routes/comment.js", "./routes/employer.js", "./routes/application.js"],
 };
 
 const swaggerSpec = swaggerJSDoc(options);
