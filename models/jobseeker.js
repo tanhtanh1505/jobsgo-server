@@ -1,11 +1,11 @@
 const query = require("../db/dbConnection");
 const { multipleColumnSet } = require("../utils/common");
 
-class EmployerModel {
+class JobseekerModel {
   update = async (params, id) => {
     const { columnSet, values } = multipleColumnSet(params);
 
-    const sql = `UPDATE employer SET ${columnSet} WHERE id = ?`;
+    const sql = `UPDATE jobseeker SET ${columnSet} WHERE id = ?`;
 
     const result = await query(sql, [...values, id]);
 
@@ -13,4 +13,4 @@ class EmployerModel {
   };
 }
 
-module.exports = new EmployerModel();
+module.exports = new JobseekerModel();

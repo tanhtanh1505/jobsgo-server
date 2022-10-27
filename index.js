@@ -5,6 +5,7 @@ const dotenv = require("dotenv");
 const HttpException = require("./utils/HttpException");
 const cookieParser = require("cookie-parser");
 const socket = require("./socket/index");
+const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/user");
 const jobsRoutes = require("./routes/job");
 const commentRoutes = require("./routes/comment");
@@ -28,7 +29,8 @@ app.use(express.json());
 
 socket.listen(server);
 
-app.use("/", userRoutes);
+app.use("/", authRoutes);
+app.use("/user", userRoutes);
 app.use("/jobs", jobsRoutes);
 app.use("/jobs/:id/comments", commentRoutes);
 app.use("/applications", applicationRouter);

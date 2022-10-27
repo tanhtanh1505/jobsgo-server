@@ -1,8 +1,11 @@
 const UserModel = require("../models/user");
+const EmployerModel = require("../models/employer");
+const JobSeekerModel = require("../models/jobseeker");
 const HttpException = require("../utils/HttpException");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
+const Role = require("../constants/user");
 dotenv.config();
 
 class UserController {
@@ -82,29 +85,32 @@ class UserController {
   };
 
   updateUser = async (req, res) => {
-    this.checkValidation(req);
+    const { name, avatar, about, interested } = req.body;
 
-    await this.hashPassword(req);
+    if (!name || !avatar || !about || !interested) throw new HttpException(500, "Fill all required feild: name, avatar, about, interested");
 
-    const { confirm_password, ...restOfUpdates } = req.body;
-
-    // do the update query and get the result
-    // it can be partial edit
-    const result = await UserModel.update(restOfUpdates, req.params.id);
+    var result;
+    if (req.user.role == Role.Employer) {
+      result = await UserModel.update({ name, avatar }, req.user.id);
+      await EmployerModel.update({ about }, req.user.id);
+    } else {
+      result = await UserModel.update({ name, avatar }, req.user.id);
+      await JobSeekerModel.update({ interested }, req.user.id);
+    }
 
     if (!result) {
       throw new HttpException(404, "Something went wrong");
     }
 
-    const { affectedRows, changedRows, info } = result;
+    const { affectedRows, info } = result;
 
-    const message = !affectedRows ? "User not found" : affectedRows && changedRows ? "User updated successfully" : "Updated faild";
+    const message = !affectedRows ? "User not found" : affectedRows ? "User updated successfully" : "Updated faild";
 
     res.send({ message, info });
   };
 
   deleteUser = async (req, res) => {
-    const result = await UserModel.delete(req.params.id);
+    const result = await UserModel.delete(req.user.id);
     if (!result) {
       throw new HttpException(404, "User not found");
     }
