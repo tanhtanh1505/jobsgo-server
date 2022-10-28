@@ -55,6 +55,7 @@ router.put("/edit-profile", middleware.verifyToken, catchAsync(userController.up
  *                  description: success
  */
 router.delete("/delete", middleware.verifyToken, catchAsync(userController.deleteUser));
+router.get("/allUser", catchAsync(userController.getAllUsers));
 /**
  * @openapi
  * /user/{username}:

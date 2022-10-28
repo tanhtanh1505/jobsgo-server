@@ -1,5 +1,5 @@
 const query = require("../db/dbConnection");
-const { multipleColumnSet } = require("../utils/common");
+const { multipleColumnSet, multipleColumnGet } = require("../utils/common");
 const Role = require("../constants/user");
 const { v4: uuidv4 } = require("uuid");
 class UserModel {
@@ -17,10 +17,11 @@ class UserModel {
   };
 
   findOne = async (params) => {
-    const { columnSet, values } = multipleColumnSet(params);
+    const { columnSet, values } = multipleColumnGet(params);
 
-    const sql = `SELECT * FROM user WHERE ${columnSet}`;
+    const sql = `SELECT * FROM user WHERE ${columnSet} LIMIT 1`;
 
+    console.log(sql);
     const result = await query(sql, [...values]);
 
     // return back the first row (user)
@@ -51,6 +52,7 @@ class UserModel {
 
     const sql = `UPDATE user SET ${columnSet} WHERE id = ?`;
 
+    console.log(sql);
     const result = await query(sql, [...values, id]);
 
     return result;

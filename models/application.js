@@ -1,5 +1,5 @@
 const query = require("../db/dbConnection");
-const { multipleColumnSet } = require("../utils/common");
+const { multipleColumnSet, multipleColumnGet } = require("../utils/common");
 const Role = require("../constants/user");
 const { v4: uuidv4 } = require("uuid");
 class ApplicationModel {
@@ -10,7 +10,7 @@ class ApplicationModel {
       return await query(sql);
     }
 
-    const { columnSet, values } = multipleColumnSet(params);
+    const { columnSet, values } = multipleColumnGet(params);
     sql += ` WHERE ${columnSet}`;
 
     return await query(sql, [...values]);
@@ -19,7 +19,7 @@ class ApplicationModel {
   findOne = async (params) => {
     const { columnSet, values } = multipleColumnSet(params);
 
-    const sql = `SELECT * FROM application WHERE ${columnSet}`;
+    const sql = `SELECT * FROM application WHERE ${columnSet} LIMIT 1`;
 
     const result = await query(sql, [...values]);
 
@@ -27,11 +27,9 @@ class ApplicationModel {
   };
 
   findBy = async (params) => {
-    const { columnSet, values } = multipleColumnSet(params);
+    const { columnSet, values } = multipleColumnGet(params);
 
     var sql = `SELECT * FROM application WHERE ${columnSet}`;
-
-    sql = sql.replace(",", " AND");
 
     const result = await query(sql, [...values]);
 

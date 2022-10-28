@@ -1,5 +1,5 @@
 const query = require("../db/dbConnection");
-const { multipleColumnSet } = require("../utils/common");
+const { multipleColumnSet, multipleColumnGet } = require("../utils/common");
 const Role = require("../constants/user");
 const { v4: uuidv4 } = require("uuid");
 class CommentModel {
@@ -10,14 +10,14 @@ class CommentModel {
       return await query(sql);
     }
 
-    const { columnSet, values } = multipleColumnSet(params);
+    const { columnSet, values } = multipleColumnGet(params);
     sql += ` WHERE ${columnSet}`;
 
     return await query(sql, [...values]);
   };
 
   findOne = async (params) => {
-    const { columnSet, values } = multipleColumnSet(params);
+    const { columnSet, values } = multipleColumnGet(params);
 
     const sql = `SELECT * FROM comment WHERE ${columnSet}`;
 
