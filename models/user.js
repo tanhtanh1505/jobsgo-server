@@ -10,7 +10,7 @@ class UserModel {
       return await query(sql);
     }
 
-    const { columnSet, values } = multipleColumnSet(params);
+    const { columnSet, values } = multipleColumnGet(params);
     sql += ` WHERE ${columnSet}`;
 
     return await query(sql, [...values]);
@@ -28,11 +28,22 @@ class UserModel {
     return result[0];
   };
 
-  create = async ({ username, password, name, email, phone, role = Role.JobSeeker, avatar = "", about = "about", interested = "interested" }) => {
-    const sql_create_user = `INSERT INTO user (id, username, password, name, email, phone, role, avatar) VALUES (?,?,?,?,?,?,?,?)`;
+  create = async ({
+    username,
+    password,
+    name,
+    email,
+    phone,
+    role = Role.JobSeeker,
+    avatar = "",
+    location = "",
+    about = "about",
+    interested = "interested",
+  }) => {
+    const sql_create_user = `INSERT INTO user (id, username, password, name, email, phone, role, avatar, location) VALUES (?,?,?,?,?,?,?,?,?)`;
 
     const id = uuidv4();
-    const result = await query(sql_create_user, [id, username, password, name, email, phone, role, avatar]);
+    const result = await query(sql_create_user, [id, username, password, name, email, phone, role, avatar, location]);
 
     if (role == Role.Employer) {
       const sql_create_employer = `INSERT INTO employer (id, about) VALUES (?,?)`;

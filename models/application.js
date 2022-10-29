@@ -2,6 +2,8 @@ const query = require("../db/dbConnection");
 const { multipleColumnSet, multipleColumnGet } = require("../utils/common");
 const Role = require("../constants/user");
 const { v4: uuidv4 } = require("uuid");
+const ApplicationStatus = require("../constants/application");
+
 class ApplicationModel {
   find = async (params = {}) => {
     let sql = `SELECT * FROM application`;
@@ -61,7 +63,7 @@ class ApplicationModel {
 
   //mark an application as accepted
   accept = async (jobseekerId, jobId) => {
-    const sql = `UPDATE application SET status = 'accepted' WHERE jobseekerId = ? AND jobId = ?`;
+    const sql = `UPDATE application SET status = ${ApplicationStatus.Accepted} WHERE jobseekerId = ? AND jobId = ?`;
     const result = await query(sql, [jobseekerId, jobId]);
 
     const affectedRows = result ? result.affectedRows : 0;

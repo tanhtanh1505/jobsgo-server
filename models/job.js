@@ -25,10 +25,47 @@ class JobModel {
     return result[0];
   };
 
-  create = async ({ title, description, requirement, start_time = null, end_time = null, tags }, author) => {
-    const sql = `INSERT INTO job (id, title, description, requirement, author, start_time, end_time, tags) VALUES (?,?,?,?,?,?,?,?)`;
+  create = async (
+    {
+      title,
+      description,
+      requirements,
+      tags,
+      startTime = null,
+      endTime = null,
+      salary,
+      typeOfWorking,
+      sex,
+      positions,
+      slots,
+      exp,
+      location,
+      benefits,
+      imageUrl,
+    },
+    author
+  ) => {
+    const sql = `INSERT INTO job (id, title, description, requirements, tags, startTime, endTime, salary, typeOfWorking, sex, positions, slots, exp, location, benefits, imageUrl, author) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
     const id = uuidv4();
-    const result = await query(sql, [id, title, description, requirement, author, start_time, end_time, tags]);
+    const result = await query(sql, [
+      id,
+      title,
+      description,
+      requirements,
+      tags,
+      startTime,
+      endTime,
+      salary,
+      typeOfWorking,
+      sex,
+      positions,
+      slots,
+      exp,
+      location,
+      benefits,
+      imageUrl,
+      author,
+    ]);
     const affectedRows = result ? result.affectedRows : 0;
 
     return affectedRows;
