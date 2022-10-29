@@ -37,22 +37,22 @@ class ApplicationModel {
   };
 
   //find all applications of a job
-  findApplicationOfJob = async (job_id) => {
-    const sql = `SELECT * FROM application WHERE job_id = ?`;
-    const result = await query(sql, [job_id]);
+  findApplicationOfJob = async (jobId) => {
+    const sql = `SELECT * FROM application WHERE jobId = ?`;
+    const result = await query(sql, [jobId]);
     return result;
   };
 
   //find all applications of a user
   findApplicationOfJobSeeker = async (user_id) => {
-    const sql = `SELECT * FROM application WHERE jobseeker_id = ?`;
+    const sql = `SELECT * FROM application WHERE jobseekerId = ?`;
     const result = await query(sql, [user_id]);
     return result;
   };
 
-  create = async (jobseeker_id, job_id) => {
-    const sql = `INSERT INTO application (jobseeker_id, job_id) VALUES (?,?)`;
-    const result = await query(sql, [jobseeker_id, job_id]);
+  create = async (jobseekerId, jobId) => {
+    const sql = `INSERT INTO application (jobseekerId, jobId) VALUES (?,?)`;
+    const result = await query(sql, [jobseekerId, jobId]);
 
     const affectedRows = result ? result.affectedRows : 0;
 
@@ -60,9 +60,9 @@ class ApplicationModel {
   };
 
   //mark an application as accepted
-  accept = async (jobseeker_id, job_id) => {
-    const sql = `UPDATE application SET status = 'accepted' WHERE jobseeker_id = ? AND job_id = ?`;
-    const result = await query(sql, [jobseeker_id, job_id]);
+  accept = async (jobseekerId, jobId) => {
+    const sql = `UPDATE application SET status = 'accepted' WHERE jobseekerId = ? AND jobId = ?`;
+    const result = await query(sql, [jobseekerId, jobId]);
 
     const affectedRows = result ? result.affectedRows : 0;
 
@@ -70,27 +70,27 @@ class ApplicationModel {
   };
 
   //mark an application in bookbark
-  mark = async (jobseeker_id, job_id) => {
-    const sql = `UPDATE application SET marked = 1 WHERE jobseeker_id = ? AND job_id = ?`;
-    const result = await query(sql, [jobseeker_id, job_id]);
+  mark = async (jobseekerId, jobId) => {
+    const sql = `UPDATE application SET marked = 1 WHERE jobseekerId = ? AND jobId = ?`;
+    const result = await query(sql, [jobseekerId, jobId]);
 
     const affectedRows = result ? result.affectedRows : 0;
 
     return affectedRows;
   };
 
-  unmark = async (jobseeker_id, job_id) => {
-    const sql = `UPDATE application SET marked = 0 WHERE jobseeker_id = ? AND job_id = ?`;
-    const result = await query(sql, [jobseeker_id, job_id]);
+  unmark = async (jobseekerId, jobId) => {
+    const sql = `UPDATE application SET marked = 0 WHERE jobseekerId = ? AND jobId = ?`;
+    const result = await query(sql, [jobseekerId, jobId]);
 
     const affectedRows = result ? result.affectedRows : 0;
 
     return affectedRows;
   };
 
-  delete = async (jobseeker_id, job_id) => {
-    const sql = `DELETE FROM application WHERE jobseeker_id = ? AND job_id = ?`;
-    const result = await query(sql, [jobseeker_id, job_id]);
+  delete = async (jobseekerId, jobId) => {
+    const sql = `DELETE FROM application WHERE jobseekerId = ? AND jobId = ?`;
+    const result = await query(sql, [jobseekerId, jobId]);
 
     const affectedRows = result ? result.affectedRows : 0;
 

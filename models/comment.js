@@ -27,16 +27,16 @@ class CommentModel {
   };
 
   //find all comments of a job
-  findCommentOfJob = async (job_id) => {
-    const sql = `SELECT * FROM comment WHERE job_id = ?`;
-    const result = await query(sql, [job_id]);
+  findCommentOfJob = async (jobId) => {
+    const sql = `SELECT * FROM comment WHERE jobId = ?`;
+    const result = await query(sql, [jobId]);
     return result;
   };
 
-  create = async (author, job_id, content) => {
+  create = async (author, jobId, content) => {
     const id = uuidv4();
-    const sql = `INSERT INTO comment (id, author, job_id, content) VALUES (?,?,?,?)`;
-    const result = await query(sql, [id, author, job_id, content]);
+    const sql = `INSERT INTO comment (id, author, jobId, content) VALUES (?,?,?,?)`;
+    const result = await query(sql, [id, author, jobId, content]);
 
     const affectedRows = result ? result.affectedRows : 0;
 

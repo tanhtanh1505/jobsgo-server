@@ -27,7 +27,7 @@ class ApplicationController {
 
   createApplication = async (req, res) => {
     //id of job
-    const application = await ApplicationModel.findBy({ job_id: req.params.id, jobseeker_id: req.user.id });
+    const application = await ApplicationModel.findBy({ jobId: req.params.id, jobseekerId: req.user.id });
     if (application && application.length > 0) {
       return res.send("Already applied");
     }
@@ -43,7 +43,7 @@ class ApplicationController {
 
   //mark application
   markApplication = async (req, res) => {
-    const application = await ApplicationModel.findBy({ job_id: req.params.id, jobseeker_id: req.user.id });
+    const application = await ApplicationModel.findBy({ jobId: req.params.id, jobseekerId: req.user.id });
     if (!(application && application.length > 0)) {
       await this.createApplication(req, res);
     }
@@ -58,7 +58,7 @@ class ApplicationController {
   };
 
   unmarkApplication = async (req, res) => {
-    const application = await ApplicationModel.findBy({ job_id: req.params.id, jobseeker_id: req.user.id });
+    const application = await ApplicationModel.findBy({ jobId: req.params.id, jobseekerId: req.user.id });
     if (!(application && application.length > 0)) {
       throw new HttpException(500, "Application not exist");
     }
@@ -74,7 +74,7 @@ class ApplicationController {
 
   //accept an application
   acceptApplication = async (req, res) => {
-    const result = await ApplicationModel.accept(req.params.id, req.params.job_id);
+    const result = await ApplicationModel.accept(req.params.id, req.params.jobId);
 
     if (!result) {
       throw new HttpException(500, "Something went wrong");
