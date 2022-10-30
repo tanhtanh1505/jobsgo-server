@@ -4,6 +4,7 @@ const CommentModel = require("../models/comment");
 const JobModel = require("../models/job");
 const HttpException = require("../utils/HttpException");
 const Role = require("../constants/user");
+const { createUserSchema, loginSchema, updateUserSchema } = require("../schemas");
 
 module.exports.verifyToken = async (req, res, next) => {
   try {
@@ -85,4 +86,20 @@ module.exports.isJobSeeker = async (req, res, next) => {
     e.status = 401;
     next(e);
   }
+};
+
+module.exports.validateCreateUser = (req, res, next) => {
+  const { error } = createUserSchema.validate(req.body);
+  if (error) {
+    throw new HttpException(500, error.message);
+  }
+  next();
+};
+
+module.exports.validateLogin = (req, res, next) => {
+  const { error } = loginSchema.validate(req.body);
+  if (error) {
+    throw new HttpException(500, error.message);
+  }
+  next();
 };

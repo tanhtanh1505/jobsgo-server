@@ -28,30 +28,19 @@ class UserModel {
     return result[0];
   };
 
-  create = async ({
-    username,
-    password,
-    name,
-    email,
-    phone,
-    role = Role.JobSeeker,
-    avatar = "",
-    location = "",
-    about = "about",
-    interested = "interested",
-  }) => {
-    const sql_create_user = `INSERT INTO user (id, username, password, name, email, phone, role, avatar, location) VALUES (?,?,?,?,?,?,?,?,?)`;
+  create = async ({ username, password, name, email, phone, role = Role.JobSeeker, avatar = "", address = "" }) => {
+    const sql_create_user = `INSERT INTO user (id, username, password, name, email, phone, role, avatar, address) VALUES (?,?,?,?,?,?,?,?,?)`;
 
     const id = uuidv4();
-    const result = await query(sql_create_user, [id, username, password, name, email, phone, role, avatar, location]);
+    const result = await query(sql_create_user, [id, username, password, name, email, phone, role, avatar, address]);
 
-    if (role == Role.Employer) {
-      const sql_create_employer = `INSERT INTO employer (id, about) VALUES (?,?)`;
-      await query(sql_create_employer, [id, about]);
-    } else {
-      const sql_create_jobseeker = `INSERT INTO jobseeker (id, interested) VALUES (?,?)`;
-      await query(sql_create_jobseeker, [id, interested]);
-    }
+    // if (role == Role.Employer) {
+    //   const sql_create_employer = `INSERT INTO employer (id, about) VALUES (?,?)`;
+    //   await query(sql_create_employer, [id, about]);
+    // } else {
+    //   const sql_create_jobseeker = `INSERT INTO jobseeker (id, interested) VALUES (?,?)`;
+    //   await query(sql_create_jobseeker, [id, interested]);
+    // }
 
     const affectedRows = result ? result.affectedRows : 0;
 

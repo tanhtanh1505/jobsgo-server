@@ -6,6 +6,8 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 const Role = require("../constants/user");
+const mailService = require("../services/mail");
+const jwtHelper = require("../helper/jwtHelper");
 dotenv.config();
 
 class UserController {
@@ -87,8 +89,6 @@ class UserController {
   updateUser = async (req, res) => {
     const { name, avatar, about, interested } = req.body;
 
-    if (!name || !avatar || !about || !interested) throw new HttpException(500, "Fill all required feild: name, avatar, about, interested");
-
     var result;
     if (req.user.role == Role.Employer) {
       result = await UserModel.update({ name, avatar }, req.user.id);
@@ -133,8 +133,8 @@ class UserController {
     }
 
     // user matched!
-    const accessToken = this.genToken(user);
-    const refreshToken = this.genRefreshToken(user);
+    const accessToken = jwtHelper.genToken(user);
+    const refreshToken = jwtHelper.genRefreshToken(user);
     await global.redisClient.rPush(user.id, refreshToken);
     res.cookie("refreshToken", refreshToken, {
       httpOnly: false,
@@ -176,6 +176,63 @@ class UserController {
     });
   };
 
+  resetPassword = async (req, res) => {
+    const { email } = req.body;
+
+    const user = await UserModel.findOne({ email });
+
+    if (!user) {
+      throw new HttpException(401, "User not exist!");
+    }
+
+    const token = jwtHelper.genTokenResetPassword(user);
+    const url = `${process.env.CLIENT_URL}/reset-password/${token}`;
+
+    const mailOptions = {
+      from: "service@tanhuet.com",
+      to: email,
+      subject: "Reset your password",
+      html: `
+        <h2>Please click on given link to reset your password</h2>
+        <p>${url}</p>
+      `,
+    };
+
+    mailService.sendMail(mailOptions);
+
+    res.send("Check your email to reset password");
+  };
+
+  changePassword = async (req, res) => {
+    const { password } = req.body;
+
+    const { token } = req.params;
+
+    jwt.verify(token, process.env.JWT_RESETPASS_KEY, async (err, user) => {
+      if (err) {
+        return res.status(401).json("Refresh Token is not valid");
+      }
+
+      if (!user) {
+        throw new HttpException(401, "Token is not valid");
+      }
+
+      const hashPassword = await bcrypt.hash(password, 8);
+
+      const result = await UserModel.update({ password: hashPassword }, user.id);
+
+      if (!result) {
+        throw new HttpException(404, "Something went wrong");
+      }
+
+      const { affectedRows } = result;
+
+      const message = !affectedRows ? "User not found" : affectedRows ? "User updated successfully" : "Updated faild";
+
+      res.send(message);
+    });
+  };
+
   refreshRToken = async (req, res) => {
     const refreshToken = req.cookies.refreshToken;
     console.log(refreshToken);
@@ -197,7 +254,7 @@ class UserController {
       // await global.redisClient.del(user.id);
       // await global.redisClient.lPush(user.id, newRToken);
 
-      const newAccessToken = this.genToken(user);
+      const newAccessToken = jwtHelper.genToken(user);
       await global.redisClient.rPush(user.id, newAccessToken);
 
       res.status(200).json(newAccessToken);
@@ -209,28 +266,6 @@ class UserController {
     if (req.body.password) {
       req.body.password = await bcrypt.hash(req.body.password, 8);
     }
-  };
-
-  genToken = (user, expiresIn = "7d") => {
-    return jwt.sign(
-      {
-        id: user.id,
-        username: user.username,
-      },
-      process.env.JWT_ACCESS_KEY,
-      { expiresIn: expiresIn }
-    );
-  };
-
-  genRefreshToken = (user, expiresIn = "365d") => {
-    return jwt.sign(
-      {
-        id: user.id,
-        username: user.username,
-      },
-      process.env.JWT_REFRESH_KEY,
-      { expiresIn: expiresIn }
-    );
   };
 }
 
