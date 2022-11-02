@@ -1,5 +1,5 @@
 const query = require("../db/dbConnection");
-const { multipleColumnSet, multipleColumnGet } = require("../utils/common");
+const { multipleColumnSet, multipleColumnGet, multipleColumnInsert } = require("../utils/common");
 
 class EmployerModel {
   find = async (params = {}) => {
@@ -24,6 +24,13 @@ class EmployerModel {
     const result = await query(sql, [...values]);
 
     return result[0];
+  };
+
+  create = async (params) => {
+    const { sql, values } = multipleColumnInsert("employer", params);
+    const result = await query(sql, [...values]);
+    const affectedRows = result ? result.affectedRows : 0;
+    return affectedRows;
   };
 
   update = async (params, id) => {

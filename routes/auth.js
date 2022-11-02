@@ -5,46 +5,6 @@ const middleware = require("../middlewares/auth");
 
 /**
  * @openapi
- * /register:
- *  post:
- *      summary: register a new user
- *      description: register a new user, set role to Employer or JobSeeker
- *      tags:
- *      - Auth
- *      requestBody:
- *          require: true
- *          content:
- *              application/json:
- *                  schema:
- *                      type: object
- *                      properties:
- *                          username:
- *                              example: "tanhne"
- *                          name:
- *                              example: "Tanh"
- *                          email:
- *                              example: "tanhtanh1505@gmail.com"
- *                          phone:
- *                              example: "0944150502"
- *                          role:
- *                              example: "JobSeeker"
- *                          avatar:
- *                              example: "avatar"
- *                          password:
- *                              type: string
- *                              example: "123"
- *                          about:
- *                              example: "abouthehe"
- *                          interested:
- *                              example: "interestedhehe"
- *      responses:
- *              200:
- *                  description: success
- */
-router.post("/register", middleware.validateCreateUser, catchAsync(userController.createUser));
-
-/**
- * @openapi
  * /login:
  *  post:
  *      summary: login
