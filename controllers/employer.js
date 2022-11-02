@@ -3,6 +3,7 @@ const UserModel = require("../models/user");
 const EmployerModel = require("../models/employer");
 const { v4: uuidv4 } = require("uuid");
 const Role = require("../constants/user");
+const bcrypt = require("bcryptjs");
 
 module.exports.register = async (req, res) => {
   const { username, name, password, email, phone, avatar, address, about, wallpaper, size } = req.body;
@@ -19,10 +20,11 @@ module.exports.register = async (req, res) => {
   if (user) {
     return res.status(409).send("Phone already in use");
   }
+  hashedpassword = await bcrypt.hash(password, 8);
   const newUser = await UserModel.create({
     id,
     username,
-    password,
+    password: hashedpassword,
     name,
     email,
     phone,
@@ -40,27 +42,42 @@ module.exports.register = async (req, res) => {
   return res.status(500).send("Error registering employer");
 };
 
-module.exports.getOwnerJobs = async (req, res) => {
-  const result = await JobModel.find({ author: req.params.id });
-  res.send(result);
+//edit profile
+module.exports.editProfile = async (req, res) => {
+  const { about, wallpaper, size } = req.body;
+  const employer = await EmployerModel.findOne({ id: req.user.id });
+  if (!employer) {
+    return res.status(409).send("Employer not found");
+  }
+  const newEmployer = await EmployerModel.update(
+    {
+      about,
+      wallpaper,
+      size,
+    },
+    req.user.id
+  );
+  if (newEmployer) {
+    return res.status(200).send("Employer edited successfully");
+  }
+  return res.status(500).send("Error editing employer");
 };
 
-module.exports.getJob = async (req, res) => {
-  const result = await JobModel.findOne({ id: req.params.id });
-  res.send(result);
+//get current employer
+module.exports.getCurrentEmployer = async (req, res) => {
+  return res.status(200).send(await getEmployerWithoutPassword(req.user.id));
 };
 
-module.exports.createJob = async (req, res) => {
-  const result = await JobModel.create(req.body, req.params.id);
-  res.send(result);
+//get employer by id
+module.exports.getEmployerById = async (req, res) => {
+  return res.status(200).send(await getEmployerWithoutPassword(req.params.id));
 };
 
-module.exports.updateJob = async (req, res) => {
-  const result = await JobModel.update(req.body, req.params.id);
-  res.send(result);
-};
-
-module.exports.deleteJob = async (req, res) => {
-  const result = await JobModel.delete(req.params.id);
-  res.send(result);
+getEmployerWithoutPassword = async (id) => {
+  const employer = await EmployerModel.findOne({ id: id });
+  if (!employer) {
+    return null;
+  }
+  const { password, ...employerWithoutPassword } = employer;
+  return employerWithoutPassword;
 };

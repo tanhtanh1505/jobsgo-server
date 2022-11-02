@@ -11,7 +11,7 @@ module.exports.createUserSchema = Joi.object({
   address: Joi.string().allow(""),
 });
 
-//create employer schema
+//employer schema
 module.exports.createEmployerSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().email().required(),
@@ -20,6 +20,12 @@ module.exports.createEmployerSchema = Joi.object({
   phone: Joi.string().required(),
   avatar: Joi.string().allow(""),
   address: Joi.string().allow(""),
+  about: Joi.string().allow(""),
+  wallpaper: Joi.string().allow(""),
+  size: Joi.number().allow(""),
+});
+
+module.exports.updateEmployerSchema = Joi.object({
   about: Joi.string().allow(""),
   wallpaper: Joi.string().allow(""),
   size: Joi.number().allow(""),

@@ -7,7 +7,7 @@ router.get("/:id/alljobs", catchAsync(employerController.getOwnerJobs));
 
 /**
  * @openapi
- * /register:
+ * /employer:
  *  post:
  *      summary: register a new employer
  *      description: register a new Employer
@@ -45,6 +45,64 @@ router.get("/:id/alljobs", catchAsync(employerController.getOwnerJobs));
  *              200:
  *                  description: success
  */
-router.post("/register", middleware.validateCreateEmployer, catchAsync(employerController.register));
+router.post("/", middleware.validateCreateEmployer, catchAsync(employerController.register));
 
+/**
+ * @openapi
+ * /employer:
+ *  put:
+ *      summary: edit profile of employer
+ *      description: edit profile of employer
+ *      tags:
+ *      - Employer
+ *      requestBody:
+ *          require: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      type: object
+ *                      properties:
+ *                          about:
+ *                              example: "abouthehe"
+ *                          wallpaper:
+ *                              example: "wallpaper"
+ *                          size:
+ *                              example: 1000
+ *      responses:
+ *              200:
+ *                  description: success
+ */
+router.put("/", middleware.verifyToken, middleware.isEmployer, middleware.validateEditEmployer, catchAsync(employerController.editProfile));
+
+/**
+ * @openapi
+ * /employer:
+ *  get:
+ *      summary: get current employer profile
+ *      tags:
+ *      - Employer
+ *      responses:
+ *              200:
+ *                  description: success
+ */
+router.get("/", middleware.verifyToken, catchAsync(employerController.getCurrentEmployer));
+
+/**
+ * @openapi
+ * /employer/{id}:
+ *  get:
+ *      summary: get employer by id
+ *      tags:
+ *      - Employer
+ *      parameters:
+ *       - in: path
+ *         name: id
+ *         type: string
+ *         required: true
+ *         description: id
+ *      responses:
+ *              200:
+ *                  description: success
+ */
+router.get("/:id", catchAsync(employerController.getEmployerById));
 module.exports = router;

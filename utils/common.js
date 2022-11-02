@@ -41,6 +41,22 @@ exports.multipleColumnGet = (object) => {
   };
 };
 
+exports.multipleColumnGetInner = (table, object) => {
+  if (typeof object !== "object") {
+    throw new Error("Invalid input");
+  }
+
+  const keys = Object.keys(object);
+  const values = Object.values(object);
+
+  columnSet = keys.map((key) => `${table}.${key} = ?`).join(" AND ");
+
+  return {
+    columnSet,
+    values,
+  };
+};
+
 //query insert into table
 exports.multipleColumnInsert = (table, data) => {
   if (typeof data !== "object") {
