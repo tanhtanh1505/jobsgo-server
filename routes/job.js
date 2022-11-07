@@ -22,21 +22,21 @@ const { validateCreateJob, validateUpdateJob } = require("../middlewares/validat
  *                              example: "title"
  *                          description:
  *                              example: "description"
- *                          requirement:
- *                              example: "requirement"
+ *                          requirements:
+ *                              example: "requirements"
  *                          tags:
  *                              example: "tags"
  *                          startTime:
- *                              example: "2022-11-01T00:00:00.000Z"
+ *                              example: "2022-11-01"
  *                          endTime:
- *                              example: "2022-12-01T00:00:00.000Z"
+ *                              example: "2022-12-01"
  *                          salary:
  *                              example: 1000
  *                          typeOfWorking:
  *                              example: "fulltime"
  *                          gender:
  *                              example: "male"
- *                          position:
+ *                          positions:
  *                              example: "staff"
  *                          slots:
  *                              example: 10
@@ -126,9 +126,9 @@ router
    *                          tags:
    *                              example: "tags"
    *                          startTime:
-   *                              example: "2022-11-01T00:00:00.000Z"
+   *                              example: "2022-11-01"
    *                          endTime:
-   *                              example: "2022-12-01T00:00:00.000Z"
+   *                              example: "2022-12-01"
    *                          salary:
    *                              example: 1000
    *                          typeOfWorking:

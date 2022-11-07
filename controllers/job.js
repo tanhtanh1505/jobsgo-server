@@ -3,6 +3,7 @@ const JobModel = require("../models/job");
 const HttpException = require("../utils/HttpException");
 const dotenv = require("dotenv");
 dotenv.config();
+const { v4: uuidv4 } = require("uuid");
 
 class JobController {
   getAll = async (req, res) => {
@@ -25,13 +26,14 @@ class JobController {
   };
 
   create = async (req, res) => {
-    const { title, description, requirement, tags, startTime, endTime, salary, typeOfWorking, gender, position, slots, exp, benefits, imageUrl } =
+    const { title, description, requirements, tags, startTime, endTime, salary, typeOfWorking, gender, positions, slots, exp, benefits, imageUrl } =
       req.body;
-
+    const newJobId = uuidv4();
     const result = await JobModel.create({
+      id: newJobId,
       title,
       description,
-      requirement,
+      requirements,
       tags,
       author: req.user.id,
       startTime,
@@ -39,7 +41,7 @@ class JobController {
       salary,
       typeOfWorking,
       gender,
-      position,
+      positions,
       slots,
       exp,
       benefits,
@@ -62,7 +64,7 @@ class JobController {
 
     const { affectedRows, changedRows, info } = result;
 
-    const message = !affectedRows ? "User not found" : affectedRows && changedRows ? "User updated successfully" : "Updated faild";
+    const message = !affectedRows ? "Job not found" : affectedRows && changedRows ? "Job updated successfully" : "Updated faild";
 
     res.send({ message, info });
   };
