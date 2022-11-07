@@ -10,6 +10,7 @@ const userRoutes = require("./routes/user");
 const jobsRoutes = require("./routes/job");
 // const commentRoutes = require("./routes/comment");
 const employerRouter = require("./routes/employer");
+const jobseekerRouter = require("./routes/jobseeker");
 const applicationRouter = require("./routes/application");
 const swagger = require("./utils/swagger");
 
@@ -32,6 +33,7 @@ socket.listen(server);
 app.use("/", authRoutes);
 app.use("/user", userRoutes);
 app.use("/employer", employerRouter);
+app.use("/jobseeker", jobseekerRouter);
 app.use("/job", jobsRoutes);
 // app.use("/job/:id/comments", commentRoutes);
 app.use("/job/:id/applications", applicationRouter);

@@ -1,5 +1,5 @@
 const query = require("../db/dbConnection");
-const { multipleColumnSet, multipleColumnGet, multipleColumnInsert } = require("../utils/common");
+const { multipleColumnSet, multipleColumnGetInner, multipleColumnInsert } = require("../utils/common");
 
 class JobseekerModel {
   find = async (params = {}) => {
@@ -9,15 +9,14 @@ class JobseekerModel {
       return await query(sql);
     }
 
-    const { columnSet, values } = multipleColumnGet(params);
+    const { columnSet, values } = multipleColumnGetInner("jobseeker", params);
     sql += ` WHERE ${columnSet}`;
 
     return await query(sql, [...values]);
   };
 
   findOne = async (params) => {
-    const { columnSet, values } = multipleColumnGet(params);
-
+    const { columnSet, values } = multipleColumnGetInner("jobseeker", params);
     const sql = `SELECT * FROM user INNER JOIN jobseeker ON user.id = jobseeker.id WHERE ${columnSet} LIMIT 1`;
 
     console.log(sql);
