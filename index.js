@@ -36,7 +36,7 @@ app.use("/employer", employerRouter);
 app.use("/jobseeker", jobseekerRouter);
 app.use("/job", jobsRoutes);
 // app.use("/job/:id/comments", commentRoutes);
-app.use("/job/:id/applications", applicationRouter);
+app.use("/job/:jobId/application", applicationRouter);
 
 app.get("/", (req, res) => {
   res.status(200).end("hi");

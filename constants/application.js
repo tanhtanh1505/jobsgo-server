@@ -1,5 +1,5 @@
 module.exports = {
-  Accepted: "Accepted",
-  Rejected: "Rejected",
-  Pending: "Pending",
+  Accepted: "accepted",
+  Rejected: "rejected",
+  Pending: "pending",
 };

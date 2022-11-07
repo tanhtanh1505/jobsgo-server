@@ -2,7 +2,6 @@ const applicationController = require("../controllers/application");
 const router = require("express").Router({ mergeParams: true });
 const catchAsync = require("../utils/catchAsync");
 const middleware = require("../middlewares/jwt");
-const { validateCreateApplication } = require("../middlewares/validate/application");
 
 // /**
 //  * @openapi
@@ -35,7 +34,7 @@ const { validateCreateApplication } = require("../middlewares/validate/applicati
  *              200:
  *                  description: success
  */
-router.post("/", middleware.verifyToken, validateCreateApplication, middleware.isJobSeeker, catchAsync(applicationController.createApplication));
+router.post("/", middleware.verifyToken, middleware.isJobSeeker, catchAsync(applicationController.createApplication));
 
 /**
  * @openapi
@@ -62,7 +61,7 @@ router.post("/", middleware.verifyToken, validateCreateApplication, middleware.i
  *                      type: object
  *                      properties:
  *                          status:
- *                             example: "Accepted"
+ *                             example: "accepted"
  *      responses:
  *              200:
  *                  description: success

@@ -53,22 +53,22 @@ class ApplicationModel {
   };
 
   create = async (jobseekerId, jobId) => {
-    const id = uuidv4();
-    const sql = `INSERT INTO application (id, jobseekerId, jobId, status) VALUES (?,?,?,?)`;
+    // const id = uuidv4();
+    const sql = `INSERT INTO application (jobseekerId, jobId, status) VALUES (?,?,?)`;
 
-    const result = await query(sql, [id, jobseekerId, jobId, ApplicationStatus.Pending]);
+    const result = await query(sql, [jobseekerId, jobId, ApplicationStatus.Pending]);
 
     const affectedRows = result ? result.affectedRows : 0;
 
     return affectedRows;
   };
 
-  update = async (params, id) => {
+  update = async (params, jobseekerId, jobId) => {
     const { columnSet, values } = multipleColumnSet(params);
 
-    const sql = `UPDATE application SET ${columnSet} WHERE id = ?`;
+    const sql = `UPDATE application SET ${columnSet} WHERE jobseekerId = ? AND jobId = ?`;
 
-    const result = await query(sql, [...values, id]);
+    const result = await query(sql, [...values, jobseekerId, jobId]);
 
     return result;
   };

@@ -15,7 +15,7 @@ class ApplicationController {
 
   getApplicationOfJob = async (req, res) => {
     //id of job
-    const result = await ApplicationModel.findApplicationOfJob(req.params.id);
+    const result = await ApplicationModel.findApplicationOfJob(req.params.jobId);
     res.send(result);
   };
 
@@ -41,7 +41,7 @@ class ApplicationController {
       return res.send("Already applied");
     }
 
-    const result = await ApplicationModel.create(req.user.id, req.params.id);
+    const result = await ApplicationModel.create(req.user.id, req.params.jobId);
 
     if (!result) {
       throw new HttpException(500, "Something went wrong");
@@ -51,13 +51,13 @@ class ApplicationController {
   };
 
   updateStatus = async (req, res) => {
-    const result = await ApplicationModel.update(req.params.id, req.body.status);
+    const result = await ApplicationModel.update(req.body.status, req.user.id, req.params.jobId);
 
     if (!result) {
       throw new HttpException(500, "Something went wrong");
     }
 
-    res.send("Application was accepted!");
+    res.send("Application status was updated!");
   };
 
   deleteApplication = async (req, res) => {
