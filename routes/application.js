@@ -2,7 +2,7 @@ const applicationController = require("../controllers/application");
 const router = require("express").Router({ mergeParams: true });
 const catchAsync = require("../utils/catchAsync");
 const middleware = require("../middlewares/jwt");
-
+const validateApplication = require("../middlewares/validate/application");
 // /**
 //  * @openapi
 //  * /job/{jobId}/application:
@@ -66,7 +66,7 @@ router.post("/", middleware.verifyToken, middleware.isJobSeeker, catchAsync(appl
  *              200:
  *                  description: success
  */
-router.put("/", middleware.verifyToken, catchAsync(applicationController.updateStatus));
+router.put("/", middleware.verifyToken, validateApplication.validateUpdateApplication, catchAsync(applicationController.updateStatus));
 
 /**
  * @openapi

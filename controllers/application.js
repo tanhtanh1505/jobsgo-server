@@ -51,7 +51,7 @@ class ApplicationController {
   };
 
   updateStatus = async (req, res) => {
-    const result = await ApplicationModel.update(req.body.status, req.user.id, req.params.jobId);
+    const result = await ApplicationModel.update({ status: req.body.status }, req.user.id, req.params.jobId);
 
     if (!result) {
       throw new HttpException(500, "Something went wrong");
