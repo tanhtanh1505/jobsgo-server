@@ -130,10 +130,13 @@ class UserController {
     const refreshToken = jwtHelper.genRefreshToken(user);
     await global.redisClient.rPush(user.id, refreshToken);
     res.cookie("refreshToken", refreshToken, {
-      httpOnly: false,
-      secure: false,
-      path: "/",
-      sameSite: "strict",
+      // httpOnly: true,
+      // secure: false,
+      // path: "/",
+      // sameSite: "strict",
+      maxAge: 1000 * 60 * 60 * 24 * 7,
+      signed: true,
+      httpOnly: true,
     });
 
     // const secretKey = process.env.SECRET_JWT || "";
