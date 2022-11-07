@@ -1,13 +1,13 @@
 const commentController = require("../controllers/comment");
 const router = require("express").Router({ mergeParams: true });
 const catchAsync = require("../utils/catchAsync");
-const middleware = require("../middlewares/auth");
-
+const middleware = require("../middlewares/jwt");
+const { validateCreateComment, validateUpdateComment } = require("../middlewares/validate/comment");
 /**
  * @openapi
- * /job/{id}/comments:
+ * /employer/{id}/comments:
  *  get:
- *      summary: get all comments of a job
+ *      summary: get all comments of a employer
  *      tags:
  *      - Comment
  *      parameters:
@@ -19,11 +19,11 @@ const middleware = require("../middlewares/auth");
  *              200:
  *                  description: success
  */
-router.get("/", catchAsync(commentController.getCommentOfJob));
+router.get("/", catchAsync(commentController.getCommentOfEmployer));
 
 /**
  * @openapi
- * /job/{id}/comments/create:
+ * /employer/{id}/comments:
  *  post:
  *      summary: create a comment
  *      tags:
@@ -46,11 +46,11 @@ router.get("/", catchAsync(commentController.getCommentOfJob));
  *              200:
  *                  description: success
  */
-router.post("/create", middleware.verifyToken, catchAsync(commentController.createComment));
+router.post("/", middleware.verifyToken, validateCreateComment, catchAsync(commentController.createComment));
 
 /**
  * @openapi
- * /job/{id}/comments/{commentId}:
+ * /employer/{id}/comments/{commentId}:
  *  get:
  *      summary: get comment by id
  *      tags:
@@ -68,7 +68,7 @@ router.get("/:commentId", catchAsync(commentController.getComment));
 
 /**
  * @openapi
- * /job/{id}/comments/{commentId}:
+ * /employer/{id}/comments/{commentId}:
  *  put:
  *      summary: update comment
  *      tags:
@@ -95,7 +95,7 @@ router.put("/:commentId", middleware.verifyToken, catchAsync(commentController.u
 
 /**
  * @openapi
- * /job/{id}/comments/{commentId}:
+ * /employer/{id}/comments/{commentId}:
  *  delete:
  *      summary: Delete a comment
  *      description: Delete a comment

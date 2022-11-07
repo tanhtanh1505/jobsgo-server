@@ -24,12 +24,12 @@ const options = {
     ],
   },
   apis: [
-    "./routes/user.js",
-    "./routes/employer.js",
-    "./routes/jobseeker.js",
     "./routes/auth.js",
-    "./routes/job.js",
+    "./routes/user.js",
+    "./routes/jobseeker .js",
+    "./routes/employer.js",
     "./routes/comment.js",
+    "./routes/job.js",
     "./routes/application.js",
   ],
 };

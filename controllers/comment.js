@@ -8,9 +8,9 @@ class CommentController {
     res.send(result);
   };
 
-  getCommentOfJob = async (req, res) => {
+  getCommentOfEmployer = async (req, res) => {
     //id of job
-    const result = await CommentModel.findCommentOfJob(req.params.id);
+    const result = await CommentModel.findCommentOfEmployer(req.params.id);
     res.send(result);
   };
 
