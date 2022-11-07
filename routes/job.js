@@ -1,11 +1,12 @@
 const jobController = require("../controllers/job");
 const router = require("express").Router();
 const catchAsync = require("../utils/catchAsync");
-const middleware = require("../middlewares/auth");
+const middleware = require("../middlewares/jwt");
+const { validateCreateJob, validateUpdateJob } = require("../middlewares/validate/job");
 
 /**
  * @openapi
- * /jobs/create:
+ * /job/create:
  *  post:
  *      summary: create a job for employer
  *      tags:
@@ -25,15 +26,35 @@ const middleware = require("../middlewares/auth");
  *                              example: "requirement"
  *                          tags:
  *                              example: "tags"
+ *                          startTime:
+ *                              example: "2022-11-01T00:00:00.000Z"
+ *                          endTime:
+ *                              example: "2022-12-01T00:00:00.000Z"
+ *                          salary:
+ *                              example: 1000
+ *                          typeOfWorking:
+ *                              example: "fulltime"
+ *                          gender:
+ *                              example: "male"
+ *                          position:
+ *                              example: "staff"
+ *                          slots:
+ *                              example: 10
+ *                          exp:
+ *                              example: "1 year"
+ *                          benefits:
+ *                              example: "benefit"
+ *                          imageUrl:
+ *                              example: "imageUrl"
  *      responses:
  *              200:
  *                  description: success
  */
-router.post("/create", middleware.verifyToken, middleware.isEmployer, catchAsync(jobController.create));
+router.post("/create", middleware.verifyToken, middleware.isEmployer, validateCreateJob, catchAsync(jobController.create));
 
 /**
  * @openapi
- * /jobs/all:
+ * /job/all:
  *  get:
  *      summary: get all jobs
  *      tags:
@@ -46,7 +67,7 @@ router.get("/all", catchAsync(jobController.getAll));
 
 /**
  * @openapi
- * /jobs/all-mine:
+ * /job/all-mine:
  *  get:
  *      summary: get all own jobs of current user
  *      tags:
@@ -59,10 +80,10 @@ router.get("/all-mine", middleware.verifyToken, middleware.isEmployer, catchAsyn
 
 //get, edit, delete
 router
-  .route("/:id")
+  .route("/:jobId")
   /**
    * @openapi
-   * /jobs/{id}:
+   * /job/{id}:
    *  get:
    *      summary: get job by id
    *      tags:
@@ -79,7 +100,7 @@ router
   .get(catchAsync(jobController.getById))
   /**
    * @openapi
-   * /jobs/{id}:
+   * /job/{jobId}:
    *  put:
    *      summary: edit an own job for employer
    *      tags:
@@ -104,14 +125,34 @@ router
    *                              example: "requirement"
    *                          tags:
    *                              example: "tags"
+   *                          startTime:
+   *                              example: "2022-11-01T00:00:00.000Z"
+   *                          endTime:
+   *                              example: "2022-12-01T00:00:00.000Z"
+   *                          salary:
+   *                              example: 1000
+   *                          typeOfWorking:
+   *                              example: "fulltime"
+   *                          gender:
+   *                              example: "male"
+   *                          position:
+   *                              example: "staff"
+   *                          slots:
+   *                              example: 10
+   *                          exp:
+   *                              example: "1 year"
+   *                          benefits:
+   *                              example: "benefit"
+   *                          imageUrl:
+   *                              example: "imageUrl"
    *      responses:
    *              200:
    *                  description: success
    */
-  .put(middleware.verifyToken, middleware.isJobsCreator, catchAsync(jobController.update))
+  .put(middleware.verifyToken, middleware.isJobsCreator, validateUpdateJob, catchAsync(jobController.update))
   /**
    * @openapi
-   * /jobs/{id}:
+   * /job/{jobId}:
    *  delete:
    *      summary: delete own job for employer
    *      tags:

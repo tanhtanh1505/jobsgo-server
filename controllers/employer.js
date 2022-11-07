@@ -20,7 +20,7 @@ module.exports.register = async (req, res) => {
   if (user) {
     return res.status(409).send("Phone already in use");
   }
-  hashedpassword = await bcrypt.hash(password, 8);
+  const hashedpassword = await bcrypt.hash(password, 8);
   const newUser = await UserModel.create({
     id,
     username,
@@ -39,11 +39,11 @@ module.exports.register = async (req, res) => {
     }
     return res.status(500).send("Error registering employer");
   }
-  return res.status(500).send("Error registering employer");
+  return res.status(500).send("Error registering employer and user");
 };
 
 //edit profile
-module.exports.editProfile = async (req, res) => {
+module.exports.updateProfile = async (req, res) => {
   const { about, wallpaper, size } = req.body;
   const employer = await EmployerModel.findOne({ id: req.user.id });
   if (!employer) {

@@ -53,41 +53,24 @@ class ApplicationModel {
   };
 
   create = async (jobseekerId, jobId) => {
-    const sql = `INSERT INTO application (jobseekerId, jobId) VALUES (?,?)`;
-    const result = await query(sql, [jobseekerId, jobId]);
+    const id = uuidv4();
+    const sql = `INSERT INTO application (id, jobseekerId, jobId, status) VALUES (?,?,?,?)`;
+
+    const result = await query(sql, [id, jobseekerId, jobId, ApplicationStatus.Pending]);
 
     const affectedRows = result ? result.affectedRows : 0;
 
     return affectedRows;
   };
 
-  //mark an application as accepted
-  accept = async (jobseekerId, jobId) => {
-    const sql = `UPDATE application SET status = ${ApplicationStatus.Accepted} WHERE jobseekerId = ? AND jobId = ?`;
-    const result = await query(sql, [jobseekerId, jobId]);
+  update = async (params, id) => {
+    const { columnSet, values } = multipleColumnSet(params);
 
-    const affectedRows = result ? result.affectedRows : 0;
+    const sql = `UPDATE application SET ${columnSet} WHERE id = ?`;
 
-    return affectedRows;
-  };
+    const result = await query(sql, [...values, id]);
 
-  //mark an application in bookbark
-  mark = async (jobseekerId, jobId) => {
-    const sql = `UPDATE application SET marked = 1 WHERE jobseekerId = ? AND jobId = ?`;
-    const result = await query(sql, [jobseekerId, jobId]);
-
-    const affectedRows = result ? result.affectedRows : 0;
-
-    return affectedRows;
-  };
-
-  unmark = async (jobseekerId, jobId) => {
-    const sql = `UPDATE application SET marked = 0 WHERE jobseekerId = ? AND jobId = ?`;
-    const result = await query(sql, [jobseekerId, jobId]);
-
-    const affectedRows = result ? result.affectedRows : 0;
-
-    return affectedRows;
+    return result;
   };
 
   delete = async (jobseekerId, jobId) => {

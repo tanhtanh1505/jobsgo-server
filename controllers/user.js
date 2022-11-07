@@ -87,16 +87,9 @@ class UserController {
   };
 
   updateUser = async (req, res) => {
-    const { name, avatar, about, interested } = req.body;
+    const { name, avatar, address } = req.body;
 
-    var result;
-    if (req.user.role == Role.Employer) {
-      result = await UserModel.update({ name, avatar }, req.user.id);
-      await EmployerModel.update({ about }, req.user.id);
-    } else {
-      result = await UserModel.update({ name, avatar }, req.user.id);
-      await JobSeekerModel.update({ interested }, req.user.id);
-    }
+    const result = await UserModel.update({ name, avatar, address }, req.user.id);
 
     if (!result) {
       throw new HttpException(404, "Something went wrong");
@@ -118,7 +111,7 @@ class UserController {
   };
 
   userLogin = async (req, res) => {
-    const { username, password: pass } = req.body;
+    var { username, password } = req.body;
 
     const user = await UserModel.findOne({ username });
 
@@ -126,7 +119,7 @@ class UserController {
       throw new HttpException(401, "User not exist!");
     }
 
-    const isMatch = await bcrypt.compare(pass, user.password);
+    const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
       throw new HttpException(401, "Incorrect password!");
@@ -148,7 +141,7 @@ class UserController {
     //   expiresIn: "24h",
     // });
 
-    const { password, ...userWithoutPassword } = user;
+    var { password, ...userWithoutPassword } = user;
 
     res.send({ ...userWithoutPassword, accessToken });
   };

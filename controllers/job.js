@@ -11,7 +11,7 @@ class JobController {
   };
 
   getById = async (req, res) => {
-    const job = await JobModel.findOne({ id: req.params.id });
+    const job = await JobModel.findOne({ id: req.params.jobId });
     if (!job) {
       throw new HttpException(404, "Job not found");
     }
@@ -25,12 +25,26 @@ class JobController {
   };
 
   create = async (req, res) => {
-    const { title, description, requirement, tags } = req.body;
+    const { title, description, requirement, tags, startTime, endTime, salary, typeOfWorking, gender, position, slots, exp, benefits, imageUrl } =
+      req.body;
 
-    if (!title || !description || !requirement || !tags)
-      throw new HttpException(500, "Fill all required feild: title, description, requirement, tags");
-
-    const result = await JobModel.create(req.body, req.user.id);
+    const result = await JobModel.create({
+      title,
+      description,
+      requirement,
+      tags,
+      author: req.user.id,
+      startTime,
+      endTime,
+      salary,
+      typeOfWorking,
+      gender,
+      position,
+      slots,
+      exp,
+      benefits,
+      imageUrl,
+    });
 
     if (!result) {
       throw new HttpException(500, "Something went wrong");
@@ -40,7 +54,7 @@ class JobController {
   };
 
   update = async (req, res) => {
-    const result = await JobModel.update(req.body, req.params.id);
+    const result = await JobModel.update(req.body, req.params.jobId);
 
     if (!result) {
       throw new HttpException(404, "Something went wrong");
@@ -54,7 +68,7 @@ class JobController {
   };
 
   delete = async (req, res) => {
-    const result = await JobModel.delete(req.params.id);
+    const result = await JobModel.delete(req.params.jobId);
     if (!result) {
       throw new HttpException(404, "Job not found");
     }

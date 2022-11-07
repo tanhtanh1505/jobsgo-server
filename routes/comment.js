@@ -5,7 +5,7 @@ const middleware = require("../middlewares/auth");
 
 /**
  * @openapi
- * /jobs/{id}/comments:
+ * /job/{id}/comments:
  *  get:
  *      summary: get all comments of a job
  *      tags:
@@ -23,7 +23,7 @@ router.get("/", catchAsync(commentController.getCommentOfJob));
 
 /**
  * @openapi
- * /jobs/{id}/comments/create:
+ * /job/{id}/comments/create:
  *  post:
  *      summary: create a comment
  *      tags:
@@ -50,7 +50,7 @@ router.post("/create", middleware.verifyToken, catchAsync(commentController.crea
 
 /**
  * @openapi
- * /jobs/{id}/comments/{commentId}:
+ * /job/{id}/comments/{commentId}:
  *  get:
  *      summary: get comment by id
  *      tags:
@@ -68,7 +68,7 @@ router.get("/:commentId", catchAsync(commentController.getComment));
 
 /**
  * @openapi
- * /jobs/{id}/comments/{commentId}:
+ * /job/{id}/comments/{commentId}:
  *  put:
  *      summary: update comment
  *      tags:
@@ -95,7 +95,7 @@ router.put("/:commentId", middleware.verifyToken, catchAsync(commentController.u
 
 /**
  * @openapi
- * /jobs/{id}/comments/{commentId}:
+ * /job/{id}/comments/{commentId}:
  *  delete:
  *      summary: Delete a comment
  *      description: Delete a comment

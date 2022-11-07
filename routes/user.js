@@ -1,7 +1,8 @@
 const userController = require("../controllers/user");
 const router = require("express").Router();
 const catchAsync = require("../utils/catchAsync");
-const middleware = require("../middlewares/auth");
+const middleware = require("../middlewares/jwt");
+const { validateCreateUser, validateUpdateUser } = require("../middlewares/validate/user");
 
 /**
  * @openapi
@@ -34,15 +35,13 @@ router.get("/profile", middleware.verifyToken, catchAsync(userController.getCurr
  *                              example: "Tanh"
  *                          avatar:
  *                              example: "avatar"
- *                          about:
- *                              example: "abouthehe"
- *                          interested:
- *                              example: "interestedhehe"
+ *                          address:
+ *                              example: "address"
  *      responses:
  *              200:
  *                  description: success
  */
-router.put("/edit-profile", middleware.verifyToken, catchAsync(userController.updateUser));
+router.put("/update", middleware.verifyToken, validateUpdateUser, catchAsync(userController.updateUser));
 /**
  * @openapi
  * /user/delete:
@@ -55,12 +54,23 @@ router.put("/edit-profile", middleware.verifyToken, catchAsync(userController.up
  *                  description: success
  */
 router.delete("/delete", middleware.verifyToken, catchAsync(userController.deleteUser));
+/**
+ * @openapi
+ * /user/allUser:
+ *  delete:
+ *      summary: api test get all user
+ *      tags:
+ *      - User
+ *      responses:
+ *              200:
+ *                  description: success
+ */
 router.get("/allUser", catchAsync(userController.getAllUsers));
 /**
  * @openapi
  * /user/{username}:
  *  get:
- *      summary: get info of other user
+ *      summary: get user by username
  *      tags:
  *      - User
  *      parameters:
@@ -74,6 +84,7 @@ router.get("/allUser", catchAsync(userController.getAllUsers));
  *                  description: success
  */
 router.get("/:username", catchAsync(userController.getUserByUserName));
+
 // router.post("/uploadAvatar", catchAsync(user.uploadAvatar));
 
 module.exports = router;

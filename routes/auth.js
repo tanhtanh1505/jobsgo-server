@@ -1,7 +1,8 @@
 const userController = require("../controllers/user");
 const router = require("express").Router();
 const catchAsync = require("../utils/catchAsync");
-const middleware = require("../middlewares/auth");
+const middleware = require("../middlewares/jwt");
+const validateAuth = require("../middlewares/validate/auth");
 
 /**
  * @openapi
@@ -26,7 +27,7 @@ const middleware = require("../middlewares/auth");
  *              200:
  *                  description: success
  */
-router.post("/login", middleware.validateLogin, catchAsync(userController.userLogin));
+router.post("/login", validateAuth.validateLogin, catchAsync(userController.userLogin));
 /**
  * @openapi
  * /logout:
@@ -73,7 +74,7 @@ router.post("/refreshToken", catchAsync(userController.refreshRToken));
  *              200:
  *                  description: success
  */
-router.post("/reset-password", catchAsync(userController.resetPassword));
+router.post("/reset-password", validateAuth.validateSendRequestResetPassword, catchAsync(userController.resetPassword));
 
 /**
  * @openapi

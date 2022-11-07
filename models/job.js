@@ -1,5 +1,5 @@
 const query = require("../db/dbConnection");
-const { multipleColumnSet } = require("../utils/common");
+const { multipleColumnGet, multipleColumnSet, multipleColumnInsert } = require("../utils/common");
 const { v4: uuidv4 } = require("uuid");
 class JobModel {
   find = async (params = {}) => {
@@ -9,65 +9,26 @@ class JobModel {
       return await query(sql);
     }
 
-    const { columnSet, values } = multipleColumnSet(params);
+    const { columnSet, values } = multipleColumnGet(params);
     sql += ` WHERE ${columnSet}`;
 
     return await query(sql, [...values]);
   };
 
   findOne = async (params) => {
-    const { columnSet, values } = multipleColumnSet(params);
+    const { columnSet, values } = multipleColumnGet(params);
 
-    const sql = `SELECT * FROM job WHERE ${columnSet}`;
+    const sql = `SELECT * FROM job WHERE ${columnSet} LIMIT 1`;
 
     const result = await query(sql, [...values]);
 
     return result[0];
   };
 
-  create = async (
-    {
-      title,
-      description,
-      requirements,
-      tags,
-      startTime = null,
-      endTime = null,
-      salary,
-      typeOfWorking,
-      sex,
-      positions,
-      slots,
-      exp,
-      location,
-      benefits,
-      imageUrl,
-    },
-    author
-  ) => {
-    const sql = `INSERT INTO job (id, title, description, requirements, tags, startTime, endTime, salary, typeOfWorking, sex, positions, slots, exp, location, benefits, imageUrl, author) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
-    const id = uuidv4();
-    const result = await query(sql, [
-      id,
-      title,
-      description,
-      requirements,
-      tags,
-      startTime,
-      endTime,
-      salary,
-      typeOfWorking,
-      sex,
-      positions,
-      slots,
-      exp,
-      location,
-      benefits,
-      imageUrl,
-      author,
-    ]);
+  create = async (params) => {
+    const { sql, values } = await multipleColumnInsert("job", params);
+    const result = await query(sql, [...values]);
     const affectedRows = result ? result.affectedRows : 0;
-
     return affectedRows;
   };
 

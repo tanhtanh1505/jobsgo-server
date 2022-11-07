@@ -1,9 +1,8 @@
 const employerController = require("../controllers/employer");
 const router = require("express").Router();
 const catchAsync = require("../utils/catchAsync");
-const middleware = require("../middlewares/auth");
-
-router.get("/:id/alljobs", catchAsync(employerController.getOwnerJobs));
+const middleware = require("../middlewares/jwt");
+const { validateCreateEmployer, validateUpdateEmployer } = require("../middlewares/validate/employer");
 
 /**
  * @openapi
@@ -28,8 +27,6 @@ router.get("/:id/alljobs", catchAsync(employerController.getOwnerJobs));
  *                              example: "tanhtanh1505@gmail.com"
  *                          phone:
  *                              example: "0944150502"
- *                          role:
- *                              example: "JobSeeker"
  *                          avatar:
  *                              example: "avatar"
  *                          password:
@@ -45,14 +42,14 @@ router.get("/:id/alljobs", catchAsync(employerController.getOwnerJobs));
  *              200:
  *                  description: success
  */
-router.post("/", middleware.validateCreateEmployer, catchAsync(employerController.register));
+router.post("/", validateCreateEmployer, catchAsync(employerController.register));
 
 /**
  * @openapi
  * /employer:
  *  put:
- *      summary: edit profile of employer
- *      description: edit profile of employer
+ *      summary: update profile of employer
+ *      description: update profile of employer
  *      tags:
  *      - Employer
  *      requestBody:
@@ -72,7 +69,7 @@ router.post("/", middleware.validateCreateEmployer, catchAsync(employerControlle
  *              200:
  *                  description: success
  */
-router.put("/", middleware.verifyToken, middleware.isEmployer, middleware.validateEditEmployer, catchAsync(employerController.editProfile));
+router.put("/", middleware.verifyToken, middleware.isEmployer, validateUpdateEmployer, catchAsync(employerController.updateProfile));
 
 /**
  * @openapi
