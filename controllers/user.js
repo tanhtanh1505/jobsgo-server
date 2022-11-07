@@ -129,7 +129,17 @@ class UserController {
     const accessToken = jwtHelper.genToken(user);
     const refreshToken = jwtHelper.genRefreshToken(user);
     await global.redisClient.rPush(user.id, refreshToken);
-    res.cookie("refreshToken", refreshToken);
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: false,
+      secure: false,
+      path: "/",
+      sameSite: "strict",
+    });
+
+    // const secretKey = process.env.SECRET_JWT || "";
+    // const token = jwt.sign({ user_id: user.id.toString() }, secretKey, {
+    //   expiresIn: "24h",
+    // });
 
     var { password, ...userWithoutPassword } = user;
 
