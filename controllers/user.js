@@ -129,12 +129,7 @@ class UserController {
     const accessToken = jwtHelper.genToken(user);
     const refreshToken = jwtHelper.genRefreshToken(user);
     await global.redisClient.rPush(user.id, refreshToken);
-    res.cookie("refreshToken", refreshToken, {
-      httpOnly: false,
-      secure: false,
-      path: "/",
-      sameSite: "strict",
-    });
+    res.cookie("refreshToken", refreshToken);
 
     var { password, ...userWithoutPassword } = user;
 
