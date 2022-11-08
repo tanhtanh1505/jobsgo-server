@@ -78,6 +78,28 @@ router.get("/all", catchAsync(jobController.getAll));
  */
 router.get("/all-mine", middleware.verifyToken, middleware.isEmployer, catchAsync(jobController.getMyJob));
 
+/**
+ * @openapi
+ * /job/import:
+ *  post:
+ *      summary: import jobs from google sheet
+ *      tags:
+ *      - Job
+ *      requestBody:
+ *          require: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      type: object
+ *                      properties:
+ *                          sheetId:
+ *                              example: "18lcFL76xNC3rzFce5bKjNV9-04sKLy2KmLiG2EbotPE"
+ *      responses:
+ *              200:
+ *                  description: success
+ */
+router.post("/import", middleware.verifyToken, middleware.isEmployer, catchAsync(jobController.import));
+
 //get, edit, delete
 router
   .route("/:jobId")
