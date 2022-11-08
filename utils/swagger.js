@@ -26,7 +26,7 @@ const options = {
   apis: [
     "./routes/auth.js",
     "./routes/user.js",
-    "./routes/jobseeker .js",
+    "./routes/jobseeker.js",
     "./routes/employer.js",
     "./routes/comment.js",
     "./routes/job.js",
