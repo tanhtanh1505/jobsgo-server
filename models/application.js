@@ -19,10 +19,10 @@ class ApplicationModel {
   };
 
   findOne = async (params) => {
-    const { columnSet, values } = multipleColumnSet(params);
+    const { columnSet, values } = multipleColumnGet(params);
 
     const sql = `SELECT * FROM application WHERE ${columnSet} LIMIT 1`;
-
+    console.log(sql);
     const result = await query(sql, [...values]);
 
     return result[0];
@@ -53,10 +53,10 @@ class ApplicationModel {
   };
 
   create = async (jobseekerId, jobId) => {
-    // const id = uuidv4();
-    const sql = `INSERT INTO application (jobseekerId, jobId, status) VALUES (?,?,?)`;
+    const id = uuidv4();
+    const sql = `INSERT INTO application (id, jobseekerId, jobId, status) VALUES (?,?,?,?)`;
 
-    const result = await query(sql, [jobseekerId, jobId, ApplicationStatus.Pending]);
+    const result = await query(sql, [id, jobseekerId, jobId, ApplicationStatus.Pending]);
 
     const affectedRows = result ? result.affectedRows : 0;
 
@@ -69,6 +69,16 @@ class ApplicationModel {
     const sql = `UPDATE application SET ${columnSet} WHERE jobseekerId = ? AND jobId = ?`;
 
     const result = await query(sql, [...values, jobseekerId, jobId]);
+
+    return result;
+  };
+
+  updateById = async (params, id) => {
+    const { columnSet, values } = multipleColumnSet(params);
+
+    const sql = `UPDATE application SET ${columnSet} WHERE id = ?`;
+
+    const result = await query(sql, [...values, id]);
 
     return result;
   };

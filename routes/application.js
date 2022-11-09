@@ -3,52 +3,35 @@ const router = require("express").Router({ mergeParams: true });
 const catchAsync = require("../utils/catchAsync");
 const middleware = require("../middlewares/jwt");
 const validateApplication = require("../middlewares/validate/application");
-// /**
-//  * @openapi
-//  * /job/{jobId}/application:
-//  *  get:
-//  *      summary: get applications of current user
-//  *      description: get own applications of current user
-//  *      tags:
-//  *      - Application
-//  *      responses:
-//  *              200:
-//  *                  description: success
-//  */
-// router.get("/", middleware.verifyToken, catchAsync(applicationController.getMyApplication));
 
 /**
  * @openapi
- * /job/{jobId}/application:
- *  post:
- *      summary: create an application
- *      description: for jobseeker create an application for job
+ * /application/{applicationId}:
+ *  get:
+ *      summary: get application by id
+ *      description: get application by id
  *      tags:
  *      - Application
  *      parameters:
  *       - in: path
- *         name: jobId
+ *         name: applicationId
  *         type: string
  *         required: true
  *      responses:
  *              200:
  *                  description: success
  */
-router.post("/", middleware.verifyToken, middleware.isJobSeeker, catchAsync(applicationController.createApplication));
+router.get("/:applicationId", middleware.verifyToken, catchAsync(applicationController.getById));
 
 /**
  * @openapi
- * /job/{jobId}/application/{applicationId}:
+ * /application/{applicationId}:
  *  put:
  *      summary: update application status for employer
  *      description: for employer update application status of applicationId
  *      tags:
  *      - Application
  *      parameters:
- *       - in: path
- *         name: jobId
- *         type: string
- *         required: true
  *       - in: path
  *         name: applicationId
  *         type: string
@@ -66,25 +49,12 @@ router.post("/", middleware.verifyToken, middleware.isJobSeeker, catchAsync(appl
  *              200:
  *                  description: success
  */
-router.put("/", middleware.verifyToken, validateApplication.validateUpdateApplication, catchAsync(applicationController.updateStatus));
-
-/**
- * @openapi
- * /job/{jobId}/application:
- *  get:
- *      summary: get application of job for employer
- *      description: get application of job for employer
- *      tags:
- *      - Application
- *      parameters:
- *       - in: path
- *         name: jobId
- *         type: string
- *         required: true
- *      responses:
- *              200:
- *                  description: success
- */
-router.get("/", middleware.verifyToken, catchAsync(applicationController.getApplicationOfJob));
+router.put(
+  "/:applicationId",
+  middleware.verifyToken,
+  middleware.canEditStatusApplication,
+  validateApplication.validateUpdateApplication,
+  catchAsync(applicationController.updateStatus)
+);
 
 module.exports = router;

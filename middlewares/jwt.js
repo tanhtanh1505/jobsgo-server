@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const UserModel = require("../models/user");
 const CommentModel = require("../models/comment");
 const JobModel = require("../models/job");
+const ApplicationModel = require("../models/application");
 const HttpException = require("../utils/HttpException");
 const Role = require("../constants/user");
 
@@ -62,6 +63,26 @@ module.exports.isJobSeeker = async (req, res, next) => {
 module.exports.isJobsCreator = async (req, res, next) => {
   try {
     const cur_job = await JobModel.findOne({ id: req.params.jobId });
+    if (cur_job.author != req.user.id) {
+      throw new HttpException(404, "You are not author");
+    }
+
+    next();
+  } catch (e) {
+    e.status = 401;
+    next(e);
+  }
+};
+
+module.exports.canEditStatusApplication = async (req, res, next) => {
+  // for employer whose job is applied
+  try {
+    const cur_application = await ApplicationModel.findOne({ id: req.params.applicationId });
+    if (!cur_application) {
+      throw new HttpException(404, "Application not found");
+    }
+
+    const cur_job = await JobModel.findOne({ id: cur_application.jobId });
     if (cur_job.author != req.user.id) {
       throw new HttpException(404, "You are not author");
     }

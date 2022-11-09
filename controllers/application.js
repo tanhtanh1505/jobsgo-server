@@ -5,7 +5,7 @@ const HttpException = require("../utils/HttpException");
 
 class ApplicationController {
   getById = async (req, res, next) => {
-    const application = await ApplicationModel.findOne({ id: req.params.id });
+    const application = await ApplicationModel.findOne({ id: req.params.applicationId });
     if (!application) {
       throw new HttpException(404, "Application not found");
     }
@@ -51,7 +51,7 @@ class ApplicationController {
   };
 
   updateStatus = async (req, res) => {
-    const result = await ApplicationModel.update({ status: req.body.status }, req.user.id, req.params.jobId);
+    const result = await ApplicationModel.updateById({ status: req.body.status }, req.params.applicationId);
 
     if (!result) {
       throw new HttpException(500, "Something went wrong");

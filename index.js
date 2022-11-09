@@ -42,7 +42,7 @@ app.use("/jobseeker", jobseekerRouter);
 app.use("/employer", employerRouter);
 app.use("/employer/:id/comments", commentRoutes);
 app.use("/job", jobsRoutes);
-app.use("/job/:jobId/application", applicationRouter);
+app.use("/application", applicationRouter);
 
 app.get("/", (req, res) => {
   res.status(200).end("hi");

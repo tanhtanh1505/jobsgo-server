@@ -10,8 +10,10 @@ module.exports.createJobSchema = Joi.object({
   startTime: Joi.date().required(),
   endTime: Joi.date().required(),
   salary: Joi.number().required(),
-  typeOfWorking: Joi.string().required().valid(typeOfWorking),
-  gender: Joi.string().valid(gender),
+  typeOfWorking: Joi.string()
+    .required()
+    .valid(...Object.values(typeOfWorking)),
+  gender: Joi.string().valid(...Object.values(gender)),
   positions: Joi.string().required(),
   slots: Joi.number().required(),
   exp: Joi.string().required(),
@@ -27,8 +29,10 @@ module.exports.updateJobSchema = Joi.object({
   startTime: Joi.date().required(),
   endTime: Joi.date().required(),
   salary: Joi.number().required(),
-  typeOfWorking: Joi.string().required().valid(typeOfWorking),
-  gender: Joi.string().valid(gender),
+  typeOfWorking: Joi.string()
+    .required()
+    .valid(...Object.values(typeOfWorking)),
+  gender: Joi.string().valid(...Object.values(gender)),
   positions: Joi.string().required(),
   slots: Joi.number().required(),
   exp: Joi.string().required(),

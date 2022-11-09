@@ -121,6 +121,7 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- Table `jobsgo`.`application`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `jobsgo`.`application` (
+  `id` VARCHAR(45) NOT NULL,
   `jobseekerId` VARCHAR(45) NOT NULL,
   `jobId` VARCHAR(45) NOT NULL,
   `status` VARCHAR(45) NULL DEFAULT NULL,
@@ -128,6 +129,7 @@ CREATE TABLE IF NOT EXISTS `jobsgo`.`application` (
   `updatedAt` TIMESTAMP NULL DEFAULT NULL,
   INDEX `fk_application_1_idx` (`jobId` ASC) VISIBLE,
   INDEX `fk_application_2_idx` (`jobseekerId` ASC) VISIBLE,
+  PRIMARY KEY (`id`),
   CONSTRAINT `fk_application_1`
     FOREIGN KEY (`jobId`)
     REFERENCES `jobsgo`.`job` (`id`)
@@ -289,10 +291,12 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- Table `jobsgo`.`bookmark`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `jobsgo`.`bookmark` (
+  `id` VARCHAR(45) NOT NULL,
   `jobseekerId` VARCHAR(45) NOT NULL,
   `jobId` VARCHAR(45) NOT NULL,
   INDEX `fk_application_1_idx` (`jobId` ASC) VISIBLE,
   INDEX `fk_application_2_idx` (`jobseekerId` ASC) VISIBLE,
+  PRIMARY KEY (`id`),
   CONSTRAINT `fk_application_10`
     FOREIGN KEY (`jobId`)
     REFERENCES `jobsgo`.`job` (`id`)

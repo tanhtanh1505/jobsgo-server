@@ -3,6 +3,8 @@ const router = require("express").Router();
 const catchAsync = require("../utils/catchAsync");
 const middleware = require("../middlewares/jwt");
 const { validateCreateJob, validateUpdateJob } = require("../middlewares/validate/job");
+const applicationController = require("../controllers/application");
+const validateApplication = require("../middlewares/validate/application");
 
 /**
  * @openapi
@@ -189,5 +191,43 @@ router
    *                  description: success
    */
   .delete(middleware.verifyToken, middleware.isJobsCreator, catchAsync(jobController.delete));
+
+/**
+ * @openapi
+ * /job/{jobId}/apply:
+ *  post:
+ *      summary: create an application, apply to this job
+ *      description: for jobseeker create an application for job
+ *      tags:
+ *      - Job
+ *      parameters:
+ *       - in: path
+ *         name: jobId
+ *         type: string
+ *         required: true
+ *      responses:
+ *              200:
+ *                  description: success
+ */
+router.post("/:jobId/apply", middleware.verifyToken, middleware.isJobSeeker, catchAsync(applicationController.createApplication));
+
+/**
+ * @openapi
+ * /job/{jobId}/applications:
+ *  get:
+ *      summary: get applications of job for employer
+ *      description: get applications of job for employer
+ *      tags:
+ *      - Job
+ *      parameters:
+ *       - in: path
+ *         name: jobId
+ *         type: string
+ *         required: true
+ *      responses:
+ *              200:
+ *                  description: success
+ */
+router.get("/:jobId/applications", middleware.verifyToken, catchAsync(applicationController.getApplicationOfJob));
 
 module.exports = router;
