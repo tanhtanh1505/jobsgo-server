@@ -1,4 +1,5 @@
 const UserModel = require("../models/user");
+const BookmarkModel = require("../models/bookmark");
 const JobModel = require("../models/job");
 const HttpException = require("../utils/HttpException");
 const dotenv = require("dotenv");
@@ -147,6 +148,41 @@ class JobController {
       }
     }
     res.send("Import success");
+  };
+
+  isMarked = async (req, res) => {
+    const { jobId } = req.params;
+    const { id } = req.user;
+    const user = await UserModel.findOne({ id });
+    if (!user) {
+      throw new HttpException(404, "User not found");
+    }
+    const bookmark = await BookmarkModel.findOne({ jobId, jobseekerId: user.id });
+
+    if (!bookmark) {
+      res.send(false);
+    } else {
+      res.send(true);
+    }
+  };
+
+  createMark = async (req, res) => {
+    const result = await BookmarkModel.create(req.user.id, req.params.jobId);
+
+    if (!result) {
+      throw new HttpException(500, "Something went wrong");
+    }
+
+    res.send("Bookmark was created!");
+  };
+
+  deleteMark = async (req, res) => {
+    const result = await BookmarkModel.delete(req.user.id, req.params.jobId);
+    if (!result) {
+      throw new HttpException(404, "Bookmark not found");
+    }
+
+    res.send("Bookmark has been deleted");
   };
 }
 

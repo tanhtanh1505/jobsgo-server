@@ -40,7 +40,7 @@ app.use("/", authRoutes);
 app.use("/user", userRoutes);
 app.use("/jobseeker", jobseekerRouter);
 app.use("/employer", employerRouter);
-app.use("/employer/:id/comments", commentRoutes);
+app.use("/comments", commentRoutes);
 app.use("/job", jobsRoutes);
 app.use("/application", applicationRouter);
 

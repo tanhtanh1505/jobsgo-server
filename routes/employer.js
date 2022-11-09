@@ -3,6 +3,8 @@ const router = require("express").Router();
 const catchAsync = require("../utils/catchAsync");
 const middleware = require("../middlewares/jwt");
 const { validateCreateEmployer, validateUpdateEmployer } = require("../middlewares/validate/employer");
+const commentController = require("../controllers/comment");
+const { validateCreateComment } = require("../middlewares/validate/comment");
 
 /**
  * @openapi
@@ -102,4 +104,50 @@ router.get("/", middleware.verifyToken, catchAsync(employerController.getCurrent
  *                  description: success
  */
 router.get("/:id", catchAsync(employerController.getEmployerById));
+
+/**
+ * @openapi
+ * /employer/{id}/comments:
+ *  get:
+ *      summary: get all comments of a employer
+ *      tags:
+ *      - Comment
+ *      parameters:
+ *       - in: path
+ *         name: id
+ *         type: string
+ *         required: true
+ *      responses:
+ *              200:
+ *                  description: success
+ */
+router.get("/:id/comments", catchAsync(commentController.getCommentOfEmployer));
+
+/**
+ * @openapi
+ * /employer/{id}/comment:
+ *  post:
+ *      summary: create a comment
+ *      tags:
+ *      - Comment
+ *      parameters:
+ *       - in: path
+ *         name: id
+ *         type: string
+ *         required: true
+ *      requestBody:
+ *          require: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      type: object
+ *                      properties:
+ *                          content:
+ *                             example: "content"
+ *      responses:
+ *              200:
+ *                  description: success
+ */
+router.post("/:id/comment", middleware.verifyToken, validateCreateComment, catchAsync(commentController.createComment));
+
 module.exports = router;

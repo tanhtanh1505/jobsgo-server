@@ -4,7 +4,6 @@ const catchAsync = require("../utils/catchAsync");
 const middleware = require("../middlewares/jwt");
 const { validateCreateJob, validateUpdateJob } = require("../middlewares/validate/job");
 const applicationController = require("../controllers/application");
-const validateApplication = require("../middlewares/validate/application");
 
 /**
  * @openapi
@@ -199,7 +198,7 @@ router
  *      summary: create an application, apply to this job
  *      description: for jobseeker create an application for job
  *      tags:
- *      - Job
+ *      - Application
  *      parameters:
  *       - in: path
  *         name: jobId
@@ -218,7 +217,7 @@ router.post("/:jobId/apply", middleware.verifyToken, middleware.isJobSeeker, cat
  *      summary: get applications of job for employer
  *      description: get applications of job for employer
  *      tags:
- *      - Job
+ *      - Application
  *      parameters:
  *       - in: path
  *         name: jobId
@@ -229,5 +228,62 @@ router.post("/:jobId/apply", middleware.verifyToken, middleware.isJobSeeker, cat
  *                  description: success
  */
 router.get("/:jobId/applications", middleware.verifyToken, catchAsync(applicationController.getApplicationOfJob));
+
+/**
+ * @openapi
+ * /job/{jobId}/marked:
+ *  get:
+ *      summary: get status is marked or not
+ *      description: get status is marked or not
+ *      tags:
+ *      - Job
+ *      parameters:
+ *       - in: path
+ *         name: jobId
+ *         type: string
+ *         required: true
+ *      responses:
+ *              200:
+ *                  description: success
+ */
+router.get("/:jobId/marked", middleware.verifyToken, middleware.isJobSeeker, catchAsync(jobController.isMarked));
+
+/**
+ * @openapi
+ * /job/{jobId}/mark:
+ *  post:
+ *      summary: mark job as favorite
+ *      description: mark job as favorite
+ *      tags:
+ *      - Job
+ *      parameters:
+ *       - in: path
+ *         name: jobId
+ *         type: string
+ *         required: true
+ *      responses:
+ *              200:
+ *                  description: success
+ */
+router.post("/:jobId/mark", middleware.verifyToken, middleware.isJobSeeker, catchAsync(jobController.createMark));
+
+/**
+ * @openapi
+ * /job/{jobId}/unmark:
+ *  delete:
+ *      summary: unmark job in favorite
+ *      description: unmark job in favorite
+ *      tags:
+ *      - Job
+ *      parameters:
+ *       - in: path
+ *         name: jobId
+ *         type: string
+ *         required: true
+ *      responses:
+ *              200:
+ *                  description: success
+ */
+router.delete("/:jobId/unmark", middleware.verifyToken, middleware.isJobSeeker, catchAsync(jobController.deleteMark));
 
 module.exports = router;
