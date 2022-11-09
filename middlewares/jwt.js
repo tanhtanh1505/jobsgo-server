@@ -3,6 +3,7 @@ const UserModel = require("../models/user");
 const CommentModel = require("../models/comment");
 const JobModel = require("../models/job");
 const ApplicationModel = require("../models/application");
+const EducationModel = require("../models/education");
 const HttpException = require("../utils/HttpException");
 const Role = require("../constants/user");
 
@@ -98,6 +99,20 @@ module.exports.isCommentCreator = async (req, res, next) => {
   try {
     const cur_comment = await CommentModel.findOne({ id: req.params.commentId });
     if (cur_comment.author != req.user.id) {
+      throw new HttpException(404, "You are not author");
+    }
+
+    next();
+  } catch (e) {
+    e.status = 401;
+    next(e);
+  }
+};
+
+module.exports.isEducationCreator = async (req, res, next) => {
+  try {
+    const cur_education = await EducationModel.findOne({ id: req.params.educationId });
+    if (cur_education.jobseekerId != req.user.id) {
       throw new HttpException(404, "You are not author");
     }
 

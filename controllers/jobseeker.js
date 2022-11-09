@@ -4,6 +4,7 @@ const JobseekerModel = require("../models/jobseeker");
 const { v4: uuidv4 } = require("uuid");
 const Role = require("../constants/user");
 const bcrypt = require("bcryptjs");
+const mailService = require("../services/mail");
 
 module.exports.register = async (req, res) => {
   const {
@@ -92,6 +93,24 @@ module.exports.updateProfile = async (req, res) => {
     req.user.id
   );
   if (newJobseeker) {
+    const url = `${process.env.CLIENT_URL}`;
+
+    const mailOptions = {
+      from: "service@tanhuet.com",
+      to: email,
+      subject: "Welcome to Working On Paradise",
+      html: `
+        <h1>Hi ${name}</h1>
+        <p>Welcome to <a href=${url}>Work On Paradise</a></p>
+        <p>Wish you have an amazing experience with us </p>
+        </br>
+
+        <p>Thank you</p>
+      `,
+    };
+
+    mailService.sendMail(mailOptions);
+
     return res.status(200).send("Jobseeker edited successfully");
   }
   return res.status(500).send("Error editing Jobseeker");

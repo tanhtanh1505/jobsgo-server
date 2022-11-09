@@ -9,6 +9,7 @@ const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/user");
 const jobsRoutes = require("./routes/job");
 const commentRoutes = require("./routes/comment");
+const educationRoutes = require("./routes/education");
 const employerRouter = require("./routes/employer");
 const jobseekerRouter = require("./routes/jobseeker");
 const applicationRouter = require("./routes/application");
@@ -43,6 +44,7 @@ app.use("/employer", employerRouter);
 app.use("/comments", commentRoutes);
 app.use("/job", jobsRoutes);
 app.use("/application", applicationRouter);
+app.use("/education", educationRoutes);
 
 app.get("/", (req, res) => {
   res.status(200).end("hi");
