@@ -12,6 +12,17 @@ class JobController {
     res.send(list);
   };
 
+  getOneSuggestion = async (req, res) => {
+    const listJob = await JobModel.findLimit({}, 1);
+    res.send(listJob);
+  };
+
+  getListSuggestion = async (req, res) => {
+    const { number } = req.params;
+    const listJob = await JobModel.findLimit({}, number);
+    res.send(listJob);
+  };
+
   getById = async (req, res) => {
     const job = await JobModel.findOne({ id: req.params.jobId });
     if (!job) {

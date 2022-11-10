@@ -81,6 +81,24 @@ router.get("/all-mine", middleware.verifyToken, middleware.isEmployer, catchAsyn
 
 /**
  * @openapi
+ * /job/recommend/{number}:
+ *  get:
+ *      summary: get number last recommend jobs
+ *      tags:
+ *      - Job
+ *      parameters:
+ *      - in: path
+ *        name: number
+ *        type: string
+ *        required: true
+ *      responses:
+ *              200:
+ *                  description: success
+ */
+router.get("/recommend/:number", middleware.verifyToken, catchAsync(jobController.getListSuggestion));
+
+/**
+ * @openapi
  * /job/import:
  *  post:
  *      summary: import jobs from google sheet

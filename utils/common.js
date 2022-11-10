@@ -75,7 +75,6 @@ exports.multipleColumnInsert = (table, data) => {
   const placeholders = keys.map((key) => "?").join(", ");
 
   const sql = `INSERT INTO ${table} (${columnSet}) VALUES (${placeholders})`;
-  console.log(sql);
-  console.log(values);
+
   return { sql, values };
 };
