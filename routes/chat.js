@@ -46,4 +46,26 @@ router
    */
   .get(middleware.verifyToken, catchAsync(ChatController.getListMessage));
 
+/**
+ * @openapi
+ * /chat/conversation/{conversationId}/{number}:
+ *  get:
+ *      summary: get number last message by conversation id
+ *      tags:
+ *      - Chat
+ *      parameters:
+ *       - in: path
+ *         name: conversationId
+ *         type: string
+ *         required: true
+ *       - in: path
+ *         name: number
+ *         type: string
+ *         required: true
+ *      responses:
+ *              200:
+ *                  description: success
+ */
+router.get("/conversation/:conversationId/:number", middleware.verifyToken, catchAsync(ChatController.getNumberLastMessage));
+
 module.exports = router;

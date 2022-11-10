@@ -39,8 +39,6 @@ class ChatController {
   };
 
   getListMessage = async (req, res) => {
-    console.log(req.params.conversationId);
-    console.log(req.user.id);
     var conversation = await ConversationModel.findOne({ id: req.params.conversationId, firstUser: req.user.id });
     if (!conversation) {
       conversation = await ConversationModel.findOne({ id: req.params.conversationId, secondUser: req.user.id });
@@ -49,6 +47,18 @@ class ChatController {
       return res.status(404).send("Conversation not found");
     }
     const messages = await MessageModel.find({ conversationId: req.params.conversationId });
+    return res.status(200).send(messages);
+  };
+
+  getNumberLastMessage = async (req, res) => {
+    var conversation = await ConversationModel.findOne({ id: req.params.conversationId, firstUser: req.user.id });
+    if (!conversation) {
+      conversation = await ConversationModel.findOne({ id: req.params.conversationId, secondUser: req.user.id });
+    }
+    if (!conversation) {
+      return res.status(404).send("Conversation not found");
+    }
+    const messages = await MessageModel.findLimit({ conversationId: req.params.conversationId }, req.params.number);
     return res.status(200).send(messages);
   };
 }

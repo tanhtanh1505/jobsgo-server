@@ -9,7 +9,7 @@ class MessageModel {
     }
 
     const { columnSet, values } = multipleColumnGet(params);
-    sql += ` WHERE ${columnSet} ORDER BY createdAt ASC`;
+    sql += ` WHERE ${columnSet} ORDER BY createdAt DESC`;
 
     return await query(sql, [...values]);
   };
@@ -22,6 +22,19 @@ class MessageModel {
     const result = await query(sql, [...values]);
 
     return result[0];
+  };
+
+  findLimit = async (params = {}, limit) => {
+    let sql = `SELECT * FROM message`;
+
+    if (!Object.keys(params).length) {
+      return await query(sql);
+    }
+
+    const { columnSet, values } = multipleColumnGet(params);
+    sql += ` WHERE ${columnSet} ORDER BY createdAt DESC LIMIT ${limit}`;
+
+    return await query(sql, [...values]);
   };
 
   create = async (params) => {
