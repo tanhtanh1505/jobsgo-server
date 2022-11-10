@@ -32,6 +32,7 @@ const options = {
     "./routes/comment.js",
     "./routes/job.js",
     "./routes/application.js",
+    "./routes/chat.js",
     "./routes/helper.js",
   ],
 };

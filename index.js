@@ -14,6 +14,7 @@ const employerRouter = require("./routes/employer");
 const jobseekerRouter = require("./routes/jobseeker");
 const applicationRouter = require("./routes/application");
 const helperRouter = require("./routes/helper");
+const chatRouter = require("./routes/chat");
 const swagger = require("./utils/swagger");
 
 const setup = require("./setup/index");
@@ -46,6 +47,7 @@ app.use("/comments", commentRoutes);
 app.use("/job", jobsRoutes);
 app.use("/application", applicationRouter);
 app.use("/education", educationRoutes);
+app.use("/chat", chatRouter);
 app.use("/helper", helperRouter);
 
 app.get("/", (req, res) => {

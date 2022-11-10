@@ -1,3 +1,5 @@
+const event = require("./event");
+const ChatController = require("../controllers/chat");
 module.exports.listen = (server) => {
   const io = require("socket.io")(server, {
     cors: {
@@ -7,18 +9,22 @@ module.exports.listen = (server) => {
 
   console.log(`Socket is listening`);
 
-  io.on("connection", (socket) => {
+  io.on(event.connection, (socket) => {
     console.log(socket.id);
 
-    socket.on("joinRoom", async (roomId) => {
+    socket.on(event.joinRoom, async (roomId) => {
       if (roomId) await socket.join(roomId);
     });
 
-    socket.on("sendMessage", (roomId, message) => {
-      if (roomId) io.sockets.in(roomId).emit("receiveMessage", message);
+    socket.on(event.sendMessage, async (roomId, message) => {
+      if (roomId) {
+        console.log(message);
+        await ChatController.saveMessage(roomId, message);
+        io.sockets.in(roomId).emit(event.receiveMessage, message);
+      }
     });
 
-    socket.on("disconnect", async (roomId) => {
+    socket.on(event.disconnect, async (roomId) => {
       if (roomId) {
         await socket.leave(roomId);
       }

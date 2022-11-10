@@ -247,6 +247,7 @@ CREATE TABLE IF NOT EXISTS `jobsgo`.`message` (
   `content` LONGTEXT NOT NULL,
   `sender` VARCHAR(45) NOT NULL,
   `status` VARCHAR(45) NULL DEFAULT NULL,
+  `createdAt` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   INDEX `fk_conversation_1_idx` (`conversationId` ASC) VISIBLE,
   INDEX `fk_user_1_idx` (`sender` ASC) VISIBLE,
