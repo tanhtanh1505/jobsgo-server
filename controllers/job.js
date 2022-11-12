@@ -20,7 +20,23 @@ class JobController {
   getListSuggestion = async (req, res) => {
     const { number } = req.params;
     const listJob = await JobModel.findLimit({}, number);
-    res.send(listJob);
+    var resListJob = [];
+    for (let job of listJob) {
+      // get bookmark
+      var tempJob = job;
+      const bookmark = await BookmarkModel.findOne({ jobId: job.id, jobseekerId: req.user.id });
+      if (bookmark) {
+        tempJob.bookmark = true;
+      } else {
+        tempJob.bookmark = false;
+      }
+      // get name author
+      const author = await UserModel.findOne({ id: job.author });
+      tempJob.authorName = author.name;
+      tempJob.address = author.address;
+      resListJob.push(tempJob);
+    }
+    res.send(resListJob);
   };
 
   getById = async (req, res) => {
