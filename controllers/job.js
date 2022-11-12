@@ -34,6 +34,7 @@ class JobController {
       const author = await UserModel.findOne({ id: job.author });
       tempJob.authorName = author.name;
       tempJob.address = author.address;
+      tempJob.avatarAuthor = author.avatar;
       resListJob.push(tempJob);
     }
     res.send(resListJob);
