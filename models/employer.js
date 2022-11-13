@@ -19,7 +19,6 @@ class EmployerModel {
     const { columnSet, values } = multipleColumnGetInner("employer", params);
     const sql = `SELECT * FROM user INNER JOIN employer ON user.id = employer.id WHERE ${columnSet} LIMIT 1`;
 
-    console.log(sql);
     const result = await query(sql, [...values]);
 
     return result[0];

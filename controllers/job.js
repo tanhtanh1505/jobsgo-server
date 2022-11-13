@@ -1,4 +1,5 @@
 const UserModel = require("../models/user");
+const EmployerModel = require("../models/employer");
 const BookmarkModel = require("../models/bookmark");
 const JobModel = require("../models/job");
 const HttpException = require("../utils/HttpException");
@@ -14,7 +15,7 @@ class JobController {
       var tempJob = job;
 
       // get name author
-      const author = await UserModel.findOne({ id: job.author });
+      const author = await EmployerModel.findOne({ id: job.author });
       tempJob.authorName = author.name;
       tempJob.authorAddress = author.address;
       tempJob.authorEmail = author.email;
@@ -34,7 +35,7 @@ class JobController {
       var tempJob = job;
 
       // get name author
-      const author = await UserModel.findOne({ id: job.author });
+      const author = await EmployerModel.findOne({ id: job.author });
       tempJob.authorName = author.name;
       tempJob.authorAddress = author.address;
       tempJob.authorEmail = author.email;
@@ -61,7 +62,7 @@ class JobController {
         tempJob.bookmark = false;
       }
       // get name author
-      const author = await UserModel.findOne({ id: job.author });
+      const author = await EmployerModel.findOne({ id: job.author });
       tempJob.authorName = author.name;
       tempJob.authorAddress = author.address;
       tempJob.authorEmail = author.email;
@@ -87,7 +88,7 @@ class JobController {
       tempJob.bookmark = false;
     }
     // get name author
-    const author = await UserModel.findOne({ id: job.author });
+    const author = await EmployerModel.findOne({ id: job.author });
     tempJob.authorName = author.name;
     tempJob.authorAddress = author.address;
     tempJob.authorEmail = author.email;
