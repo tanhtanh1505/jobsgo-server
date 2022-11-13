@@ -8,13 +8,43 @@ const { v4: uuidv4 } = require("uuid");
 const sheets = require("../utils/sheets/index");
 class JobController {
   getAll = async (req, res) => {
-    let list = await JobModel.find();
-    res.send(list);
+    let listJob = await JobModel.find();
+    var resListJob = [];
+    for (let job of listJob) {
+      var tempJob = job;
+
+      // get name author
+      const author = await UserModel.findOne({ id: job.author });
+      tempJob.authorName = author.name;
+      tempJob.authorAddress = author.address;
+      tempJob.authorEmail = author.email;
+      tempJob.authorPhone = author.phone;
+      tempJob.authorAvatar = author.avatar;
+      tempJob.authorAbout = author.about;
+      tempJob.authorSize = author.size;
+      resListJob.push(tempJob);
+    }
+    res.send(resListJob);
   };
 
   getOneSuggestion = async (req, res) => {
     const listJob = await JobModel.findLimit({}, 1);
-    res.send(listJob);
+    var resListJob = [];
+    for (let job of listJob) {
+      var tempJob = job;
+
+      // get name author
+      const author = await UserModel.findOne({ id: job.author });
+      tempJob.authorName = author.name;
+      tempJob.authorAddress = author.address;
+      tempJob.authorEmail = author.email;
+      tempJob.authorPhone = author.phone;
+      tempJob.authorAvatar = author.avatar;
+      tempJob.authorAbout = author.about;
+      tempJob.authorSize = author.size;
+      resListJob.push(tempJob);
+    }
+    res.send(resListJob);
   };
 
   getListSuggestion = async (req, res) => {
@@ -33,8 +63,12 @@ class JobController {
       // get name author
       const author = await UserModel.findOne({ id: job.author });
       tempJob.authorName = author.name;
-      tempJob.address = author.address;
-      tempJob.avatarAuthor = author.avatar;
+      tempJob.authorAddress = author.address;
+      tempJob.authorEmail = author.email;
+      tempJob.authorPhone = author.phone;
+      tempJob.authorAvatar = author.avatar;
+      tempJob.authorAbout = author.about;
+      tempJob.authorSize = author.size;
       resListJob.push(tempJob);
     }
     res.send(resListJob);
@@ -45,7 +79,24 @@ class JobController {
     if (!job) {
       throw new HttpException(404, "Job not found");
     }
-    res.send(job);
+    var tempJob = job;
+    const bookmark = await BookmarkModel.findOne({ jobId: job.id, jobseekerId: req.user.id });
+    if (bookmark) {
+      tempJob.bookmark = true;
+    } else {
+      tempJob.bookmark = false;
+    }
+    // get name author
+    const author = await UserModel.findOne({ id: job.author });
+    tempJob.authorName = author.name;
+    tempJob.authorAddress = author.address;
+    tempJob.authorEmail = author.email;
+    tempJob.authorPhone = author.phone;
+    tempJob.authorAvatar = author.avatar;
+    tempJob.authorAbout = author.about;
+    tempJob.authorSize = author.size;
+
+    res.send(tempJob);
   };
 
   getMyJob = async (req, res) => {

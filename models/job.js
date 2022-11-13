@@ -15,6 +15,19 @@ class JobModel {
     return await query(sql, [...values]);
   };
 
+  findInner = async (params = {}) => {
+    let sql = `SELECT * FROM job INNER JOIN user ON job.author = user.id`;
+
+    if (!Object.keys(params).length) {
+      return await query(sql);
+    }
+
+    const { columnSet, values } = multipleColumnGet(params);
+    sql += ` WHERE ${columnSet}`;
+
+    return await query(sql, [...values]);
+  };
+
   findOne = async (params) => {
     const { columnSet, values } = multipleColumnGet(params);
 
