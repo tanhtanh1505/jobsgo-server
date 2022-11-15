@@ -102,6 +102,7 @@ router.get("/recommend/:number", middleware.verifyToken, catchAsync(jobControlle
  * /job/getPageSuggestion/{jobPerPage}/{pageNumber}:
  *  get:
  *      summary: get page suggestion jobs
+ *      description: jobPerPage is number of job per page, pageNumber is number of page
  *      tags:
  *      - Job
  *      parameters:
