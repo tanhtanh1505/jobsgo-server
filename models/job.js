@@ -51,6 +51,19 @@ class JobModel {
     return await query(sql, [...values]);
   };
 
+  findLimitOffset = async (params = {}, limit, offset) => {
+    let sql = `SELECT * FROM job`;
+
+    if (!Object.keys(params).length) {
+      return await query(sql + ` LIMIT ${limit} OFFSET ${offset}`);
+    }
+
+    const { columnSet, values } = multipleColumnGet(params);
+    sql += ` WHERE ${columnSet} LIMIT ${limit} OFFSET ${offset}`;
+
+    return await query(sql, [...values]);
+  };
+
   create = async (params) => {
     const { sql, values } = await multipleColumnInsert("job", params);
     const result = await query(sql, [...values]);

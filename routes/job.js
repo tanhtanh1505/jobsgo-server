@@ -99,6 +99,28 @@ router.get("/recommend/:number", middleware.verifyToken, catchAsync(jobControlle
 
 /**
  * @openapi
+ * /job/getPageSuggestion/{jobPerPage}/{pageNumber}:
+ *  get:
+ *      summary: get page suggestion jobs
+ *      tags:
+ *      - Job
+ *      parameters:
+ *      - in: path
+ *        name: jobPerPage
+ *        type: number
+ *        required: true
+ *      - in: path
+ *        name: pageNumber
+ *        type: number
+ *        required: true
+ *      responses:
+ *              200:
+ *                  description: success
+ */
+router.get("/getPageSuggestion/:jobPerPage/:pageNumber", catchAsync(jobController.getPageSuggestion));
+
+/**
+ * @openapi
  * /job/import:
  *  post:
  *      summary: import jobs from google sheet

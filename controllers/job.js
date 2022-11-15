@@ -75,6 +75,35 @@ class JobController {
     res.send(resListJob);
   };
 
+  getPageSuggestion = async (req, res) => {
+    const { jobPerPage, pageNumber } = req.params;
+    const listJob = await JobModel.findLimitOffset({}, jobPerPage, (pageNumber - 1) * jobPerPage);
+    var resListJob = [];
+    for (let job of listJob) {
+      // get bookmark
+      var tempJob = job;
+      if (req.user) {
+        const bookmark = await BookmarkModel.findOne({ jobId: job.id, jobseekerId: req.user.id });
+        if (bookmark) {
+          tempJob.bookmark = true;
+        } else {
+          tempJob.bookmark = false;
+        }
+      }
+      // get name author
+      const author = await EmployerModel.findOne({ id: job.author });
+      tempJob.authorName = author.name;
+      tempJob.authorAddress = author.address;
+      tempJob.authorEmail = author.email;
+      tempJob.authorPhone = author.phone;
+      tempJob.authorAvatar = author.avatar;
+      tempJob.authorAbout = author.about;
+      tempJob.authorSize = author.size;
+      resListJob.push(tempJob);
+    }
+    res.send(resListJob);
+  };
+
   getById = async (req, res) => {
     const job = await JobModel.findOne({ id: req.params.jobId });
     if (!job) {
