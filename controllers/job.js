@@ -261,6 +261,31 @@ class JobController {
     res.send("Import success");
   };
 
+  //get list marked
+  listMarked = async (req, res) => {
+    let listJob = await JobModel.find();
+    var resListJob = [];
+    for (let job of listJob) {
+      var tempJob = job;
+      const bookmark = await BookmarkModel.findOne({ jobId: job.id, jobseekerId: req.user.id });
+      if (bookmark) {
+        tempJob.bookmark = true;
+        const author = await EmployerModel.findOne({ id: job.author });
+        tempJob.authorName = author.name;
+        tempJob.authorAddress = author.address;
+        tempJob.authorEmail = author.email;
+        tempJob.authorPhone = author.phone;
+        tempJob.authorAvatar = author.avatar;
+        tempJob.authorAbout = author.about;
+        tempJob.authorSize = author.size;
+        resListJob.push(tempJob);
+      } else {
+        tempJob.bookmark = false;
+      }
+    }
+    res.send(resListJob);
+  };
+
   isMarked = async (req, res) => {
     const { jobId } = req.params;
     const { id } = req.user;

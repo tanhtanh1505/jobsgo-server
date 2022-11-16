@@ -44,13 +44,7 @@ module.exports.uploadFile = async (file) => {
     Body: fs.createReadStream(path),
     ContentType: mimetype,
   };
-  s3.upload(params, (error, data) => {
-    if (error) {
-      fs.unlinkSync(path);
-      return "error";
-    }
-    console.log(data.Location);
-    fs.unlinkSync(path);
-    return `${data.Location}`;
-  });
+  const resUpload = await s3.upload(params).promise();
+  fs.unlinkSync(path);
+  return resUpload.Location;
 };

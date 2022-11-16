@@ -122,6 +122,20 @@ router.get("/getPageSuggestion/:jobPerPage/:pageNumber", catchAsync(jobControlle
 
 /**
  * @openapi
+ * /job/list-marked:
+ *  get:
+ *      summary: get list marked job
+ *      description: get list marked job
+ *      tags:
+ *      - Job
+ *      responses:
+ *              200:
+ *                  description: success
+ */
+router.get("/list-marked", middleware.verifyToken, middleware.isJobSeeker, catchAsync(jobController.listMarked));
+
+/**
+ * @openapi
  * /job/import:
  *  post:
  *      summary: import jobs from google sheet
