@@ -3,6 +3,7 @@ const router = require("express").Router();
 const catchAsync = require("../utils/catchAsync");
 const middleware = require("../middlewares/jwt");
 const { validateCreateJobseeker, validateUpdateJobseeker } = require("../middlewares/validate/jobseeker");
+const multer = require("multer");
 
 /**
  * @openapi
@@ -128,4 +129,5 @@ router.get("/", middleware.verifyToken, middleware.isJobSeeker, catchAsync(jobse
  *                  description: success
  */
 router.get("/:id", catchAsync(jobseekerController.getJobseekerById));
+
 module.exports = router;

@@ -30,3 +30,27 @@ module.exports.uploadFileToS3 = async (req, res) => {
     res.status(200).send(data.Location);
   });
 };
+
+//upload file and return url
+module.exports.uploadFile = async (file) => {
+  const { path, mimetype } = file;
+  var folder = "/files";
+  if (mimetype.startsWith("image/")) {
+    folder = "/images";
+  }
+  const params = {
+    Bucket: `${process.env.AWS_BUCKET_NAME}${folder}`,
+    Key: getRandomKey(),
+    Body: fs.createReadStream(path),
+    ContentType: mimetype,
+  };
+  s3.upload(params, (error, data) => {
+    if (error) {
+      fs.unlinkSync(path);
+      return "error";
+    }
+    console.log(data.Location);
+    fs.unlinkSync(path);
+    return `${data.Location}`;
+  });
+};

@@ -147,14 +147,14 @@ router
   .route("/:jobId")
   /**
    * @openapi
-   * /job/{id}:
+   * /job/{jobId}:
    *  get:
    *      summary: get job by id
    *      tags:
    *      - Job
    *      parameters:
    *       - in: path
-   *         name: id
+   *         name: jobId
    *         type: string
    *         required: true
    *      responses:

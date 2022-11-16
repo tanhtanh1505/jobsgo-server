@@ -110,11 +110,13 @@ class JobController {
       throw new HttpException(404, "Job not found");
     }
     var tempJob = job;
-    const bookmark = await BookmarkModel.findOne({ jobId: job.id, jobseekerId: req.user.id });
-    if (bookmark) {
-      tempJob.bookmark = true;
-    } else {
-      tempJob.bookmark = false;
+    if (req.user) {
+      const bookmark = await BookmarkModel.findOne({ jobId: job.id, jobseekerId: req.user.id });
+      if (bookmark) {
+        tempJob.bookmark = true;
+      } else {
+        tempJob.bookmark = false;
+      }
     }
     // get name author
     const author = await EmployerModel.findOne({ id: job.author });

@@ -27,6 +27,7 @@ const options = {
     "./routes/auth.js",
     "./routes/user.js",
     "./routes/jobseeker.js",
+    "./routes/cv.js",
     "./routes/education.js",
     "./routes/employer.js",
     "./routes/comment.js",

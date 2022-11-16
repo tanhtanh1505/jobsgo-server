@@ -5,6 +5,7 @@ const { v4: uuidv4 } = require("uuid");
 const Role = require("../constants/user");
 const bcrypt = require("bcryptjs");
 const mailService = require("../services/mail");
+const { uploadFile } = require("../helper/uploadImageHelper");
 
 module.exports.register = async (req, res) => {
   const {
