@@ -218,7 +218,10 @@ class JobController {
     let listJob = await JobModel.find();
     var resListJob = [];
     for (let i = 0; i < listJob.length; i++) {
-      resListJob.push(await this.innerWithAuthorInfo(req, listJob[i]));
+      const tempJob = await this.innerWithAuthorInfo(req, listJob[i]);
+      if (tempJob.bookmark) {
+        resListJob.push(tempJob);
+      }
     }
     res.send(resListJob);
   };
