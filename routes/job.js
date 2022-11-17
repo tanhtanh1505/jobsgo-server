@@ -64,7 +64,7 @@ router.post("/create", middleware.verifyToken, middleware.isEmployer, validateCr
  *              200:
  *                  description: success
  */
-router.get("/all", catchAsync(jobController.getAll));
+router.get("/all", middleware.setReqUser, catchAsync(jobController.getAll));
 
 /**
  * @openapi

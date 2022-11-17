@@ -8,51 +8,47 @@ dotenv.config();
 const { v4: uuidv4 } = require("uuid");
 const sheets = require("../utils/sheets/index");
 class JobController {
+  getBookmark = async (user, job) => {
+    if (user) {
+      const bookmark = await BookmarkModel.findOne({ jobId: job.id, jobseekerId: user.id });
+      if (bookmark) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  innerWithAuthorInfo = async (req, job) => {
+    const bookmark = await this.getBookmark(req.user, job);
+    const author = await EmployerModel.findOne({ id: job.author });
+    return {
+      ...job,
+      authorName: author.name,
+      authorAddress: author.address,
+      authorEmail: author.email,
+      authorPhone: author.phone,
+      authorAvatar: author.avatar,
+      authorAbout: author.about,
+      authorSize: author.size,
+      bookmark: bookmark,
+    };
+  };
+
   getAll = async (req, res) => {
     let listJob = await JobModel.find();
     var resListJob = [];
-    for (let job of listJob) {
-      var tempJob = job;
-
-      // get bookmark
-      var tempJob = job;
-      const bookmark = await BookmarkModel.findOne({ jobId: job.id, jobseekerId: req.user.id });
-      if (bookmark) {
-        tempJob.bookmark = true;
-      } else {
-        tempJob.bookmark = false;
-      }
-
-      // get name author
-      const author = await EmployerModel.findOne({ id: job.author });
-      tempJob.authorName = author.name;
-      tempJob.authorAddress = author.address;
-      tempJob.authorEmail = author.email;
-      tempJob.authorPhone = author.phone;
-      tempJob.authorAvatar = author.avatar;
-      tempJob.authorAbout = author.about;
-      tempJob.authorSize = author.size;
-      resListJob.push(tempJob);
+    for (let i = 0; i < listJob.length; i++) {
+      resListJob.push(await this.innerWithAuthorInfo(req, listJob[i]));
     }
-    res.send(resListJob);
+
+    return res.send(resListJob);
   };
 
   getOneSuggestion = async (req, res) => {
     const listJob = await JobModel.findLimit({}, 1);
     var resListJob = [];
-    for (let job of listJob) {
-      var tempJob = job;
-
-      // get name author
-      const author = await EmployerModel.findOne({ id: job.author });
-      tempJob.authorName = author.name;
-      tempJob.authorAddress = author.address;
-      tempJob.authorEmail = author.email;
-      tempJob.authorPhone = author.phone;
-      tempJob.authorAvatar = author.avatar;
-      tempJob.authorAbout = author.about;
-      tempJob.authorSize = author.size;
-      resListJob.push(tempJob);
+    for (let i = 0; i < listJob.length; i++) {
+      resListJob.push(await this.innerWithAuthorInfo(req, listJob[i]));
     }
     res.send(resListJob);
   };
@@ -61,25 +57,8 @@ class JobController {
     const { number } = req.params;
     const listJob = await JobModel.findLimit({}, number);
     var resListJob = [];
-    for (let job of listJob) {
-      // get bookmark
-      var tempJob = job;
-      const bookmark = await BookmarkModel.findOne({ jobId: job.id, jobseekerId: req.user.id });
-      if (bookmark) {
-        tempJob.bookmark = true;
-      } else {
-        tempJob.bookmark = false;
-      }
-      // get name author
-      const author = await EmployerModel.findOne({ id: job.author });
-      tempJob.authorName = author.name;
-      tempJob.authorAddress = author.address;
-      tempJob.authorEmail = author.email;
-      tempJob.authorPhone = author.phone;
-      tempJob.authorAvatar = author.avatar;
-      tempJob.authorAbout = author.about;
-      tempJob.authorSize = author.size;
-      resListJob.push(tempJob);
+    for (let i = 0; i < listJob.length; i++) {
+      resListJob.push(await this.innerWithAuthorInfo(req, listJob[i]));
     }
     res.send(resListJob);
   };
@@ -88,27 +67,8 @@ class JobController {
     const { jobPerPage, pageNumber } = req.params;
     const listJob = await JobModel.findLimitOffset({}, jobPerPage, (pageNumber - 1) * jobPerPage);
     var resListJob = [];
-    for (let job of listJob) {
-      // get bookmark
-      var tempJob = job;
-      if (req.user) {
-        const bookmark = await BookmarkModel.findOne({ jobId: job.id, jobseekerId: req.user.id });
-        if (bookmark) {
-          tempJob.bookmark = true;
-        } else {
-          tempJob.bookmark = false;
-        }
-      }
-      // get name author
-      const author = await EmployerModel.findOne({ id: job.author });
-      tempJob.authorName = author.name;
-      tempJob.authorAddress = author.address;
-      tempJob.authorEmail = author.email;
-      tempJob.authorPhone = author.phone;
-      tempJob.authorAvatar = author.avatar;
-      tempJob.authorAbout = author.about;
-      tempJob.authorSize = author.size;
-      resListJob.push(tempJob);
+    for (let i = 0; i < listJob.length; i++) {
+      resListJob.push(await this.innerWithAuthorInfo(req, listJob[i]));
     }
     res.send(resListJob);
   };
@@ -118,24 +78,7 @@ class JobController {
     if (!job) {
       throw new HttpException(404, "Job not found");
     }
-    var tempJob = job;
-    if (req.user) {
-      const bookmark = await BookmarkModel.findOne({ jobId: job.id, jobseekerId: req.user.id });
-      if (bookmark) {
-        tempJob.bookmark = true;
-      } else {
-        tempJob.bookmark = false;
-      }
-    }
-    // get name author
-    const author = await EmployerModel.findOne({ id: job.author });
-    tempJob.authorName = author.name;
-    tempJob.authorAddress = author.address;
-    tempJob.authorEmail = author.email;
-    tempJob.authorPhone = author.phone;
-    tempJob.authorAvatar = author.avatar;
-    tempJob.authorAbout = author.about;
-    tempJob.authorSize = author.size;
+    var tempJob = await this.innerWithAuthorInfo(req, job);
 
     res.send(tempJob);
   };
@@ -274,23 +217,8 @@ class JobController {
   listMarked = async (req, res) => {
     let listJob = await JobModel.find();
     var resListJob = [];
-    for (let job of listJob) {
-      var tempJob = job;
-      const bookmark = await BookmarkModel.findOne({ jobId: job.id, jobseekerId: req.user.id });
-      if (bookmark) {
-        tempJob.bookmark = true;
-        const author = await EmployerModel.findOne({ id: job.author });
-        tempJob.authorName = author.name;
-        tempJob.authorAddress = author.address;
-        tempJob.authorEmail = author.email;
-        tempJob.authorPhone = author.phone;
-        tempJob.authorAvatar = author.avatar;
-        tempJob.authorAbout = author.about;
-        tempJob.authorSize = author.size;
-        resListJob.push(tempJob);
-      } else {
-        tempJob.bookmark = false;
-      }
+    for (let i = 0; i < listJob.length; i++) {
+      resListJob.push(await this.innerWithAuthorInfo(req, listJob[i]));
     }
     res.send(resListJob);
   };
