@@ -12,7 +12,7 @@ module.exports.uploadFileToS3 = async (req, res) => {
   const file = req.file;
   const { path, mimetype } = file;
   var folder = "/files";
-  if (mimetype.startsWith("image/")) {
+  if (mimetype && mimetype.startsWith("image/")) {
     folder = "/images";
   }
   const params = {
@@ -33,9 +33,28 @@ module.exports.uploadFileToS3 = async (req, res) => {
 
 //upload file and return url
 module.exports.uploadFile = async (file) => {
+  console.log("file", file);
   const { path, mimetype } = file;
+  console.log("path", path);
   var folder = "/files";
-  if (mimetype.startsWith("image/")) {
+  if (mimetype && mimetype.startsWith("image/")) {
+    folder = "/images";
+  }
+  const params = {
+    Bucket: `${process.env.AWS_BUCKET_NAME}${folder}`,
+    Key: getRandomKey(),
+    Body: fs.createReadStream(path),
+    ContentType: mimetype,
+  };
+  const resUpload = await s3.upload(params).promise();
+  fs.unlinkSync(path);
+  return resUpload.Location;
+};
+
+//upload file using path
+module.exports.uploadFileWithPath = async (path, mimetype) => {
+  var folder = "/files";
+  if (mimetype && mimetype.startsWith("image/")) {
     folder = "/images";
   }
   const params = {

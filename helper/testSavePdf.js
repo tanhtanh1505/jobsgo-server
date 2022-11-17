@@ -2,7 +2,16 @@ const fs = require("fs");
 const path = require("path");
 const puppeteer = require("puppeteer");
 const handlebars = require("handlebars");
-const { uploadFile, uploadFileWithPath } = require("./uploadImageHelper");
+
+const data = {
+  title: "A new Brazilian School",
+  date: "05/12/2018",
+  name: "Rodolfo Luis Marcos",
+  age: 28,
+  birthdate: "12/07/1990",
+  course: "Computer Science",
+  obs: "Graduated in 2014 by Federal University of Lavras, work with Full-Stack development and E-commerce.",
+};
 
 const DUMMYCV = {
   cv: {
@@ -68,15 +77,14 @@ const DUMMYCV = {
   },
 };
 
-module.exports.createPDF = async (data) => {
-  if (!data) return "Data is empty";
-  var templateHtml = fs.readFileSync(path.join(process.cwd(), "/helper/cv.hbs"), "utf8");
+async function createPDF(data) {
+  var templateHtml = fs.readFileSync(path.join(process.cwd(), "cv.hbs"), "utf8");
   var template = handlebars.compile(templateHtml);
   var html = template(data);
   var milis = new Date();
   milis = milis.getTime();
 
-  var pdfPath = `${process.cwd()}/helper/${data.cv.name}-${milis}.pdf`;
+  var pdfPath = `${data.cv.name}-${milis}.pdf`;
 
   var options = {
     width: "1230px",
@@ -98,10 +106,14 @@ module.exports.createPDF = async (data) => {
 
   var page = await browser.newPage();
 
+  //   await page.goto(`data:text/html;charset=UTF-8,${html}`, {
+  //     waitUntil: "networkidle0",
+  //   });
+
   await page.setContent(html);
 
   await page.pdf(options);
   await browser.close();
-  const url = await uploadFileWithPath(pdfPath, "application/pdf");
-  return url;
-};
+}
+
+createPDF(DUMMYCV);

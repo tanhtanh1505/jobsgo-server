@@ -28,4 +28,26 @@ const upload = multer({ dest: "uploads/" });
  */
 router.post("/create", upload.single("file"), catchAsync(cvController.create));
 
+/**
+ * @openapi
+ * /cv/generate:
+ *  post:
+ *      summary: Generate CV
+ *      tags:
+ *      - Cv
+ *      requestBody:
+ *          require: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      type: object
+ *                      properties:
+ *                          cv:
+ *                              example: {}
+ *      responses:
+ *              200:
+ *                  description: success
+ */
+router.post("/generate", catchAsync(cvController.generatePdf));
+
 module.exports = router;

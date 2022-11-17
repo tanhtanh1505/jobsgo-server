@@ -1,5 +1,5 @@
 const { uploadFile } = require("../helper/uploadImageHelper");
-
+const { createPDF } = require("../helper/saveToPdf");
 //save file to s3
 module.exports.create = async (req, res) => {
   const avatar = req.file;
@@ -12,4 +12,10 @@ module.exports.create = async (req, res) => {
   // console.log(`File uploaded to ${url}`);
   console.log(title, description);
   return res.status(200).send(url);
+};
+
+module.exports.generatePdf = async (req, res) => {
+  const { cv } = req.body;
+  const url = await createPDF({ cv: cv });
+  res.send(url);
 };
