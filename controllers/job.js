@@ -14,6 +14,15 @@ class JobController {
     for (let job of listJob) {
       var tempJob = job;
 
+      // get bookmark
+      var tempJob = job;
+      const bookmark = await BookmarkModel.findOne({ jobId: job.id, jobseekerId: req.user.id });
+      if (bookmark) {
+        tempJob.bookmark = true;
+      } else {
+        tempJob.bookmark = false;
+      }
+
       // get name author
       const author = await EmployerModel.findOne({ id: job.author });
       tempJob.authorName = author.name;
