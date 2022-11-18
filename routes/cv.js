@@ -7,7 +7,7 @@ const upload = multer({ dest: "uploads/" });
 
 /**
  * @openapi
- * /cv-manager/create:
+ * /cv/create:
  *  post:
  *      summary: Create CV
  *      tags:
@@ -30,7 +30,7 @@ router.post("/create", upload.single("file"), catchAsync(cvController.create));
 
 /**
  * @openapi
- * /cv-manager/generate:
+ * /cv/generate:
  *  post:
  *      summary: Generate CV
  *      tags:
