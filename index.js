@@ -50,7 +50,7 @@ app.use("/job", jobsRoutes);
 app.use("/application", applicationRouter);
 app.use("/education", educationRoutes);
 app.use("/chat", chatRouter);
-app.use("/cv", cvRouter);
+app.use("/cv-manager", cvRouter);
 app.use("/helper", helperRouter);
 
 app.get("/", (req, res) => {
