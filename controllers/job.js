@@ -85,8 +85,11 @@ class JobController {
 
   getMyJob = async (req, res) => {
     let listJobs = await JobModel.find({ author: req.user.id });
-
-    res.send(listJobs);
+    const result = [];
+    for (let i = 0; i < listJobs.length; i++) {
+      result.push(await this.innerWithAuthorInfo(req, listJobs[i]));
+    }
+    res.send(result);
   };
 
   create = async (req, res) => {
