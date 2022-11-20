@@ -114,7 +114,8 @@ module.exports.updateProfile = async (req, res) => {
 
   //   return res.status(200).send("Jobseeker edited successfully");
   // }
-  return res.status(500).send("Error editing Jobseeker");
+
+  return res.status(200).send("Jobseeker edited successfully");
 };
 
 module.exports.getCurrentJobseeker = async (req, res) => {
