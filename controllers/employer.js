@@ -125,6 +125,11 @@ module.exports.getRecommendJobseeker = async (req, res) => {
   }
 
   const { number } = req.params;
+  //if dont need jobseeker valid, add random
+  if (recommendJobseekers.length < number) {
+    recommendJobseekers.push(...jobseekers);
+  }
+
   recommendJobseekers.splice(number);
   return res.status(200).send(recommendJobseekers);
 };
