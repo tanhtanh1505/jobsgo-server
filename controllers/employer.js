@@ -117,7 +117,8 @@ module.exports.getRecommendJobseeker = async (req, res) => {
         if (added) break;
 
         if (equalByRate(tag, careerFeild, 0.5)) {
-          recommendJobseekers.push(jobseeker);
+          const { password, ...jobseekerWithoutPassword } = jobseeker;
+          recommendJobseekers.push(jobseekerWithoutPassword);
           added = true;
         }
       }
@@ -127,7 +128,12 @@ module.exports.getRecommendJobseeker = async (req, res) => {
   const { number } = req.params;
   //if dont need jobseeker valid, add random
   if (recommendJobseekers.length < number) {
-    recommendJobseekers.push(...jobseekers);
+    recommendJobseekers.push(
+      ...jobseekers.map((js) => {
+        const { password, ...jobseekerWithoutPassword } = js;
+        return jobseekerWithoutPassword;
+      })
+    );
   }
 
   recommendJobseekers.splice(number);
