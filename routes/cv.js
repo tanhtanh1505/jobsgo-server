@@ -48,6 +48,6 @@ router.post("/create", upload.single("file"), catchAsync(cvController.create));
  *              200:
  *                  description: success
  */
-router.post("/generate", catchAsync(cvController.generatePdf));
+router.post("/generate", middleware.verifyToken, middleware.isJobSeeker, catchAsync(cvController.generatePdf));
 
 module.exports = router;

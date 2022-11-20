@@ -19,7 +19,6 @@ class JobseekerModel {
     const { columnSet, values } = multipleColumnGetInner("jobseeker", params);
     const sql = `SELECT * FROM user INNER JOIN jobseeker ON user.id = jobseeker.id WHERE ${columnSet} LIMIT 1`;
 
-    console.log(sql);
     const result = await query(sql, [...values]);
 
     return result[0];
@@ -36,7 +35,6 @@ class JobseekerModel {
     const { columnSet, values } = multipleColumnSet(params);
 
     const sql = `UPDATE jobseeker SET ${columnSet} WHERE id = ?`;
-
     const result = await query(sql, [...values, id]);
 
     return result;
