@@ -1,5 +1,6 @@
 const JobModel = require("../models/job");
 const UserModel = require("../models/user");
+const JobseekerModel = require("../models/jobseeker");
 const EmployerModel = require("../models/employer");
 const { v4: uuidv4 } = require("uuid");
 const Role = require("../constants/user");
@@ -90,6 +91,58 @@ module.exports.getCurrentEmployer = async (req, res) => {
 //get employer by id
 module.exports.getEmployerById = async (req, res) => {
   return res.status(200).send(await getEmployerWithoutPassword(req.params.id));
+};
+
+module.exports.getRecommendJobseeker = async (req, res) => {
+  //get all tags from job of employer
+  const job = await JobModel.find({ author: req.user.id });
+  var tags = [];
+  for (var i = 0; i < job.length; i++) {
+    tags.push(...job[i].tags.split(",").map((j) => j.trim()));
+  }
+
+  const jobseekers = await JobseekerModel.find();
+  if (!jobseekers) {
+    return res.status(409).send("Jobseeker not found");
+  }
+  const recommendJobseekers = [];
+  for (let i = 0; i < jobseekers.length; i++) {
+    const jobseeker = jobseekers[i];
+    const careerFeilds = jobseeker.careerFeild.split(",").map((c) => c.trim());
+    var added = false;
+    for (let tag of tags) {
+      if (added) break;
+
+      for (let careerFeild of careerFeilds) {
+        if (added) break;
+
+        if (equalByRate(tag, careerFeild, 0.5)) {
+          recommendJobseekers.push(jobseeker);
+          added = true;
+        }
+      }
+    }
+  }
+
+  const { number } = req.params;
+  recommendJobseekers.splice(number);
+  return res.status(200).send(recommendJobseekers);
+};
+
+equalByRate = (src, element, rate) => {
+  const charSet = [];
+  for (let i = 0; i < src.length; i++) {
+    charSet.push(src[i]);
+  }
+  for (let i = 0; i < element.length; i++) {
+    const index = charSet.indexOf(element[i]);
+    if (index != -1) {
+      charSet.splice(index, 1);
+    }
+  }
+  if ((charSet.length * 1.0) / src.length <= 1 - rate) return true;
+
+  return false;
 };
 
 getEmployerWithoutPassword = async (id) => {

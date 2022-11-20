@@ -107,6 +107,25 @@ router.get("/:id", catchAsync(employerController.getEmployerById));
 
 /**
  * @openapi
+ * /employer/recommend-jobseeker/{number}:
+ *  get:
+ *      summary: get recommend jobseeker
+ *      tags:
+ *      - Employer
+ *      parameters:
+ *       - in: path
+ *         name: number
+ *         type: string
+ *         required: true
+ *         description: number
+ *      responses:
+ *              200:
+ *                  description: success
+ */
+router.get("/recommend-jobseeker/:number", middleware.verifyToken, catchAsync(employerController.getRecommendJobseeker));
+
+/**
+ * @openapi
  * /employer/{id}/comments:
  *  get:
  *      summary: get all comments of a employer
