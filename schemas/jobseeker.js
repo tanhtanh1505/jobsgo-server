@@ -22,7 +22,7 @@ module.exports.createJobseekerSchema = Joi.object({
 
 module.exports.updateJobseekerSchema = Joi.object({
   age: Joi.number().required(),
-  gender: Joi.string().valid(gender),
+  gender: Joi.string().valid(...Object.values(gender)),
   experience: Joi.string().allow(""),
   advanedSkill: Joi.string().allow(""),
   salary: Joi.number().min(0),
