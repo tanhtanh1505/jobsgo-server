@@ -128,7 +128,9 @@ class UserController {
     // user matched!
     const accessToken = jwtHelper.genToken(user);
     const refreshToken = jwtHelper.genRefreshToken(user);
-    await global.redisClient.rPush(user.id, refreshToken);
+    if (process.env.USE_REDIS == true) {
+      await global.redisClient.rPush(user.id, refreshToken);
+    }
     res.cookie("refreshToken", refreshToken, {
       httpOnly: false,
       secure: false,
@@ -157,14 +159,17 @@ class UserController {
         throw new HttpException(401, "Refresh Token is not valid");
       }
 
-      const rToken = await global.redisClient.lRange(user.id, 0, -1);
-      if (!rToken || rToken.indexOf(refreshToken) == -1) {
-        throw new HttpException(401, "Token is not exist");
-      }
+      if (process.env.USE_REDIS == true) {
+        const rToken = await global.redisClient.lRange(user.id, 0, -1);
+        if (!rToken || rToken.indexOf(refreshToken) == -1) {
+          throw new HttpException(401, "Token is not exist");
+        }
 
-      const newRToken = rToken.filter((token) => token != refreshToken);
-      await global.redisClient.del(user.id);
-      await global.redisClient.lPush(user.id, newRToken);
+        const newRToken = rToken.filter((token) => token != refreshToken);
+
+        await global.redisClient.del(user.id);
+        await global.redisClient.lPush(user.id, newRToken);
+      }
       return res.clearCookie("refreshToken").send("log out success");
     });
   };
@@ -238,19 +243,24 @@ class UserController {
         return res.status(401).json("Refresh Token is not valid");
       }
 
-      const rToken = await global.redisClient.lRange(user.id, 0, -1);
-      if (!rToken || rToken.indexOf(refreshToken) == -1) {
-        return res.status(401).json("Token is not exist");
+      if (process.env.USE_REDIS == true) {
+        const rToken = await global.redisClient.lRange(user.id, 0, -1);
+        if (!rToken || rToken.indexOf(refreshToken) == -1) {
+          return res.status(401).json("Token is not exist");
+        }
+
+        // const newRToken = rToken.filter((token) => token != refreshToken);
+        // await global.redisClient.del(user.id);
+        // await global.redisClient.lPush(user.id, newRToken);
+
+        const newAccessToken = jwtHelper.genToken(user);
+        await global.redisClient.rPush(user.id, newAccessToken);
+        return res.status(200).json(newAccessToken);
+      } else {
+        const newAccessToken = jwtHelper.genToken(user);
+
+        return res.status(200).json(newAccessToken);
       }
-
-      // const newRToken = rToken.filter((token) => token != refreshToken);
-      // await global.redisClient.del(user.id);
-      // await global.redisClient.lPush(user.id, newRToken);
-
-      const newAccessToken = jwtHelper.genToken(user);
-      await global.redisClient.rPush(user.id, newAccessToken);
-
-      res.status(200).json(newAccessToken);
     });
   };
 

@@ -26,7 +26,9 @@ dotenv.config();
 const app = express();
 const server = http.createServer(app);
 
-setup.run();
+if (process.env.USE_REDIS == true) {
+  setup.run();
+}
 
 // app.use(cors());
 app.use(function (req, res, next) {
