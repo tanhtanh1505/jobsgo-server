@@ -6,7 +6,7 @@ const Role = require("../constants/user");
 const bcrypt = require("bcryptjs");
 const mailService = require("../services/mail");
 const { uploadFile } = require("../helper/uploadImageHelper");
-
+const { creatContent } = require("../helper/templateMail");
 module.exports.register = async (req, res) => {
   const {
     username,
@@ -71,14 +71,7 @@ module.exports.register = async (req, res) => {
         from: "service@tanhuet.com",
         to: email,
         subject: "Welcome to Working On Paradise",
-        html: `
-        <h1>Hi ${name}</h1>
-        <p>Welcome to <a href=${url}>Work On Paradise</a></p>
-        <p>Wish you have an amazing experience with us </p>
-        </br>
-
-        <p>Thank you</p>
-      `,
+        html: creatContent(name, "Register successfully", "Welcome to Working On Paradise"),
       };
 
       mailService.sendMail(mailOptions);
