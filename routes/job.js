@@ -95,7 +95,7 @@ router.get("/all-mine", middleware.verifyToken, middleware.isEmployer, catchAsyn
  *              200:
  *                  description: success
  */
-router.get("/recommend/:number", middleware.verifyToken, catchAsync(jobController.getListSuggestion));
+router.get("/recommend/:number", middleware.setReqUser, catchAsync(jobController.getListSuggestion));
 
 /**
  * @openapi
