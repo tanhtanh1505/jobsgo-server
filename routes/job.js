@@ -185,7 +185,7 @@ router
    *      - Job
    *      parameters:
    *       - in: path
-   *         name: id
+   *         name: jobId
    *         type: string
    *         required: true
    *      requestBody:
@@ -199,8 +199,8 @@ router
    *                              example: "title"
    *                          description:
    *                              example: "description"
-   *                          requirement:
-   *                              example: "requirement"
+   *                          requirements:
+   *                              example: "requirements"
    *                          tags:
    *                              example: "tags"
    *                          startTime:
@@ -213,7 +213,7 @@ router
    *                              example: "fulltime"
    *                          gender:
    *                              example: "male"
-   *                          position:
+   *                          positions:
    *                              example: "staff"
    *                          slots:
    *                              example: 10
@@ -237,7 +237,7 @@ router
    *      - Job
    *      parameters:
    *       - in: path
-   *         name: id
+   *         name: jobId
    *         type: string
    *         required: true
    *      responses:
