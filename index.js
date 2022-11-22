@@ -26,11 +26,18 @@ dotenv.config();
 const app = express();
 const server = http.createServer(app);
 
-setup.run();
+if (process.env.USE_REDIS == true) {
+  setup.run();
+}
 
 // app.use(cors());
 app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+  const corsWhitelist = ["https://woparadise.tech", "http://localhost:3000"];
+
+  const origin = req.headers.origin;
+  if (corsWhitelist.indexOf(origin) > -1) {
+    res.header("Access-Control-Allow-Origin", origin);
+  }
   res.header("Access-Control-Allow-Credentials", true);
   res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, PATCH, DELETE");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
