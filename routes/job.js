@@ -118,7 +118,7 @@ router.get("/recommend/:number", middleware.verifyToken, catchAsync(jobControlle
  *              200:
  *                  description: success
  */
-router.get("/getPageSuggestion/:jobPerPage/:pageNumber", catchAsync(jobController.getPageSuggestion));
+router.get("/getPageSuggestion/:jobPerPage/:pageNumber", middleware.setReqUser, catchAsync(jobController.getPageSuggestion));
 
 /**
  * @openapi
