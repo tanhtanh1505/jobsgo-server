@@ -2,7 +2,7 @@ const ApplicationModel = require("../models/application");
 const JobModel = require("../models/job");
 const Role = require("../constants/user");
 const HttpException = require("../utils/HttpException");
-
+const JobController = require("./job");
 class ApplicationController {
   getById = async (req, res, next) => {
     const application = await ApplicationModel.findOne({ id: req.params.applicationId });
@@ -22,6 +22,11 @@ class ApplicationController {
   getMyApplication = async (req, res) => {
     if (req.user.role == Role.JobSeeker) {
       const result = await ApplicationModel.findApplicationOfJobSeeker(req.user.id);
+      for (let i = 0; i < result.length; i++) {
+        const job = await JobModel.findOne({ id: result[i].jobId });
+        const jobInner = await JobController.innerWithAuthorInfo(req, job);
+        result[i].job = jobInner;
+      }
       res.send(result);
     } else {
       const jobs = await JobModel.find({ author: req.user.id });
