@@ -6,6 +6,20 @@ const validateApplication = require("../middlewares/validate/application");
 
 /**
  * @openapi
+ * /application/mine:
+ *  get:
+ *      summary: get my applications
+ *      description: get my applications
+ *      tags:
+ *      - Application
+ *      responses:
+ *              200:
+ *                  description: success
+ */
+router.get("/mine", middleware.verifyToken, catchAsync(applicationController.getMyApplication));
+
+/**
+ * @openapi
  * /application/{applicationId}:
  *  get:
  *      summary: get application by id
