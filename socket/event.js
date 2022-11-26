@@ -3,5 +3,6 @@ module.exports = {
   joinRoom: "joinRoom",
   sendMessage: "sendMessage",
   receiveMessage: "receiveMessage",
+  receiveNoti: "receiveNoti",
   disconnect: "disconnect",
 };
