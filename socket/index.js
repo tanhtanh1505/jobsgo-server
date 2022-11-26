@@ -21,7 +21,7 @@ module.exports.listen = (server) => {
         console.log(message);
         await ChatController.saveMessage(roomId, message);
         io.sockets.in(roomId).emit(event.receiveMessage, message);
-        io.to(socket.id).emit(event.receiveNoti, "new_message");
+        io.to(`${socket.id}`).emit(event.receiveNoti, "new_message");
       }
     });
 
