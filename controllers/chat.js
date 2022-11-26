@@ -1,18 +1,26 @@
 const ConversationModel = require("../models/conersation");
 const MessageModel = require("../models/message");
+const UserModel = require("../models/user");
 const { v4: uuidv4 } = require("uuid");
 const { json } = require("express");
 
 class ChatController {
   //get list conversation of user
   getListConversations = async (req, res) => {
-    var conversation1 = await ConversationModel.find({ firstUser: req.user.id });
-    var conversation2 = await ConversationModel.find({ secondUser: req.user.id });
-    var conversation = conversation1.concat(conversation2);
     var listMessage = [];
-    for (var i = 0; i < conversation.length; i++) {
-      listMessage.push(conversation[i]);
+    var conversation1 = await ConversationModel.find({ firstUser: req.user.id });
+    for (var i = 0; i < conversation1.length; i++) {
+      //inner with user
+      conversation1[i].other = await UserModel.findOne({ id: conversation1[i].secondUser });
+      listMessage.push(conversation1[i]);
     }
+    var conversation2 = await ConversationModel.find({ secondUser: req.user.id });
+    for (var i = 0; i < conversation2.length; i++) {
+      //inner with user
+      conversation2[i].other = await UserModel.findOne({ id: conversation2[i].firstUser });
+      listMessage.push(conversation2[i]);
+    }
+
     return res.status(200).json(listMessage);
   };
 
