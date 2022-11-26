@@ -5,6 +5,19 @@ const catchAsync = require("../utils/catchAsync");
 
 /**
  * @openapi
+ * /chat/list-conversations:
+ *  get:
+ *      summary: get conversation
+ *      tags:
+ *      - Chat
+ *      responses:
+ *              200:
+ *                  description: success
+ */
+router.get("/list-conversations", middleware.verifyToken, catchAsync(ChatController.getListConversations));
+
+/**
+ * @openapi
  * /chat/conversation:
  *  post:
  *      summary: get conversation

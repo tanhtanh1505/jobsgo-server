@@ -10,7 +10,6 @@ class ConversationModel {
 
     const { columnSet, values } = multipleColumnGet(params);
     sql += ` WHERE ${columnSet}`;
-
     return await query(sql, [...values]);
   };
 
