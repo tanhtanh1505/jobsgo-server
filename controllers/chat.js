@@ -12,12 +12,14 @@ class ChatController {
     for (var i = 0; i < conversation1.length; i++) {
       //inner with user
       conversation1[i].other = await UserModel.findOne({ id: conversation1[i].secondUser });
+      conversation1[i].lastMessage = await MessageModel.findOne({ id: conversation1[i].lastMsg });
       listMessage.push(conversation1[i]);
     }
     var conversation2 = await ConversationModel.find({ secondUser: req.user.id });
     for (var i = 0; i < conversation2.length; i++) {
       //inner with user
       conversation2[i].other = await UserModel.findOne({ id: conversation2[i].firstUser });
+      conversation2[i].lastMessage = await MessageModel.findOne({ id: conversation2[i].lastMsg });
       listMessage.push(conversation2[i]);
     }
 
