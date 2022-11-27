@@ -31,6 +31,8 @@ const { validateCreateComment } = require("../middlewares/validate/comment");
  *                              example: "0944150502"
  *                          avatar:
  *                              example: "avatar"
+ *                          address:
+ *                              example: "address"
  *                          password:
  *                              type: string
  *                              example: "123"
