@@ -37,7 +37,7 @@ class ChatController {
       return res.status(200).send(conversation);
     }
     const id = uuidv4();
-    conversation = await ConversationModel.create({ id: id, firstUser: req.user.id, secondUser: req.body.friendId });
+    conversation = await ConversationModel.create({ id: id, firstUser: req.user.id, secondUser: req.body.friendId, lastMsg: "" });
     return res.status(200).send(conversation);
   };
 
