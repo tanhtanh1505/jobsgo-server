@@ -9,6 +9,11 @@ class EducationController {
     res.send(list);
   };
 
+  getEducationOf = async (req, res) => {
+    let list = await EducationModel.find({ jobseekerId: req.params.jobseekerId });
+    res.send(list);
+  };
+
   getById = async (req, res) => {
     const education = await EducationModel.findOne({ id: req.params.educationId });
     if (!education) {

@@ -49,6 +49,24 @@ router.post("/create", middleware.verifyToken, middleware.isJobSeeker, validateC
  */
 router.get("/all-mine", middleware.verifyToken, middleware.isJobSeeker, catchAsync(educationController.getMine));
 
+/**
+ * @openapi
+ * /education/jobseeker/{jobseekerId}:
+ *  get:
+ *      summary: get education of jobseeker by jobseeker id
+ *      tags:
+ *      - Education
+ *      parameters:
+ *       - in: path
+ *         name: jobseekerId
+ *         type: string
+ *         required: true
+ *      responses:
+ *              200:
+ *                  description: success
+ */
+router.get("/jobseeker/:jobseekerId", catchAsync(educationController.getEducationOf));
+
 //get, edit, delete
 router
   .route("/:educationId")
