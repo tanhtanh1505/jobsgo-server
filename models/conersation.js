@@ -24,7 +24,7 @@ class ConversationModel {
   };
 
   create = async (params) => {
-    const { sql, values } = await multipleColumnInsert("conversation", params);
+    const { sql, values } = multipleColumnInsert("conversation", params);
     const result = await query(sql, [...values]);
     const affectedRows = result ? result.affectedRows : 0;
     return affectedRows;

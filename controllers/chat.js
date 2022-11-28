@@ -30,10 +30,12 @@ class ChatController {
   getConversation = async (req, res) => {
     var conversation = await ConversationModel.findOne({ firstUser: req.user.id, secondUser: req.body.friendId });
     if (conversation) {
+      conversation.other = await UserModel.findOne({ id: conversation.secondUser });
       return res.status(200).send(conversation);
     }
     conversation = await ConversationModel.findOne({ firstUser: req.body.friendId, secondUser: req.user.id });
     if (conversation) {
+      conversation.other = await UserModel.findOne({ id: conversation.firstUser });
       return res.status(200).send(conversation);
     }
     const id = uuidv4();
