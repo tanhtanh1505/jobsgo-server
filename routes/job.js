@@ -99,6 +99,28 @@ router.get("/recommend/:number", middleware.setReqUser, catchAsync(jobController
 
 /**
  * @openapi
+ * /job/suggest-keyword/{number}/{keyword}:
+ *  get:
+ *      summary: get suggest-keyword for jobs
+ *      tags:
+ *      - Job
+ *      parameters:
+ *      - in: path
+ *        name: number
+ *        type: string
+ *        required: true
+ *      - in: path
+ *        name: keyword
+ *        type: string
+ *        required: true
+ *      responses:
+ *              200:
+ *                  description: success
+ */
+router.get("/suggest-keyword/:number/:keyword", middleware.setReqUser, catchAsync(jobController.getListSuggestionKeyWord));
+
+/**
+ * @openapi
  * /job/getPageSuggestion/{jobPerPage}/{pageNumber}:
  *  get:
  *      summary: get page suggestion jobs

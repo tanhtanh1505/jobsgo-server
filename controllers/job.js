@@ -63,6 +63,41 @@ class JobController {
     res.send(resListJob);
   };
 
+  getListSuggestionKeyWord = async (req, res) => {
+    const { number, keyword } = req.params;
+    const result = new Set();
+
+    //job
+    const listJob = await JobModel.find();
+    for (let i = 0; i < listJob.length; i++) {
+      if (result.size >= number) break;
+      if (listJob[i].title.toLowerCase().includes(keyword.toLowerCase())) {
+        result.add(listJob[i].title);
+      }
+      if (listJob[i].positions.toLowerCase().includes(keyword.toLowerCase())) {
+        result.add(listJob[i].positions);
+      }
+      listJob[i].tags.split(",").forEach((tag) => {
+        if (tag.toLowerCase().includes(keyword.toLowerCase())) {
+          result.add(tag);
+        }
+      });
+    }
+
+    //employer
+    const listEmployer = await EmployerModel.find();
+    for (let i = 0; i < listEmployer.length; i++) {
+      if (result.size >= number) break;
+      if (listEmployer[i].name.toLowerCase().includes(keyword.toLowerCase())) {
+        result.add(listEmployer[i].name);
+      }
+      if (listEmployer[i].address.toLowerCase().includes(keyword.toLowerCase())) {
+        result.add(listEmployer[i].address);
+      }
+    }
+    res.send([...result]);
+  };
+
   getPageSuggestion = async (req, res) => {
     const { jobPerPage, pageNumber } = req.params;
     const listJob = await JobModel.findLimitOffset({}, jobPerPage, (pageNumber - 1) * jobPerPage);
