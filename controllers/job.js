@@ -63,6 +63,25 @@ class JobController {
     res.send(resListJob);
   };
 
+  findJobByKeyWord = async (req, res) => {
+    const { keyword } = req.params;
+    const listJob = await JobModel.find({});
+    const resListJob = new Set();
+    for (let i = 0; i < listJob.length; i++) {
+      const job = await this.innerWithAuthorInfo(req, listJob[i]);
+      if (job.title.toLowerCase().includes(keyword.toLowerCase())) {
+        resListJob.add(job);
+      } else if (job.positions.toLowerCase().includes(keyword.toLowerCase())) {
+        resListJob.add(job);
+      } else if (job.tags.toLowerCase().includes(keyword.toLowerCase())) {
+        resListJob.add(job);
+      } else if (job.authorName.toLowerCase().includes(keyword.toLowerCase())) {
+        resListJob.add(job);
+      }
+    }
+    console.log(resListJob);
+    return res.send(Array.from(resListJob));
+  };
   getListSuggestionKeyWord = async (req, res) => {
     const { number, keyword } = req.params;
     const result = new Set();
