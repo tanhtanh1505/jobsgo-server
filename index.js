@@ -32,7 +32,7 @@ if (process.env.USE_REDIS == true) {
 
 // app.use(cors());
 app.use(function (req, res, next) {
-  const corsWhitelist = ["https://woparadise.tech", "http://localhost:3000"];
+  const corsWhitelist = ["https://woparadise.tech", "http://localhost:3000", "https://jobsgo-3d607.web.app"];
 
   const origin = req.headers.origin;
   if (corsWhitelist.indexOf(origin) > -1) {
