@@ -71,7 +71,8 @@ class JobController {
     const listJob = await JobModel.findLimit({}, number);
     var resListJob = [];
     for (let i = 0; i < listJob.length; i++) {
-      resListJob.push(await this.innerWithAuthorInfo(req, listJob[i]));
+      var temp = await this.innerWithAuthorInfo(req, listJob[i]);
+      if (!temp.apply) resListJob.push(temp);
     }
     res.send(resListJob);
   };
@@ -135,7 +136,8 @@ class JobController {
     const listJob = await JobModel.findLimitOffset({}, jobPerPage, (pageNumber - 1) * jobPerPage);
     var resListJob = [];
     for (let i = 0; i < listJob.length; i++) {
-      resListJob.push(await this.innerWithAuthorInfo(req, listJob[i]));
+      var temp = await this.innerWithAuthorInfo(req, listJob[i]);
+      if (!temp.apply) resListJob.push(temp);
     }
     res.send(resListJob);
   };
