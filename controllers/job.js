@@ -133,7 +133,7 @@ class JobController {
 
   getPageSuggestion = async (req, res) => {
     const { jobPerPage, pageNumber } = req.params;
-    const listJob = await JobModel.findLimitOffset({}, jobPerPage, (pageNumber - 1) * jobPerPage);
+    const listJob = await JobModel.findLimitOffsetNotApplied(jobPerPage, (pageNumber - 1) * jobPerPage);
     var resListJob = [];
     for (let i = 0; i < listJob.length; i++) {
       var temp = await this.innerWithAuthorInfo(req, listJob[i]);

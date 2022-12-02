@@ -64,6 +64,12 @@ class JobModel {
     return await query(sql, [...values]);
   };
 
+  findLimitOffsetNotApplied = async (limit, offset) => {
+    let sql = `SELECT * FROM job INNER JOIN application ON job.id = application.jobId LIMIT ${limit} OFFSET ${offset}`;
+
+    return await query(sql);
+  };
+
   create = async (params) => {
     const { sql, values } = await multipleColumnInsert("job", params);
     const result = await query(sql, [...values]);
