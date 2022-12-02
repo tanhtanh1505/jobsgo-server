@@ -1,6 +1,7 @@
 const UserModel = require("../models/user");
 const EmployerModel = require("../models/employer");
 const BookmarkModel = require("../models/bookmark");
+const ApplicationModel = require("../models/application");
 const JobModel = require("../models/job");
 const HttpException = require("../utils/HttpException");
 const dotenv = require("dotenv");
@@ -18,8 +19,19 @@ class JobController {
     return false;
   };
 
+  getApplication = async (user, job) => {
+    if (user) {
+      const apply = await ApplicationModel.findOne({ jobId: job.id, jobseekerId: user.id });
+      if (apply) {
+        return true;
+      }
+    }
+    return false;
+  };
+
   innerWithAuthorInfo = async (req, job) => {
     const bookmark = await this.getBookmark(req.user, job);
+    const apply = await this.getApplication(req.user, job);
     const author = await EmployerModel.findOne({ id: job.author });
     return {
       ...job,
@@ -31,6 +43,7 @@ class JobController {
       authorAbout: author.about,
       authorSize: author.size,
       bookmark: bookmark,
+      apply: apply,
     };
   };
 

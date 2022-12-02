@@ -22,7 +22,6 @@ class ApplicationModel {
     const { columnSet, values } = multipleColumnGet(params);
 
     const sql = `SELECT * FROM application WHERE ${columnSet} LIMIT 1`;
-    console.log(sql);
     const result = await query(sql, [...values]);
 
     return result[0];
