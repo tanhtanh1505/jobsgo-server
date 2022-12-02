@@ -64,6 +64,12 @@ class JobModel {
     return await query(sql, [...values]);
   };
 
+  findLimitNotApplied = async (limit) => {
+    let sql = `SELECT * FROM job INNER JOIN application ON job.id = application.jobId LIMIT ${limit}`;
+
+    return await query(sql);
+  };
+
   findLimitOffsetNotApplied = async (limit, offset) => {
     let sql = `SELECT * FROM job INNER JOIN application ON job.id = application.jobId LIMIT ${limit} OFFSET ${offset}`;
 

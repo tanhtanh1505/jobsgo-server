@@ -58,7 +58,7 @@ class JobController {
   };
 
   getOneSuggestion = async (req, res) => {
-    const listJob = await JobModel.findLimit({}, 1);
+    const listJob = await JobModel.findLimitNotApplied({}, 1);
     var resListJob = [];
     for (let i = 0; i < listJob.length; i++) {
       resListJob.push(await this.innerWithAuthorInfo(req, listJob[i]));
@@ -68,7 +68,7 @@ class JobController {
 
   getListSuggestion = async (req, res) => {
     const { number } = req.params;
-    const listJob = await JobModel.findLimit({}, number);
+    const listJob = await JobModel.findLimitNotApplied({}, number);
     var resListJob = [];
     for (let i = 0; i < listJob.length; i++) {
       var temp = await this.innerWithAuthorInfo(req, listJob[i]);
