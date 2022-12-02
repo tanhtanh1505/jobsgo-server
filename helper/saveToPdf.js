@@ -105,3 +105,42 @@ module.exports.createPDF = async (data) => {
   const url = await uploadFileWithPath(pdfPath, "application/pdf");
   return url;
 };
+
+module.exports.randomPDF = async () => {
+  const data = DUMMYCV;
+  if (!data) return "Data is empty";
+  var templateHtml = fs.readFileSync(path.join(process.cwd(), "/helper/cv.hbs"), "utf8");
+  var template = handlebars.compile(templateHtml);
+  var html = template(data);
+  var milis = new Date();
+  milis = milis.getTime();
+
+  var pdfPath = `${process.cwd()}/helper/${data.cv.name}-${milis}.pdf`;
+
+  var options = {
+    width: "1230px",
+    headerTemplate: "<p></p>",
+    footerTemplate: "<p></p>",
+    displayHeaderFooter: false,
+    margin: {
+      top: "30px",
+      bottom: "30px",
+    },
+    printBackground: true,
+    path: pdfPath,
+  };
+
+  const browser = await puppeteer.launch({
+    args: ["--no-sandbox"],
+    headless: true,
+  });
+
+  var page = await browser.newPage();
+
+  await page.setContent(html);
+
+  await page.pdf(options);
+  await browser.close();
+  const url = await uploadFileWithPath(pdfPath, "application/pdf");
+  return url;
+};

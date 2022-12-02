@@ -50,4 +50,17 @@ router.post("/create", upload.single("file"), catchAsync(cvController.create));
  */
 router.post("/generate", middleware.verifyToken, middleware.isJobSeeker, catchAsync(cvController.generatePdf));
 
+/**
+ * @openapi
+ * /cv/random:
+ *  post:
+ *      summary: Random CV for test
+ *      tags:
+ *      - Cv
+ *      responses:
+ *              200:
+ *                  description: success
+ */
+router.post("/random", middleware.verifyToken, middleware.isJobSeeker, catchAsync(cvController.randomPdf));
+
 module.exports = router;
