@@ -58,21 +58,30 @@ class JobController {
   };
 
   getOneSuggestion = async (req, res) => {
-    const listJob = await JobModel.findLimitNotApplied(1);
+    const listJob = await JobModel.find({});
     var resListJob = [];
     for (let i = 0; i < listJob.length; i++) {
-      resListJob.push(await this.innerWithAuthorInfo(req, listJob[i]));
+      var temp = await this.innerWithAuthorInfo(req, listJob[i]);
+      if (!temp.apply) {
+        resListJob.push(temp);
+        break;
+      }
     }
     res.send(resListJob);
   };
 
   getListSuggestion = async (req, res) => {
     const { number } = req.params;
-    const listJob = await JobModel.findLimitNotApplied(number);
+    const listJob = await JobModel.find({});
     var resListJob = [];
-    for (let i = 0; i < listJob.length; i++) {
-      var temp = await this.innerWithAuthorInfo(req, listJob[i]);
-      if (!temp.apply) resListJob.push(temp);
+    while (resListJob.length < number) {
+      for (let i = 0; i < listJob.length; i++) {
+        var temp = await this.innerWithAuthorInfo(req, listJob[i]);
+        if (!temp.apply) {
+          resListJob.push(temp);
+          if (resListJob.length >= number) break;
+        }
+      }
     }
     res.send(resListJob);
   };
@@ -133,11 +142,11 @@ class JobController {
 
   getPageSuggestion = async (req, res) => {
     const { jobPerPage, pageNumber } = req.params;
-    const listJob = await JobModel.findLimitOffsetNotApplied(jobPerPage, (pageNumber - 1) * jobPerPage);
+    const listJob = await JobModel.findLimitOffset({}, jobPerPage, (pageNumber - 1) * jobPerPage);
     var resListJob = [];
     for (let i = 0; i < listJob.length; i++) {
       var temp = await this.innerWithAuthorInfo(req, listJob[i]);
-      if (!temp.apply) resListJob.push(temp);
+      resListJob.push(temp);
     }
     res.send(resListJob);
   };
