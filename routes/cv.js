@@ -7,7 +7,7 @@ const upload = multer({ dest: "uploads/" });
 
 /**
  * @openapi
- * /cv/create:
+ * /api/cv/create:
  *  post:
  *      summary: Create CV
  *      tags:
@@ -30,7 +30,7 @@ router.post("/create", upload.single("file"), catchAsync(cvController.create));
 
 /**
  * @openapi
- * /cv/generate:
+ * /api/cv/generate:
  *  post:
  *      summary: Generate CV
  *      tags:
@@ -52,7 +52,7 @@ router.post("/generate", middleware.verifyToken, middleware.isJobSeeker, catchAs
 
 /**
  * @openapi
- * /cv/random:
+ * /api/cv/random:
  *  post:
  *      summary: Random CV for test
  *      tags:

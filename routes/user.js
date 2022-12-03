@@ -6,7 +6,7 @@ const { validateCreateUser, validateUpdateUser } = require("../middlewares/valid
 
 /**
  * @openapi
- * /user:
+ * /api/user:
  *  get:
  *      summary: get profile of user
  *      tags:
@@ -18,7 +18,7 @@ const { validateCreateUser, validateUpdateUser } = require("../middlewares/valid
 router.get("/", middleware.verifyToken, catchAsync(userController.getCurrentUser));
 /**
  * @openapi
- * /user:
+ * /api/user:
  *  put:
  *      summary: edit profile of user
  *      description: edit profile of user
@@ -44,7 +44,7 @@ router.get("/", middleware.verifyToken, catchAsync(userController.getCurrentUser
 router.put("/", middleware.verifyToken, validateUpdateUser, catchAsync(userController.updateUser));
 /**
  * @openapi
- * /user:
+ * /api/user:
  *  delete:
  *      summary: delete user
  *      tags:
@@ -56,7 +56,7 @@ router.put("/", middleware.verifyToken, validateUpdateUser, catchAsync(userContr
 router.delete("/", middleware.verifyToken, catchAsync(userController.deleteUser));
 /**
  * @openapi
- * /user/allUser:
+ * /api/user/allUser:
  *  get:
  *      summary: api test get all user
  *      tags:
@@ -68,7 +68,7 @@ router.delete("/", middleware.verifyToken, catchAsync(userController.deleteUser)
 router.get("/allUser", catchAsync(userController.getAllUsers));
 /**
  * @openapi
- * /user/{username}:
+ * /api/user/{username}:
  *  get:
  *      summary: get user by username
  *      tags:
@@ -87,7 +87,7 @@ router.get("/:username", catchAsync(userController.getUserByUserName));
 
 /**
  * @openapi
- * /user/check-exist:
+ * /api/user/check-exist:
  *  post:
  *      summary: check if username, email or phone exist
  *      tags:

@@ -7,7 +7,7 @@ const applicationController = require("../controllers/application");
 
 /**
  * @openapi
- * /job/create:
+ * /api/job/create:
  *  post:
  *      summary: create a job for employer
  *      tags:
@@ -55,7 +55,7 @@ router.post("/create", middleware.verifyToken, middleware.isEmployer, validateCr
 
 /**
  * @openapi
- * /job/all:
+ * /api/job/all:
  *  get:
  *      summary: get all jobs
  *      tags:
@@ -68,7 +68,7 @@ router.get("/all", middleware.setReqUser, catchAsync(jobController.getAll));
 
 /**
  * @openapi
- * /job/all-mine:
+ * /api/job/all-mine:
  *  get:
  *      summary: get all own jobs of current user
  *      tags:
@@ -81,7 +81,7 @@ router.get("/all-mine", middleware.verifyToken, middleware.isEmployer, catchAsyn
 
 /**
  * @openapi
- * /job/recommend/{number}:
+ * /api/job/recommend/{number}:
  *  get:
  *      summary: get number last recommend jobs
  *      tags:
@@ -99,7 +99,7 @@ router.get("/recommend/:number", middleware.setReqUser, catchAsync(jobController
 
 /**
  * @openapi
- * /job/find-by-keyword/{keyword}:
+ * /api/job/find-by-keyword/{keyword}:
  *  get:
  *      summary: find jobs by keyword
  *      tags:
@@ -117,7 +117,7 @@ router.get("/find-by-keyword/:keyword", middleware.setReqUser, catchAsync(jobCon
 
 /**
  * @openapi
- * /job/suggest-keyword/{number}/{keyword}:
+ * /api/job/suggest-keyword/{number}/{keyword}:
  *  get:
  *      summary: get suggest-keyword for jobs
  *      tags:
@@ -139,7 +139,7 @@ router.get("/suggest-keyword/:number/:keyword", middleware.setReqUser, catchAsyn
 
 /**
  * @openapi
- * /job/getPageSuggestion/{jobPerPage}/{pageNumber}:
+ * /api/job/getPageSuggestion/{jobPerPage}/{pageNumber}:
  *  get:
  *      summary: get page suggestion jobs
  *      description: jobPerPage is number of job per page, pageNumber is number of page
@@ -162,7 +162,7 @@ router.get("/getPageSuggestion/:jobPerPage/:pageNumber", middleware.setReqUser, 
 
 /**
  * @openapi
- * /job/list-marked:
+ * /api/job/list-marked:
  *  get:
  *      summary: get list marked job
  *      description: get list marked job
@@ -176,7 +176,7 @@ router.get("/list-marked", middleware.verifyToken, middleware.isJobSeeker, catch
 
 /**
  * @openapi
- * /job/import:
+ * /api/job/import:
  *  post:
  *      summary: import jobs from google sheet
  *      tags:
@@ -201,7 +201,7 @@ router
   .route("/:jobId")
   /**
    * @openapi
-   * /job/{jobId}:
+   * /api/job/{jobId}:
    *  get:
    *      summary: get job by id
    *      tags:
@@ -218,7 +218,7 @@ router
   .get(catchAsync(jobController.getById))
   /**
    * @openapi
-   * /job/{jobId}:
+   * /api/job/{jobId}:
    *  put:
    *      summary: edit an own job for employer
    *      tags:
@@ -270,7 +270,7 @@ router
   .put(middleware.verifyToken, middleware.isJobsCreator, validateUpdateJob, catchAsync(jobController.update))
   /**
    * @openapi
-   * /job/{jobId}:
+   * /api/job/{jobId}:
    *  delete:
    *      summary: delete own job for employer
    *      tags:
@@ -288,7 +288,7 @@ router
 
 /**
  * @openapi
- * /job/{jobId}/apply:
+ * /api/job/{jobId}/apply:
  *  post:
  *      summary: create an application, apply to this job
  *      description: for jobseeker create an application for job
@@ -307,7 +307,7 @@ router.post("/:jobId/apply", middleware.verifyToken, middleware.isJobSeeker, cat
 
 /**
  * @openapi
- * /job/{jobId}/applications:
+ * /api/job/{jobId}/applications:
  *  get:
  *      summary: get applications of job for employer
  *      description: get applications of job for employer
@@ -326,7 +326,7 @@ router.get("/:jobId/applications", middleware.verifyToken, catchAsync(applicatio
 
 /**
  * @openapi
- * /job/{jobId}/marked:
+ * /api/job/{jobId}/marked:
  *  get:
  *      summary: get status is marked or not
  *      description: get status is marked or not
@@ -345,7 +345,7 @@ router.get("/:jobId/marked", middleware.verifyToken, middleware.isJobSeeker, cat
 
 /**
  * @openapi
- * /job/{jobId}/mark:
+ * /api/job/{jobId}/mark:
  *  post:
  *      summary: mark job as favorite
  *      description: mark job as favorite
@@ -364,7 +364,7 @@ router.post("/:jobId/mark", middleware.verifyToken, middleware.isJobSeeker, catc
 
 /**
  * @openapi
- * /job/{jobId}/unmark:
+ * /api/job/{jobId}/unmark:
  *  delete:
  *      summary: unmark job in favorite
  *      description: unmark job in favorite

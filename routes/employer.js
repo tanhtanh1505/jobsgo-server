@@ -8,7 +8,7 @@ const { validateCreateComment } = require("../middlewares/validate/comment");
 
 /**
  * @openapi
- * /employer:
+ * /api/employer:
  *  post:
  *      summary: register a new employer
  *      description: register a new Employer
@@ -50,7 +50,7 @@ router.post("/", validateCreateEmployer, catchAsync(employerController.register)
 
 /**
  * @openapi
- * /employer:
+ * /api/employer:
  *  put:
  *      summary: update profile of employer
  *      description: update profile of employer
@@ -77,7 +77,7 @@ router.put("/", middleware.verifyToken, middleware.isEmployer, validateUpdateEmp
 
 /**
  * @openapi
- * /employer:
+ * /api/employer:
  *  get:
  *      summary: get current employer profile
  *      tags:
@@ -90,7 +90,7 @@ router.get("/", middleware.verifyToken, catchAsync(employerController.getCurrent
 
 /**
  * @openapi
- * /employer/{id}:
+ * /api/employer/{id}:
  *  get:
  *      summary: get employer by id
  *      tags:
@@ -109,7 +109,7 @@ router.get("/:id", catchAsync(employerController.getEmployerById));
 
 /**
  * @openapi
- * /employer/recommend-jobseeker/{number}:
+ * /api/employer/recommend-jobseeker/{number}:
  *  get:
  *      summary: get recommend jobseeker
  *      tags:
@@ -128,7 +128,7 @@ router.get("/recommend-jobseeker/:number", middleware.verifyToken, catchAsync(em
 
 /**
  * @openapi
- * /employer/{id}/comments:
+ * /api/employer/{id}/comments:
  *  get:
  *      summary: get all comments of a employer
  *      tags:
@@ -146,7 +146,7 @@ router.get("/:id/comments", catchAsync(commentController.getCommentOfEmployer));
 
 /**
  * @openapi
- * /employer/{id}/comment:
+ * /api/employer/{id}/comment:
  *  post:
  *      summary: create a comment
  *      tags:

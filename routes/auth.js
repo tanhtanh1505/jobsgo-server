@@ -6,7 +6,7 @@ const validateAuth = require("../middlewares/validate/auth");
 
 /**
  * @openapi
- * /login:
+ * /api/login:
  *  post:
  *      summary: login
  *      tags:
@@ -30,7 +30,7 @@ const validateAuth = require("../middlewares/validate/auth");
 router.post("/login", validateAuth.validateLogin, catchAsync(userController.userLogin));
 /**
  * @openapi
- * /logout:
+ * /api/logout:
  *  post:
  *      summary: logout
  *      tags:
@@ -42,7 +42,7 @@ router.post("/login", validateAuth.validateLogin, catchAsync(userController.user
 router.post("/logout", middleware.verifyToken, catchAsync(userController.userLogout));
 /**
  * @openapi
- * /refreshToken:
+ * /api/refreshToken:
  *  post:
  *      summary: refresh token
  *      tags:
@@ -55,7 +55,7 @@ router.post("/refreshToken", catchAsync(userController.refreshRToken));
 
 /**
  * @openapi
- * /reset-password:
+ * /api/reset-password:
  *  post:
  *      summary: send email to reset password
  *      tags:
@@ -78,7 +78,7 @@ router.post("/reset-password", validateAuth.validateSendRequestResetPassword, ca
 
 /**
  * @openapi
- * /reset-password/{token}:
+ * /api/reset-password/{token}:
  *  post:
  *      summary: reset password via token
  *      tags:

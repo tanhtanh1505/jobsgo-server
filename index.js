@@ -17,7 +17,7 @@ const helperRouter = require("./routes/helper");
 const chatRouter = require("./routes/chat");
 const cvRouter = require("./routes/cv");
 const swagger = require("./utils/swagger");
-
+const api = require("./routes/api");
 const setup = require("./setup/index");
 
 let port = process.env.PORT || 5000;
@@ -48,17 +48,7 @@ app.use(express.json());
 
 socket.listen(server);
 
-app.use("/", authRoutes);
-app.use("/user", userRoutes);
-app.use("/jobseeker", jobseekerRouter);
-app.use("/employer", employerRouter);
-app.use("/comments", commentRoutes);
-app.use("/job", jobsRoutes);
-app.use("/application", applicationRouter);
-app.use("/education", educationRoutes);
-app.use("/chat", chatRouter);
-app.use("/cv", cvRouter);
-app.use("/helper", helperRouter);
+app.use("/api", api);
 
 app.get("/", (req, res) => {
   res.status(200).end("hi");

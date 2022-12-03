@@ -6,7 +6,7 @@ const validateApplication = require("../middlewares/validate/application");
 
 /**
  * @openapi
- * /application/mine:
+ * /api/application/mine:
  *  get:
  *      summary: get my applications
  *      description: get my applications
@@ -20,7 +20,7 @@ router.get("/mine", middleware.verifyToken, catchAsync(applicationController.get
 
 /**
  * @openapi
- * /application/{applicationId}:
+ * /api/application/{applicationId}:
  *  get:
  *      summary: get application by id
  *      description: get application by id
@@ -39,7 +39,7 @@ router.get("/:applicationId", middleware.verifyToken, catchAsync(applicationCont
 
 /**
  * @openapi
- * /application/{applicationId}:
+ * /api/application/{applicationId}:
  *  put:
  *      summary: update application status for employer
  *      description: for employer update application status of applicationId
