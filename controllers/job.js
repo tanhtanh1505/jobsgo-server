@@ -247,15 +247,14 @@ class JobController {
     ];
     const listOfSheet = await sheets.getListOfSheets(client, sheetId);
 
-    console.log(listOfSheet);
     if (Array.from(listOfSheet).indexOf(sheetName) == -1) {
       await sheets.createSheet(client, sheetId, sheetName);
     }
     const data = await sheets.getValues(client, sheetId, sheetName);
-    console.log(data);
 
     if (!data || data.length <= 0) {
       await sheets.updateValues(client, sheetId, sheetName, values);
+      return res.send("Init construction successfully! Please add data to sheet");
     } else {
       //validate format
       for (let i = 0; i < data[0].length; i++) {
