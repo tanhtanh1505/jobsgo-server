@@ -37,20 +37,11 @@ module.exports.register = async (req, res) => {
   if (newUser) {
     const newEmployer = await EmployerModel.create({ id: id, about: about, wallpaper: wallpaper, size: size });
     if (newEmployer) {
-      const url = `${process.env.CLIENT_URL}`;
-
       const mailOptions = {
         from: "service@tanhuet.com",
         to: email,
         subject: "Welcome to Working On Paradise",
-        html: `
-          <h1>Hi ${name}</h1>
-          <p>Welcome to <a href=${url}>Work On Paradise</a></p>
-          <p>Wish you have an amazing experience with us </p>
-          </br>
-  
-          <p>Thank you</p>
-        `,
+        html: creatContent(name, "Register successfully", "Welcome to Working On Paradise"),
       };
 
       mailService.sendMail(mailOptions);

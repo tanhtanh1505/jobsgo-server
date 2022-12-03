@@ -65,8 +65,6 @@ module.exports.register = async (req, res) => {
       typeOfJob: typeOfJob,
     });
     if (newJobseeker) {
-      const url = `${process.env.CLIENT_URL}`;
-
       const mailOptions = {
         from: "service@tanhuet.com",
         to: email,
