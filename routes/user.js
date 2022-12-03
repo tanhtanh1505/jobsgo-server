@@ -85,6 +85,32 @@ router.get("/allUser", catchAsync(userController.getAllUsers));
  */
 router.get("/:username", catchAsync(userController.getUserByUserName));
 
+/**
+ * @openapi
+ * /user/check-exist:
+ *  post:
+ *      summary: check if username, email or phone exist
+ *      tags:
+ *      - User
+ *      requestBody:
+ *          require: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      type: object
+ *                      properties:
+ *                          username:
+ *                              example: "tanhne"
+ *                          email:
+ *                              example: "email"
+ *                          phone:
+ *                              example: "123"
+ *      responses:
+ *              200:
+ *                  description: success
+ */
+router.post("/check-exist", catchAsync(userController.checkExist));
+
 // router.post("/uploadAvatar", catchAsync(user.uploadAvatar));
 
 module.exports = router;

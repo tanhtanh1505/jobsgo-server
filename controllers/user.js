@@ -36,6 +36,29 @@ class UserController {
     res.send(userWithoutPassword);
   };
 
+  checkExist = async (req, res) => {
+    const { username, email, phone } = req.body;
+    if (username) {
+      const user = await UserModel.findOne({ username: username });
+      if (user) {
+        return res.status(409).json("Username already exists");
+      }
+    }
+    if (email) {
+      const user = await UserModel.findOne({ email: email });
+      if (user) {
+        return res.status(409).json("Email already exists");
+      }
+    }
+    if (phone) {
+      const user = await UserModel.findOne({ phone: phone });
+      if (user) {
+        return res.status(409).json("Phone already exists");
+      }
+    }
+    res.status(200).send("ok");
+  };
+
   getUserByUserName = async (req, res, next) => {
     const user = await UserModel.findOne({ username: req.params.username });
     if (!user) {
