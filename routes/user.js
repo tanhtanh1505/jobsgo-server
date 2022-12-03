@@ -104,7 +104,7 @@ router.get("/:username", catchAsync(userController.getUserByUserName));
  *                          email:
  *                              example: "email"
  *                          phone:
- *                              example: "123"
+ *                              example: "0944150502"
  *      responses:
  *              200:
  *                  description: success
