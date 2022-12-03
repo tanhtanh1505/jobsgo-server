@@ -1,21 +1,32 @@
 const ApplicationModel = require("../models/application");
 const JobModel = require("../models/job");
+const JobSeekerModel = require("../models/jobseeker");
 const Role = require("../constants/user");
 const HttpException = require("../utils/HttpException");
 const JobController = require("./job");
 class ApplicationController {
+  innerWithJobseekerInfo = async (application) => {
+    const jobseeker = await JobSeekerModel.findOne({ id: application.jobseekerId });
+    const { password, ...jobseekerWithoutPassword } = jobseeker;
+    application.jobseeker = jobseekerWithoutPassword;
+    return application;
+  };
+
   getById = async (req, res, next) => {
     const application = await ApplicationModel.findOne({ id: req.params.applicationId });
     if (!application) {
       throw new HttpException(404, "Application not found");
     }
 
-    res.send(application);
+    res.send(this.innerWithJobseekerInfo(application));
   };
 
   getApplicationOfJob = async (req, res) => {
     //id of job
     const result = await ApplicationModel.findApplicationOfJob(req.params.jobId);
+    for (let i = 0; i < result.length; i++) {
+      result[i] = await this.innerWithJobseekerInfo(result[i]);
+    }
     res.send(result);
   };
 
@@ -33,6 +44,9 @@ class ApplicationController {
       var list = [];
       for (const job of jobs) {
         const result = await ApplicationModel.findApplicationOfJob(job.id);
+        for (let i = 0; i < result.length; i++) {
+          result[i] = await this.innerWithJobseekerInfo(result[i]);
+        }
         list.push(...result);
       }
       res.send(list);
