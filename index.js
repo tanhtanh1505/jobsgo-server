@@ -19,7 +19,7 @@ const cvRouter = require("./routes/cv");
 const swagger = require("./utils/swagger");
 const api = require("./routes/api");
 const setup = require("./setup/index");
-
+const path = require("path");
 let port = process.env.PORT || 5000;
 
 dotenv.config();
@@ -49,9 +49,14 @@ app.use(express.json());
 socket.listen(server);
 
 app.use("/api", api);
+app.use(express.static(path.resolve(__dirname, "../working-on-paradise/build")));
 
 app.get("/", (req, res) => {
   res.status(200).end("hi");
+});
+
+app.get("*", function (req, res) {
+  res.sendFile(path.resolve(__dirname, "../working-on-paradise/build", "index.html"));
 });
 
 swagger.swaggerDocs(app, port);
