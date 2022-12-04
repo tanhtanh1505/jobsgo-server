@@ -224,6 +224,39 @@ class JobController {
     res.send("Job has been deleted");
   };
 
+  filter = async (req, res) => {
+    const { company, category, skill, location, salaryMin, salaryMax, typeOfWorking, jobType, experience } = req.body;
+    const { jobPerPage, pageNumber } = req.params;
+
+    const listJob = await JobModel.find({});
+    const resListJob = [];
+    for (let i = 0; i < listJob.length; i++) {
+      const job = await this.innerWithAuthorInfo(req, listJob[i]);
+      if (company && job.authorName.toLowerCase().includes(company.toLowerCase())) {
+        resListJob.push(job);
+      } else if (category && job.positions.toLowerCase().includes(category.toLowerCase())) {
+        resListJob.push(job);
+      } else if (skill && job.tags.toLowerCase().includes(skill.toLowerCase())) {
+        resListJob.push(job);
+      } else if (location && job.authorAddress.toLowerCase().includes(location.toLowerCase())) {
+        resListJob.push(job);
+      } else if (salaryMin && salaryMax && job.salary >= salaryMin && job.salary <= salaryMax) {
+        resListJob.push(job);
+      } else if (salaryMin && job.salary >= salaryMin) {
+        resListJob.push(job);
+      } else if (salaryMax && job.salary <= salaryMax) {
+        resListJob.push(job);
+      } else if (typeOfWorking && job.typeOfWorking.toLowerCase().includes(typeOfWorking.toLowerCase())) {
+        resListJob.push(job);
+      } else if (jobType && job.typeOfWorking.toLowerCase().includes(jobType.toLowerCase())) {
+        resListJob.push(job);
+      } else if (experience && job.exp.toLowerCase().includes(experience.toLowerCase())) {
+        resListJob.push(job);
+      }
+    }
+    return res.send(resListJob.slice((pageNumber - 1) * jobPerPage, pageNumber * jobPerPage));
+  };
+
   //import from google sheet
   import = async (req, res) => {
     const sheetName = "Data";

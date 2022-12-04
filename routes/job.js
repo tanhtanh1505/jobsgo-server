@@ -204,6 +204,53 @@ router.get("/list-marked", middleware.verifyToken, middleware.isJobSeeker, catch
  */
 router.post("/import", middleware.verifyToken, middleware.isEmployer, catchAsync(jobController.import));
 
+/**
+ * @openapi
+ * /job/filter/{jobPerPage}/{pageNumber}:
+ *  post:
+ *      summary: filter jobs from one or more feilds below
+ *      tags:
+ *      - Job
+ *      parameters:
+ *      - in: path
+ *        name: jobPerPage
+ *        type: number
+ *        required: true
+ *      - in: path
+ *        name: pageNumber
+ *        type: number
+ *        required: true
+ *      requestBody:
+ *          require: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      type: object
+ *                      properties:
+ *                          company:
+ *                              example: "Google"
+ *                          category:
+ *                              example: "Staff"
+ *                          skill:
+ *                              example: "BA"
+ *                          location:
+ *                              example: "Ha Noi"
+ *                          salaryMin:
+ *                              example: 1
+ *                          salaryMax:
+ *                              example: 1000
+ *                          typeOfWorking:
+ *                              example: "remote"
+ *                          jobType:
+ *                              example: "full-time"
+ *                          experience:
+ *                              example: "1 year"
+ *      responses:
+ *              200:
+ *                  description: success
+ */
+router.post("/filter/:jobPerPage/:pageNumber", middleware.setReqUser, catchAsync(jobController.filter));
+
 //get, edit, delete
 router
   .route("/:jobId")
