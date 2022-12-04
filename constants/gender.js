@@ -1,5 +1,5 @@
 module.exports = {
   Male: "male",
   Female: "female",
-  NoRequire: "noRequire",
+  NoRequire: "no-require",
 };
