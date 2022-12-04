@@ -99,7 +99,7 @@ router.get("/recommend/:number", middleware.setReqUser, catchAsync(jobController
 
 /**
  * @openapi
- * /job/find-by-keyword/{keyword}:
+ * /job/find-by-keyword/{keyword}/{jobPerPage}/{pageNumber}:
  *  get:
  *      summary: find jobs by keyword
  *      tags:
@@ -109,11 +109,19 @@ router.get("/recommend/:number", middleware.setReqUser, catchAsync(jobController
  *        name: keyword
  *        type: string
  *        required: true
+ *      - in: path
+ *        name: jobPerPage
+ *        type: string
+ *        required: true
+ *      - in: path
+ *        name: pageNumber
+ *        type: string
+ *        required: true
  *      responses:
  *              200:
  *                  description: success
  */
-router.get("/find-by-keyword/:keyword", middleware.setReqUser, catchAsync(jobController.findJobByKeyWord));
+router.get("/find-by-keyword/:keyword/:jobPerPage/:pageNumber", middleware.setReqUser, catchAsync(jobController.findJobByKeyWord));
 
 /**
  * @openapi

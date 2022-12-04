@@ -87,7 +87,7 @@ class JobController {
   };
 
   findJobByKeyWord = async (req, res) => {
-    const { keyword } = req.params;
+    const { keyword, jobPerPage, pageNumber } = req.params;
     const listJob = await JobModel.find({});
     const resListJob = new Set();
     for (let i = 0; i < listJob.length; i++) {
@@ -102,8 +102,10 @@ class JobController {
         resListJob.add(job);
       }
     }
-    console.log(resListJob);
-    return res.send(Array.from(resListJob));
+
+    const resListJobArray = Array.from(resListJob);
+    const resListJobArraySlice = resListJobArray.slice((pageNumber - 1) * jobPerPage, pageNumber * jobPerPage);
+    return res.send(resListJobArraySlice);
   };
   getListSuggestionKeyWord = async (req, res) => {
     const { number, keyword } = req.params;
