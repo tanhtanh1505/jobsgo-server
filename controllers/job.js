@@ -107,6 +107,30 @@ class JobController {
     const resListJobArraySlice = resListJobArray.slice((pageNumber - 1) * jobPerPage, pageNumber * jobPerPage);
     return res.send(resListJobArraySlice);
   };
+
+  findJobInBookmarkByKeyWord = async (req, res) => {
+    const { keyword, jobPerPage, pageNumber } = req.params;
+    const listJob = await JobModel.find({});
+    const resListJob = new Set();
+    for (let i = 0; i < listJob.length; i++) {
+      const job = await this.innerWithAuthorInfo(req, listJob[i]);
+      if (!job.bookmark) continue;
+      if (job.title.toLowerCase().includes(keyword.toLowerCase())) {
+        resListJob.add(job);
+      } else if (job.positions.toLowerCase().includes(keyword.toLowerCase())) {
+        resListJob.add(job);
+      } else if (job.tags.toLowerCase().includes(keyword.toLowerCase())) {
+        resListJob.add(job);
+      } else if (job.authorName.toLowerCase().includes(keyword.toLowerCase())) {
+        resListJob.add(job);
+      }
+    }
+
+    const resListJobArray = Array.from(resListJob);
+    const resListJobArraySlice = resListJobArray.slice((pageNumber - 1) * jobPerPage, pageNumber * jobPerPage);
+    return res.send(resListJobArraySlice);
+  };
+
   getListSuggestionKeyWord = async (req, res) => {
     const { number, keyword } = req.params;
     const result = new Set();
@@ -139,6 +163,47 @@ class JobController {
         result.add(listEmployer[i].address);
       }
     }
+    res.send([...result]);
+  };
+
+  getListSuggestionKeyWordInBookark = async (req, res) => {
+    const { number, keyword } = req.params;
+    const result = new Set();
+    //job
+    const listJobNormal = await JobModel.find();
+    const listJob = [];
+    for (let i = 0; i < listJobNormal.length; i++) {
+      if (await this.getBookmark(req.user, listJobNormal[i])) {
+        listJob.push(listJobNormal[i]);
+      }
+    }
+
+    //check if job are marked
+
+    for (let i = 0; i < listJob.length; i++) {
+      if (result.size >= number) break;
+      if (listJob[i].title.toLowerCase().includes(keyword.toLowerCase())) {
+        result.add(listJob[i].title);
+      }
+      if (listJob[i].positions.toLowerCase().includes(keyword.toLowerCase())) {
+        result.add(listJob[i].positions);
+      }
+      listJob[i].tags.split(",").forEach((tag) => {
+        if (tag.toLowerCase().includes(keyword.toLowerCase())) {
+          result.add(tag);
+        }
+      });
+
+      //employer
+      const tempEmployer = await EmployerModel.findOne({ id: listJob[i].author });
+      if (tempEmployer.name.toLowerCase().includes(keyword.toLowerCase())) {
+        result.add(tempEmployer.name);
+      }
+      if (tempEmployer.address.toLowerCase().includes(keyword.toLowerCase())) {
+        result.add(tempEmployer.address);
+      }
+    }
+
     res.send([...result]);
   };
 

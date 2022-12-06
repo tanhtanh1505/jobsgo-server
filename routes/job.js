@@ -147,6 +147,58 @@ router.get("/suggest-keyword/:number/:keyword", middleware.setReqUser, catchAsyn
 
 /**
  * @openapi
+ * /job/favourite/find-by-keyword/{keyword}/{jobPerPage}/{pageNumber}:
+ *  get:
+ *      summary: find jobs in favourite by keyword
+ *      tags:
+ *      - Job
+ *      parameters:
+ *      - in: path
+ *        name: keyword
+ *        type: string
+ *        required: true
+ *      - in: path
+ *        name: jobPerPage
+ *        type: string
+ *        required: true
+ *      - in: path
+ *        name: pageNumber
+ *        type: string
+ *        required: true
+ *      responses:
+ *              200:
+ *                  description: success
+ */
+router.get(
+  "/favourite/find-by-keyword/:keyword/:jobPerPage/:pageNumber",
+  middleware.verifyToken,
+  catchAsync(jobController.findJobInBookmarkByKeyWord)
+);
+
+/**
+ * @openapi
+ * /job/favourite/suggest-keyword/{number}/{keyword}:
+ *  get:
+ *      summary: get suggest-keyword for jobs in favourite
+ *      tags:
+ *      - Job
+ *      parameters:
+ *      - in: path
+ *        name: number
+ *        type: string
+ *        required: true
+ *      - in: path
+ *        name: keyword
+ *        type: string
+ *        required: true
+ *      responses:
+ *              200:
+ *                  description: success
+ */
+router.get("/favourite/suggest-keyword/:number/:keyword", middleware.verifyToken, catchAsync(jobController.getListSuggestionKeyWordInBookark));
+
+/**
+ * @openapi
  * /job/getPageSuggestion/{jobPerPage}/{pageNumber}:
  *  get:
  *      summary: get page suggestion jobs
