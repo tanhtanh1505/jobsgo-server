@@ -322,7 +322,7 @@ router
    *              200:
    *                  description: success
    */
-  .get(catchAsync(jobController.getById))
+  .get(middleware.setReqUser, catchAsync(jobController.getById))
   /**
    * @openapi
    * /job/{jobId}:
