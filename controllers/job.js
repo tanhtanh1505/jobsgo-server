@@ -294,29 +294,34 @@ class JobController {
     const { jobPerPage, pageNumber } = req.params;
 
     const listJob = await JobModel.find({});
-    const resListJob = [];
-    for (let i = 0; i < listJob.length; i++) {
-      const job = await this.innerWithAuthorInfo(req, listJob[i]);
-      if (company && job.authorName.toLowerCase().includes(company.toLowerCase())) {
-        resListJob.push(job);
-      } else if (category && job.positions.toLowerCase().includes(category.toLowerCase())) {
-        resListJob.push(job);
-      } else if (skill && job.tags.toLowerCase().includes(skill.toLowerCase())) {
-        resListJob.push(job);
-      } else if (location && job.authorAddress.toLowerCase().includes(location.toLowerCase())) {
-        resListJob.push(job);
-      } else if (salaryMin && salaryMax && job.salary >= salaryMin && job.salary <= salaryMax) {
-        resListJob.push(job);
-      } else if (salaryMin && job.salary >= salaryMin) {
-        resListJob.push(job);
-      } else if (salaryMax && job.salary <= salaryMax) {
-        resListJob.push(job);
-      } else if (typeOfWorking && job.typeOfWorking.toLowerCase().includes(typeOfWorking.toLowerCase())) {
-        resListJob.push(job);
-      } else if (jobType && job.typeOfWorking.toLowerCase().includes(jobType.toLowerCase())) {
-        resListJob.push(job);
-      } else if (experience && job.exp.toLowerCase().includes(experience.toLowerCase())) {
-        resListJob.push(job);
+    const resListJob = Array.from(listJob);
+    for (let i = 0; i < resListJob.length; i++) {
+      const job = await this.innerWithAuthorInfo(req, resListJob[i]);
+      var check = false;
+      if (company && !job.authorName.toLowerCase().includes(company.toLowerCase())) {
+        check = true;
+      } else if (category && !job.positions.toLowerCase().includes(category.toLowerCase())) {
+        check = true;
+      } else if (skill && !job.tags.toLowerCase().includes(skill.toLowerCase())) {
+        check = true;
+      } else if (location && !job.authorAddress.toLowerCase().includes(location.toLowerCase())) {
+        check = true;
+      } else if (salaryMin && salaryMax && !(job.salary >= salaryMin && job.salary <= salaryMax)) {
+        check = true;
+      } else if (salaryMin && !(job.salary >= salaryMin)) {
+        check = true;
+      } else if (salaryMax && !(job.salary <= salaryMax)) {
+        check = true;
+      } else if (typeOfWorking && !job.typeOfWorking.toLowerCase().includes(typeOfWorking.toLowerCase())) {
+        check = true;
+      } else if (jobType && !job.typeOfWorking.toLowerCase().includes(jobType.toLowerCase())) {
+        check = true;
+      } else if (experience && !job.exp.toLowerCase().includes(experience.toLowerCase())) {
+        check = true;
+      }
+      if (check) {
+        resListJob.splice(i, 1);
+        i--;
       }
     }
     return res.send(resListJob.slice((pageNumber - 1) * jobPerPage, pageNumber * jobPerPage));
