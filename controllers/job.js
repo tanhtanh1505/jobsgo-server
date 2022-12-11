@@ -240,13 +240,18 @@ class JobController {
   create = async (req, res) => {
     const { title, description, requirements, tags, startTime, endTime, salary, typeOfWorking, gender, positions, slots, exp, benefits, imageUrl } =
       req.body;
+
+    // resolve tags
+    const tagsArray = tags.split(",").filter((tag) => tag && tag.trim() !== "");
+    const tagsString = tagsArray.join(",");
+
     const newJobId = uuidv4();
     const result = await JobModel.create({
       id: newJobId,
       title,
       description,
       requirements,
-      tags,
+      tags: tagsString,
       author: req.user.id,
       startTime,
       endTime,

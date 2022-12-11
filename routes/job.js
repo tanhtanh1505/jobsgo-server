@@ -294,7 +294,7 @@ router.post("/import", middleware.verifyToken, middleware.isEmployer, catchAsync
  *                          typeOfWorking:
  *                              example: "remote"
  *                          jobType:
- *                              example: "full-time"
+ *                              example: "fulltime"
  *                          experience:
  *                              example: "1 year"
  *      responses:
