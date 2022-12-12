@@ -41,12 +41,12 @@ const options = {
 const swaggerSpec = swaggerJSDoc(options);
 
 module.exports.swaggerDocs = (app, port) => {
-  app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+  app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
   app.get("docs.json", (req, res) => {
     res.setHeader("Content-Type", "application/json");
     res.send(swaggerSpec);
   });
 
-  console.log(`Swagger is available at http://localhost:${port}/docs`);
+  console.log(`Swagger is available at http://localhost:${port}/api/docs`);
 };

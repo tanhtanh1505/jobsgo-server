@@ -6,7 +6,7 @@ const { validateCreateEducation, validateUpdateEducation } = require("../middlew
 
 /**
  * @openapi
- * /education/create:
+ * /api/education/create:
  *  post:
  *      summary: create an education for job seeker
  *      tags:
@@ -38,7 +38,7 @@ router.post("/create", middleware.verifyToken, middleware.isJobSeeker, validateC
 
 /**
  * @openapi
- * /education/all-mine:
+ * /api/education/all-mine:
  *  get:
  *      summary: get all own educations of current user
  *      tags:
@@ -51,7 +51,7 @@ router.get("/all-mine", middleware.verifyToken, middleware.isJobSeeker, catchAsy
 
 /**
  * @openapi
- * /education/jobseeker/{jobseekerId}:
+ * /api/education/jobseeker/{jobseekerId}:
  *  get:
  *      summary: get education of jobseeker by jobseeker id
  *      tags:
@@ -72,7 +72,7 @@ router
   .route("/:educationId")
   /**
    * @openapi
-   * /education/{educationId}:
+   * /api/education/{educationId}:
    *  get:
    *      summary: get education by id
    *      tags:
@@ -89,7 +89,7 @@ router
   .get(middleware.verifyToken, middleware.isEducationCreator, catchAsync(educationController.getById))
   /**
    * @openapi
-   * /education/{educationId}:
+   * /api/education/{educationId}:
    *  put:
    *      summary: edit an own education
    *      tags:
@@ -125,7 +125,7 @@ router
   .put(middleware.verifyToken, middleware.isEducationCreator, catchAsync(educationController.update))
   /**
    * @openapi
-   * /education/{educationId}:
+   * /api/education/{educationId}:
    *  delete:
    *      summary: delete own education
    *      tags:

@@ -5,19 +5,9 @@ const dotenv = require("dotenv");
 const HttpException = require("./utils/HttpException");
 const cookieParser = require("cookie-parser");
 const socket = require("./socket/index");
-const authRoutes = require("./routes/auth");
-const userRoutes = require("./routes/user");
-const jobsRoutes = require("./routes/job");
-const commentRoutes = require("./routes/comment");
-const educationRoutes = require("./routes/education");
-const employerRouter = require("./routes/employer");
-const jobseekerRouter = require("./routes/jobseeker");
-const applicationRouter = require("./routes/application");
-const helperRouter = require("./routes/helper");
-const chatRouter = require("./routes/chat");
-const cvRouter = require("./routes/cv");
+const api = require("./routes/api");
 const swagger = require("./utils/swagger");
-
+const path = require("path");
 const setup = require("./setup/index");
 
 let port = process.env.PORT || 5000;

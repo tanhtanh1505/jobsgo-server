@@ -7,7 +7,7 @@ const multer = require("multer");
 
 /**
  * @openapi
- * /jobseeker:
+ * /api/jobseeker:
  *  post:
  *      summary: register a new jobseeker
  *      description: register a new jobseeker
@@ -61,7 +61,7 @@ router.post("/", validateCreateJobseeker, catchAsync(jobseekerController.registe
 
 /**
  * @openapi
- * /jobseeker:
+ * /api/jobseeker:
  *  put:
  *      summary: update profile of jobseeker
  *      description: update profile of jobseeker
@@ -100,7 +100,7 @@ router.put("/", middleware.verifyToken, middleware.isJobSeeker, validateUpdateJo
 
 /**
  * @openapi
- * /jobseeker:
+ * /api/jobseeker:
  *  get:
  *      summary: get current jobseeker profile
  *      tags:
@@ -113,7 +113,7 @@ router.get("/", middleware.verifyToken, middleware.isJobSeeker, catchAsync(jobse
 
 /**
  * @openapi
- * /jobseeker/{id}:
+ * /api/jobseeker/{id}:
  *  get:
  *      summary: get jobseeker by id
  *      tags:

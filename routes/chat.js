@@ -5,7 +5,7 @@ const catchAsync = require("../utils/catchAsync");
 
 /**
  * @openapi
- * /chat/list-conversations:
+ * /api/chat/list-conversations:
  *  get:
  *      summary: get conversation
  *      tags:
@@ -18,7 +18,7 @@ router.get("/list-conversations", middleware.verifyToken, catchAsync(ChatControl
 
 /**
  * @openapi
- * /chat/conversation:
+ * /api/chat/conversation:
  *  post:
  *      summary: get conversation
  *      tags:
@@ -43,7 +43,7 @@ router
   .route("/conversation/:conversationId")
   /**
    * @openapi
-   * /chat/conversation/{conversationId}:
+   * /api/chat/conversation/{conversationId}:
    *  get:
    *      summary: get list message by conversation id
    *      tags:
@@ -61,7 +61,7 @@ router
 
 /**
  * @openapi
- * /chat/conversation/{conversationId}/{number}:
+ * /api/chat/conversation/{conversationId}/{number}:
  *  get:
  *      summary: get number last message by conversation id
  *      tags:

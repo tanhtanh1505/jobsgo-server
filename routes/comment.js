@@ -6,7 +6,7 @@ const { validateUpdateComment } = require("../middlewares/validate/comment");
 
 /**
  * @openapi
- * /comments/{commentId}:
+ * /api/comments/{commentId}:
  *  get:
  *      summary: get comment by id
  *      tags:
@@ -24,7 +24,7 @@ router.get("/:commentId", catchAsync(commentController.getComment));
 
 /**
  * @openapi
- * /comments/{commentId}:
+ * /api/comments/{commentId}:
  *  put:
  *      summary: update comment
  *      tags:
@@ -51,7 +51,7 @@ router.put("/:commentId", middleware.verifyToken, middleware.isCommentCreator, v
 
 /**
  * @openapi
- * /comments/{commentId}:
+ * /api/comments/{commentId}:
  *  delete:
  *      summary: Delete a comment
  *      description: Delete a comment

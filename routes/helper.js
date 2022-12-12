@@ -6,7 +6,7 @@ const catchAsync = require("../utils/catchAsync");
 
 /**
  * @openapi
- * /helper/upload:
+ * /api/helper/upload:
  *  post:
  *      summary: Upload image to S3
  *      tags:
