@@ -48,27 +48,18 @@ app.use(express.json());
 
 socket.listen(server);
 
-app.use("/", authRoutes);
-app.use("/user", userRoutes);
-app.use("/jobseeker", jobseekerRouter);
-app.use("/employer", employerRouter);
-app.use("/comments", commentRoutes);
-app.use("/job", jobsRoutes);
-app.use("/application", applicationRouter);
-app.use("/education", educationRoutes);
-app.use("/chat", chatRouter);
-app.use("/cv", cvRouter);
-app.use("/helper", helperRouter);
+app.use("/api", api);
+app.use(express.static(path.resolve(__dirname, "../working-on-paradise/build")));
 
-app.get("/", (req, res) => {
-  res.status(200).end("hi");
-});
+// app.get("/", (req, res) => {
+//   res.status(200).end("hi");
+// });
 
 swagger.swaggerDocs(app, port);
 
-app.all("*", (req, res, next) => {
-  next(new HttpException(404, "Page not found :("));
-});
+// app.all("*", (req, res, next) => {
+//   next(new HttpException(404, "Page not found :("));
+// });
 
 app.use((err, req, res, next) => {
   const { status = 500, message = "Loi rui" } = err;
