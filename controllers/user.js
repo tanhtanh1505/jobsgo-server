@@ -8,6 +8,8 @@ const dotenv = require("dotenv");
 const Role = require("../constants/user");
 const mailService = require("../services/mail");
 const jwtHelper = require("../helper/jwtHelper");
+const { creatContent } = require("../helper/templateMail");
+
 dotenv.config();
 
 class UserController {
@@ -213,10 +215,13 @@ class UserController {
       from: "service@tanhuet.com",
       to: email,
       subject: "Reset your password",
-      html: `
-        <h2>Please click on given link to reset your password</h2>
-        <p>${url}</p>
-      `,
+      html: creatContent(
+        user.name,
+        "Reset your password",
+        "Click the button below to reset your password. If you didn't request a new password, you can safely delete this email.",
+        "R E S E T&nbsp; &nbsp;P A S S W O R D",
+        url
+      ),
     };
 
     mailService.sendMail(mailOptions);

@@ -7,6 +7,7 @@ const bcrypt = require("bcryptjs");
 const mailService = require("../services/mail");
 const { uploadFile } = require("../helper/uploadImageHelper");
 const { creatContent } = require("../helper/templateMail");
+require("dotenv").config();
 module.exports.register = async (req, res) => {
   const {
     username,
@@ -69,7 +70,13 @@ module.exports.register = async (req, res) => {
         from: "service@tanhuet.com",
         to: email,
         subject: "Welcome to Working On Paradise",
-        html: creatContent(name, "Register successfully", "Welcome to Working On Paradise"),
+        html: creatContent(
+          name,
+          "Register successfully",
+          "Welcome to Working On Paradise",
+          "G O&nbsp; &nbsp;T O&nbsp; &nbsp;W E B S I T E",
+          process.env.CLIENT_URL
+        ),
       };
 
       mailService.sendMail(mailOptions);

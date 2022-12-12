@@ -1,4 +1,4 @@
-module.exports.creatContent = (dear, subject, body) => {
+module.exports.creatContent = (dear, subject, body, label, goto) => {
   return `<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
   <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
   
@@ -293,8 +293,8 @@ module.exports.creatContent = (dear, subject, body) => {
   
                                                               <div align="center">
                                                                   <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-spacing: 0; border-collapse: collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;font-family:arial,helvetica,sans-serif;"><tr><td style="font-family:arial,helvetica,sans-serif;" align="center"><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="https://unlayer.com" style="height:62px; v-text-anchor:middle; width:278px;" arcsize="35.5%" stroke="f" fillcolor="#ed8b03"><w:anchorlock/><center style="color:#FFFFFF;font-family:arial,helvetica,sans-serif;"><![endif]-->
-                                                                  <a href="https://isuckhoe.net/wp-content/uploads/2021/06/isuckhoe_bmngqdr.jpg" target="_blank" class="v-size-width" style="box-sizing: border-box;display: inline-block;font-family:arial,helvetica,sans-serif;text-decoration: none;-webkit-text-size-adjust: none;text-align: center;color: #FFFFFF; background-color: #ed8b03; border-radius: 22px;-webkit-border-radius: 22px; -moz-border-radius: 22px; width:48%; max-width:100%; overflow-wrap: break-word; word-break: break-word; word-wrap:break-word; mso-border-alt: none;">
-                                                                      <span style="display:block;padding:23px 30px 22px;line-height:120%;"><strong><span style="font-size: 14px; line-height: 16.8px; font-family: Montserrat, sans-serif;">G O&nbsp; &nbsp;T O&nbsp; &nbsp;W E B S I T E</span></strong>
+                                                                  <a href="${goto}" target="_blank" class="v-size-width" style="box-sizing: border-box;display: inline-block;font-family:arial,helvetica,sans-serif;text-decoration: none;-webkit-text-size-adjust: none;text-align: center;color: #FFFFFF; background-color: #ed8b03; border-radius: 22px;-webkit-border-radius: 22px; -moz-border-radius: 22px; width:48%; max-width:100%; overflow-wrap: break-word; word-break: break-word; word-wrap:break-word; mso-border-alt: none;">
+                                                                      <span style="display:block;padding:23px 30px 22px;line-height:120%;"><strong><span style="font-size: 14px; line-height: 16.8px; font-family: Montserrat, sans-serif;">${label}</span></strong>
                                                                       </span>
                                                                   </a>
                                                                   <!--[if mso]></center></v:roundrect></td></tr></table><![endif]-->
