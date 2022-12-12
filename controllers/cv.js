@@ -46,3 +46,18 @@ module.exports.randomPdf = async (req, res) => {
 
   res.send(url);
 };
+
+module.exports.uploadCv = async (req, res) => {
+  const file = req.file;
+
+  if (!file) {
+    return res.status(400).send("No file uploaded");
+  }
+  const url = await uploadFile(file);
+  const jobseeker = await JobseekerModel.findOne({ id: req.user.id });
+  const oldCv = jobseeker.cv;
+  const newCv = oldCv + `,${url}`;
+  await JobseekerModel.update({ cv: newCv }, req.user.id);
+
+  return res.status(200).send(url);
+};

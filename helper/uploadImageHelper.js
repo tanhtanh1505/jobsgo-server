@@ -33,9 +33,7 @@ module.exports.uploadFileToS3 = async (req, res) => {
 
 //upload file and return url
 module.exports.uploadFile = async (file) => {
-  console.log("file", file);
   const { path, mimetype } = file;
-  console.log("path", path);
   var folder = "/files";
   if (mimetype && mimetype.startsWith("image/")) {
     folder = "/images";

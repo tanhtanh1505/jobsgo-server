@@ -65,6 +65,29 @@ router.post("/random", middleware.verifyToken, middleware.isJobSeeker, catchAsyn
 
 /**
  * @openapi
+ * /api/cv/upload:
+ *  post:
+ *      summary: Upload CV
+ *      tags:
+ *      - Cv
+ *      requestBody:
+ *          require: true
+ *          content:
+ *              multipart/form-data:
+ *                  schema:
+ *                      type: object
+ *                      properties:
+ *                          file:
+ *                              type: string
+ *                              format: binary
+ *      responses:
+ *              200:
+ *                  description: success
+ */
+router.post("/upload", middleware.verifyToken, middleware.isJobSeeker, upload.single("file"), catchAsync(cvController.uploadCv));
+
+/**
+ * @openapi
  * /api/cv/{position}:
  *  delete:
  *      summary: Delete CV
