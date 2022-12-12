@@ -39,9 +39,13 @@ app.use(express.json());
 socket.listen(server);
 
 app.use("/api", api);
+swagger.swaggerDocs(app, port);
+
 app.use(express.static(path.resolve(__dirname, "../working-on-paradise/build")));
 
-swagger.swaggerDocs(app, port);
+app.get("*", function (req, res) {
+  res.sendFile(path.resolve(__dirname, "../working-on-paradise/build", "index.html"));
+});
 
 app.use((err, req, res, next) => {
   const { status = 500, message = "Loi rui" } = err;
