@@ -41,15 +41,7 @@ socket.listen(server);
 app.use("/api", api);
 app.use(express.static(path.resolve(__dirname, "../working-on-paradise/build")));
 
-// app.get("/", (req, res) => {
-//   res.status(200).end("hi");
-// });
-
 swagger.swaggerDocs(app, port);
-
-// app.all("*", (req, res, next) => {
-//   next(new HttpException(404, "Page not found :("));
-// });
 
 app.use((err, req, res, next) => {
   const { status = 500, message = "Loi rui" } = err;
