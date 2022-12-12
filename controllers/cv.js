@@ -14,14 +14,13 @@ module.exports.create = async (req, res) => {
 };
 
 module.exports.delete = async (req, res) => {
-  const { position } = req.body;
   const jobseeker = await JobseekerModel.findOne({ id: req.user.id });
   const oldCv = jobseeker.cv;
   const newCv =
-    oldCv.split(",").slice(0, position).join(",") +
+    oldCv.split(",").slice(0, req.params.position).join(",") +
     oldCv
       .split(",")
-      .slice(position + 1)
+      .slice(req.params.position + 1)
       .join(",");
   await JobseekerModel.update({ cv: newCv }, req.user.id);
   res.send("success remove ");

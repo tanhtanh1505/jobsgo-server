@@ -30,28 +30,6 @@ router.post("/create", upload.single("file"), catchAsync(cvController.create));
 
 /**
  * @openapi
- * /api/cv/delete:
- *  delete:
- *      summary: Delete CV
- *      tags:
- *      - Cv
- *      requestBody:
- *          require: true
- *          content:
- *              application/json:
- *                  schema:
- *                      type: object
- *                      properties:
- *                          position:
- *                              example: 0
- *      responses:
- *              200:
- *                  description: success
- */
-router.delete("/delete", middleware.verifyToken, catchAsync(cvController.delete));
-
-/**
- * @openapi
  * /api/cv/generate:
  *  post:
  *      summary: Generate CV
@@ -84,5 +62,23 @@ router.post("/generate", middleware.verifyToken, middleware.isJobSeeker, catchAs
  *                  description: success
  */
 router.post("/random", middleware.verifyToken, middleware.isJobSeeker, catchAsync(cvController.randomPdf));
+
+/**
+ * @openapi
+ * /api/cv/{position}:
+ *  delete:
+ *      summary: Delete CV
+ *      tags:
+ *      - Cv
+ *      parameters:
+ *       - in: path
+ *         name: position
+ *         type: number
+ *         required: true
+ *      responses:
+ *              200:
+ *                  description: success
+ */
+router.delete("/:position", middleware.verifyToken, catchAsync(cvController.delete));
 
 module.exports = router;
