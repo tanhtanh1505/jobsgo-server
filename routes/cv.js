@@ -30,6 +30,28 @@ router.post("/create", upload.single("file"), catchAsync(cvController.create));
 
 /**
  * @openapi
+ * /cv/delete:
+ *  delete:
+ *      summary: Delete CV
+ *      tags:
+ *      - Cv
+ *      requestBody:
+ *          require: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      type: object
+ *                      properties:
+ *                          position:
+ *                              example: 0
+ *      responses:
+ *              200:
+ *                  description: success
+ */
+router.delete("/delete", middleware.verifyToken, catchAsync(cvController.delete));
+
+/**
+ * @openapi
  * /cv/generate:
  *  post:
  *      summary: Generate CV
